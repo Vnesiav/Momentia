@@ -19,15 +19,22 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNavigation?.setupWithNavController(navController)
-        bottomNavigation.visibility = View.VISIBLE
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.loginFragment || destination.id == R.id.registerFragment ||
+                destination.id == R.id.nameFragment) {
+                hideBottomNavigation()
+            } else {
+                showBottomNavigation()
+            }
+        }
     }
 
     fun hideBottomNavigation() {
         bottomNavigation.visibility = View.GONE
     }
 
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment)
-//
-//    }
+    fun showBottomNavigation() {
+        bottomNavigation.visibility = View.VISIBLE
+    }
 }
