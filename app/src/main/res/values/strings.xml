@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Momentia</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_menu_chat">Chat</string>
+    <string name="bottom_menu_camera">Camera</string>
+    <string name="bottom_menu_friend">Friends</string>
+    <string name="login">Login</string>
+    <string name="email_input_message">Enter Email</string>
+    <string name="password_input_message">Enter Password</string>
+    <string name="register">Register</string>
+    <string name="register_button">Register</string>
+    <string name="submit_button">SUBMIT</string>
+</resources>

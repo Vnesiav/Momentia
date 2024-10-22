@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "566977357379",
+    "project_id": "momentia-f618f",
+    "storage_bucket": "momentia-f618f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566977357379:android:197466f370c51359fe56f6",
+        "android_client_info": {
+          "package_name": "com.example.momentia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGpwfVBdGfFZlVc69Mz3gD0D47ccRM-5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
