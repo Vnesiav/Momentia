@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
@@ -15,6 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 class FriendFragment : BaseAuthFragment() {
     private val db = FirebaseFirestore.getInstance()
     private val currentUser = FirebaseAuth.getInstance().currentUser
+    private lateinit var profileImageButton: ImageButton
+    private lateinit var editProfileButton: Button
     private lateinit var addFriendButton: ImageButton
     private lateinit var profileButton: ImageButton
 
@@ -50,6 +56,23 @@ class FriendFragment : BaseAuthFragment() {
         val navController = findNavController()
         navController.navigate(R.id.addFriendFragment)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Find the ImageButton by its ID
+        profileImageButton = view.findViewById(R.id.imageButton)
+        editProfileButton = view.findViewById(R.id.editProfileButton)
+
+        // Set OnClickListener for the profileImageButton (if needed)
+//        profileImageButton.setOnClickListener {
+//            findNavController().navigate(R.id.action_friendFragment_to_profileFragment)
+//        }
+
+        // Set OnClickListener for the editProfileButton to navigate to EditProfileFragment
+        editProfileButton.setOnClickListener {
+            findNavController().navigate(R.id.action_friendFragment_to_editProfileFragment)
+        }
 
     private fun setFontSize(view: View) {
         val searchView = view.findViewById<SearchView>(R.id.search_friend)

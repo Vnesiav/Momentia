@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNavigation?.setupWithNavController(navController)
+        bottomNavigation.visibility = View.VISIBLE
 
         val fragmentsWithoutBottomNav = setOf(
             R.id.loginFragment,
@@ -57,6 +58,13 @@ class MainActivity : AppCompatActivity() {
     fun hideBottomNavigation() {
         bottomNavigation.visibility = View.GONE
     }
+
+
+
+//    override fun onSupportNavigateUp(): Boolean {
+//        val navController = findNavController(R.id.nav_host_fragment)
+//
+//    }
 
     fun showBottomNavigation() {
         bottomNavigation.visibility = View.VISIBLE
