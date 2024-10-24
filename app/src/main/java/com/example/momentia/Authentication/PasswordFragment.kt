@@ -1,4 +1,4 @@
-package com.example.momentia
+package com.example.momentia.Authentication
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -14,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
 
 class PasswordFragment : Fragment() {

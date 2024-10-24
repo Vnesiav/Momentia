@@ -1,4 +1,4 @@
-package com.example.momentia
+package com.example.momentia.Authentication
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.momentia.R
 import com.google.firebase.firestore.FirebaseFirestore
 
 class UsernameFragment : Fragment() {

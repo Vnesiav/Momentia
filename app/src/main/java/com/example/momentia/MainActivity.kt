@@ -33,7 +33,11 @@ class MainActivity : AppCompatActivity() {
             R.id.passwordFragment,
             R.id.usernameFragment,
             R.id.nameFragment,
-            R.id.phoneFragment
+            R.id.phoneFragment,
+            R.id.editProfileFragment,
+            R.id.editNameFragment,
+            R.id.changeEmailFragment,
+            R.id.changeNumberFragment
         )
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
