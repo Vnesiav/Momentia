@@ -6,4 +6,7 @@
     <color name="light_brown">#C2663C</color>
     <color name="background_color">#F3F2ED</color>
     <color name="app_bar">#7B7368</color>
+    <color name="light_choco">#C4c1b8</color>
+    <color name="text_color">#333333</color>
+    <color name="dark_choco">#4A463B</color>
 </resources>

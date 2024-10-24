@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/cameraFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/cameraFragment"
@@ -18,11 +18,11 @@
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
 
-    <fragment
-        android:id="@+id/friendFragment"
-        android:name="com.example.momentia.FriendFragment"
-        android:label="fragment_friend"
-        tools:layout="@layout/fragment_friend" />
+<!--    <fragment-->
+<!--        android:id="@+id/friendFragment"-->
+<!--        android:name="com.example.momentia.FriendFragment"-->
+<!--        android:label="fragment_friend"-->
+<!--        tools:layout="@layout/fragment_friend" />-->
 
     <fragment
         android:id="@+id/loginFragment"
@@ -35,5 +35,23 @@
         android:name="com.example.momentia.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
+
+    <fragment
+        android:id="@+id/friendFragment"
+        android:name="com.example.momentia.FriendFragment"
+        android:label="FriendFragment">
+        <action
+            android:id="@+id/action_friendFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.momentia.EditProfileFragment"
+        android:label="EditProfileFragment">
+        <action
+            android:id="@+id/action_editProfileFragment_to_friendFragment"
+            app:destination="@id/friendFragment" />
+    </fragment>
 
 </navigation>
