@@ -60,7 +60,19 @@
             android:id="@+id/action_passwordFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_passwordFragment_to_nameFragment"
+            android:id="@+id/action_passwordFragment_to_usernameFragment"
+            app:destination="@id/usernameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/usernameFragment"
+        android:name="com.example.momentia.UsernameFragment"
+        android:label="fragment_username"
+        tools:layout="@layout/fragment_username">
+        <action
+            android:id="@+id/action_usernameFragment_to_passwordFragment"
+            app:destination="@id/passwordFragment" />
+        <action
+            android:id="@+id/action_usernameFragment_to_nameFragment"
             app:destination="@id/nameFragment" />
     </fragment>
     <fragment
@@ -69,8 +81,8 @@
         android:label="fragment_name"
         tools:layout="@layout/fragment_name">
         <action
-            android:id="@+id/action_nameFragment_to_passwordFragment"
-            app:destination="@id/passwordFragment" />
+            android:id="@+id/action_nameFragment_to_usernameFragment"
+            app:destination="@id/usernameFragment" />
         <action
             android:id="@+id/action_nameFragment_to_phoneFragment"
             app:destination="@id/phoneFragment" />
@@ -90,4 +102,9 @@
             android:id="@+id/action_phoneFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+
+    <action
+        android:id="@+id/action_global_cameraFragment"
+        app:destination="@id/cameraFragment" />
+
 </navigation>

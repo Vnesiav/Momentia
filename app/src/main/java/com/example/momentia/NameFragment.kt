@@ -13,16 +13,18 @@ import com.google.firebase.auth.FirebaseAuth
 
 class NameFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
-    private lateinit var firstNameEditText: EditText
-    private lateinit var lastNameEditText: EditText
     private lateinit var email: String
     private lateinit var password: String
+    private lateinit var username: String
+    private lateinit var firstNameEditText: EditText
+    private lateinit var lastNameEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         email = arguments?.getString("email") ?: ""
         password = arguments?.getString("password") ?: ""
+        username = arguments?.getString("username") ?: ""
     }
 
     override fun onCreateView(
@@ -39,7 +41,7 @@ class NameFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_nameFragment_to_passwordFragment)
+            findNavController().navigate(R.id.action_nameFragment_to_usernameFragment)
         }
 
         continueButton.setOnClickListener {
@@ -71,6 +73,7 @@ class NameFragment : Fragment() {
         val bundle = Bundle().apply {
             putString("email", email)
             putString("password", password)
+            putString("username", username)
             putString("firstName", firstName)
             putString("lastName", lastName)
         }
