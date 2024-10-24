@@ -28,19 +28,20 @@ class ChangeNumberFragment : BaseAuthFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_change_email, container, false)
 
-        // Inisialisasi Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        // Mendapatkan referensi UI
         currentEmailEditText = view.findViewById(R.id.current_email)
         newEmailEditText = view.findViewById(R.id.new_email)
+        val backButton: ImageButton = view.findViewById(R.id.back_button)
         saveButton = view.findViewById(R.id.save_button)
 
-        // Mengisi email pengguna yang sudah terautentikasi
         val currentUser = auth.currentUser
         currentEmailEditText.setText(currentUser?.email)
 
-        // Menambahkan event klik pada tombol "Save"
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         saveButton.setOnClickListener {
             val newEmail = newEmailEditText.text.toString().trim()
 
@@ -54,13 +55,10 @@ class ChangeNumberFragment : BaseAuthFragment() {
         return view
     }
 
-    // Fungsi untuk mengubah email tanpa re-autentikasi
     private fun changeEmail(user: FirebaseUser?, newEmail: String) {
         if (user != null) {
-            // Mengubah alamat email langsung
             user.updateEmail(newEmail).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Mengupdate email di Firestore
                     updateEmailInFirestore(user, newEmail)
                 } else {
                     Toast.makeText(requireContext(), "Failed to change email: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -71,7 +69,6 @@ class ChangeNumberFragment : BaseAuthFragment() {
         }
     }
 
-    // Fungsi untuk memperbarui email di Firestore
     private fun updateEmailInFirestore(user: FirebaseUser, newEmail: String) {
         val firestore = FirebaseFirestore.getInstance().collection("users").document(user.uid)
         firestore.update("email", newEmail)

@@ -35,9 +35,6 @@
         android:label="fragment_password"
         tools:layout="@layout/fragment_password">
         <action
-            android:id="@+id/action_passwordFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
-        <action
             android:id="@+id/action_passwordFragment_to_usernameFragment"
             app:destination="@id/usernameFragment" />
     </fragment>
@@ -47,9 +44,6 @@
         android:name="com.example.momentia.Authentication.UsernameFragment"
         android:label="fragment_username"
         tools:layout="@layout/fragment_username">
-        <action
-            android:id="@+id/action_usernameFragment_to_passwordFragment"
-            app:destination="@id/passwordFragment" />
         <action
             android:id="@+id/action_usernameFragment_to_nameFragment"
             app:destination="@id/nameFragment" />
@@ -61,9 +55,6 @@
         android:label="fragment_name"
         tools:layout="@layout/fragment_name">
         <action
-            android:id="@+id/action_nameFragment_to_usernameFragment"
-            app:destination="@id/usernameFragment" />
-        <action
             android:id="@+id/action_nameFragment_to_phoneFragment"
             app:destination="@id/phoneFragment" />
     </fragment>
@@ -73,12 +64,6 @@
         android:name="com.example.momentia.Authentication.PhoneFragment"
         android:label="fragment_phone"
         tools:layout="@layout/fragment_phone">
-        <action
-            android:id="@+id/action_phoneFragment_to_nameFragment"
-            app:destination="@id/nameFragment" />
-        <!--        <action-->
-        <!--            android:id="@+id/action_phoneFragment_to_cameraFragment"-->
-        <!--            app:destination="@id/cameraFragment" />-->
         <action
             android:id="@+id/action_phoneFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -138,37 +123,22 @@
         android:id="@+id/editProfileFragment"
         android:name="com.example.momentia.Profile.EditProfileFragment"
         tools:layout="@layout/fragment_edit_profile">
-        <action
-            android:id="@+id/action_editProfileFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/editNameFragment"
         android:name="com.example.momentia.Profile.EditNameFragment"
-        tools:layout="@layout/fragment_edit_name">
-        <action
-            android:id="@+id/action_editNameFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_edit_name" />
 
     <fragment
         android:id="@+id/changeEmailFragment"
         android:name="com.example.momentia.Profile.ChangeEmailFragment"
-        tools:layout="@layout/fragment_change_email">
-        <action
-            android:id="@+id/action_changeEmailFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_change_email" />
 
     <fragment
         android:id="@+id/changeNumberFragment"
         android:name="com.example.momentia.Profile.ChangeNumberFragment"
-        tools:layout="@layout/fragment_change_number">
-        <action
-            android:id="@+id/action_changeNumberFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_change_number" />
 
     <dialog
         android:id="@+id/deleteAccountDialogFragment"

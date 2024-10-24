@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
@@ -30,6 +31,11 @@ class ProfileFragment : BaseAuthFragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         profileNameView = view.findViewById(R.id.profile_name)
+
+        val backButton = view.findViewById<ImageButton>(R.id.back_button)
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         loadUserData()
 

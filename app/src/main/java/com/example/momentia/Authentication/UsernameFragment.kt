@@ -37,7 +37,7 @@ class UsernameFragment : Fragment() {
         val continueButton: View = view.findViewById(R.id.continue_button)
 
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_usernameFragment_to_passwordFragment)
+            findNavController().popBackStack()
         }
 
         continueButton.setOnClickListener {
