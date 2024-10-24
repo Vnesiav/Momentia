@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/cameraFragment">
 
     <action
         android:id="@+id/action_global_cameraFragment"
@@ -19,6 +19,17 @@
             android:id="@+id/action_loginFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
     </fragment>
+
+  <fragment
+        android:id="@+id/addFriendFragment"
+        android:name="com.example.momentia.AddFriend.AddFriendFragment"
+        android:label="fragment_add_friend"
+        tools:layout="@layout/fragment_add_friend" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.momentia.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/registerFragment"

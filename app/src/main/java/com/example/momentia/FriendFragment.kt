@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.navigation.fragment.findNavController
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
+import android.widget.Button
 import com.example.momentia.Authentication.BaseAuthFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -51,7 +53,15 @@ class FriendFragment : BaseAuthFragment() {
 
     private fun navigateToAddFriend() {
         val navController = findNavController()
-        navController.navigate(R.id.addFriendFragment)
+
+        val navOptions = NavOptions.Builder()
+            .setEnterAnim(R.anim.slide_in_right)
+            .setExitAnim(R.anim.slide_out_left)
+            .setPopEnterAnim(R.anim.slide_in_left)
+            .setPopExitAnim(R.anim.slide_out_right)
+            .build()
+
+        navController.navigate(R.id.addFriendFragment, null, navOptions)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
