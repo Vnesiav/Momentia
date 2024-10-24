@@ -176,11 +176,6 @@
         android:label="DeleteAccountDialogFragment"
         tools:layout="@layout/fragment_delete_account_dialog" />
 
-        android:id="@+id/registerFragment"
-        android:name="com.example.momentia.RegisterFragment"
-        android:label="fragment_register"
-        tools:layout="@layout/fragment_register" />
-
     <fragment
         android:id="@+id/friendFragment"
         android:name="com.example.momentia.FriendFragment"
@@ -188,15 +183,6 @@
         <action
             android:id="@+id/action_friendFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/editProfileFragment"
-        android:name="com.example.momentia.EditProfileFragment"
-        android:label="EditProfileFragment">
-        <action
-            android:id="@+id/action_editProfileFragment_to_friendFragment"
-            app:destination="@id/friendFragment" />
     </fragment>
 
 </navigation>

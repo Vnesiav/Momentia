@@ -57,7 +57,7 @@ class EditProfileFragment : Fragment() {
 
         val backButton: ImageButton = view.findViewById(R.id.back_button)
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_editProfileFragment_to_friendFragment)
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 
