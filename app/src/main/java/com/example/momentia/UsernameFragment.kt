@@ -22,7 +22,6 @@ class UsernameFragment : Fragment() {
         email = arguments?.getString("email") ?: ""
         password = arguments?.getString("password") ?: ""
 
-        // Inisialisasi Firestore
         firestore = FirebaseFirestore.getInstance()
     }
 
