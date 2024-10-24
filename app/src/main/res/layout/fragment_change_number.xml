@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Profile.ChangeNumberFragment"
     android:layout_marginTop="16dp"
-    android:layout_marginHorizontal="32dp">
+    android:layout_marginHorizontal="16dp">
 
     <ImageButton
         android:id="@+id/back_button"
@@ -69,13 +69,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
-
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/currentNumberLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
+        android:layout_marginHorizontal="16dp"
         android:hint="@string/current_number"
         app:boxStrokeColor="@color/light_gray"
         app:hintTextColor="@color/dark_brown"
@@ -98,6 +97,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="16dp"
         app:boxStrokeColor="@color/light_gray"
         app:hintTextColor="@color/dark_brown"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,6 +117,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
+        android:layout_marginHorizontal="16dp"
         android:backgroundTint="@color/dark_brown"
         android:text="@string/save"
         android:textColor="@color/white"

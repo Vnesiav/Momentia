@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             R.id.usernameFragment,
             R.id.nameFragment,
             R.id.phoneFragment,
+            R.id.profileFragment,
             R.id.editProfileFragment,
             R.id.editNameFragment,
             R.id.changeEmailFragment,
@@ -51,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (auth.currentUser != null) {
-            // Pengguna sudah login, arahkan ke CameraFragment
             navController.navigate(R.id.action_global_cameraFragment)
         }
     }
