@@ -31,4 +31,6 @@
     <string name="last_name">Last Name</string>
     <string name="phone_number">Phone Number</string>
     <string name="whats_your_number">What\'s your number?</string>
+    <string name="whats_your_username">What\'s your username?</string>
+    <string name="username">username</string>
 </resources>

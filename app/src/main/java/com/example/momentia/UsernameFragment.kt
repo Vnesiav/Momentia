@@ -1,59 +1,60 @@
 package com.example.momentia
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [UsernameFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class UsernameFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var usernameEditText: EditText
+    private lateinit var email: String
+    private lateinit var password: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        email = arguments?.getString("email") ?: ""
+        password = arguments?.getString("password") ?: ""
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_username, container, false)
+        val view = inflater.inflate(R.layout.fragment_username, container, false)
+
+        usernameEditText = view.findViewById(R.id.username_input)
+        val backButton: ImageButton = view.findViewById(R.id.back_button)
+        val continueButton: View = view.findViewById(R.id.continue_button)
+
+        backButton.setOnClickListener {
+            findNavController().navigate(R.id.action_usernameFragment_to_passwordFragment)
+        }
+
+        continueButton.setOnClickListener {
+            handleContinueButtonClick()
+        }
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment UsernameFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UsernameFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun handleContinueButtonClick() {
+        val username = usernameEditText.text.toString().trim()
+
+        if (username.isEmpty()) {
+            Toast.makeText(requireContext(), "Please enter your username", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val bundle = Bundle().apply {
+            putString("email", email)
+            putString("password", password)
+            putString("username", username)
+        }
+        findNavController().navigate(R.id.action_usernameFragment_to_nameFragment, bundle)
     }
 }

@@ -8,15 +8,20 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var navController: NavController
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        auth = FirebaseAuth.getInstance()
+
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_nav)
@@ -26,6 +31,7 @@ class MainActivity : AppCompatActivity() {
             R.id.loginFragment,
             R.id.registerFragment,
             R.id.passwordFragment,
+            R.id.usernameFragment,
             R.id.nameFragment,
             R.id.phoneFragment
         )
@@ -36,6 +42,11 @@ class MainActivity : AppCompatActivity() {
             } else {
                 showBottomNavigation()
             }
+        }
+
+        if (auth.currentUser != null) {
+            // Pengguna sudah login, arahkan ke CameraFragment
+            navController.navigate(R.id.action_global_cameraFragment)
         }
     }
 
