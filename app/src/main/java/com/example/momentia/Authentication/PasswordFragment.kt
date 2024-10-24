@@ -1,4 +1,4 @@
-package com.example.momentia
+package com.example.momentia.Authentication
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -14,11 +14,12 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
 
 class PasswordFragment : Fragment() {
-    private lateinit var email: String
     private lateinit var auth: FirebaseAuth
+    private lateinit var email: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +64,7 @@ class PasswordFragment : Fragment() {
                 putString("email", email)
                 putString("password", password)
             }
-            findNavController().navigate(R.id.action_passwordFragment_to_nameFragment, bundle)
+            findNavController().navigate(R.id.action_passwordFragment_to_usernameFragment, bundle)
         }
     }
 

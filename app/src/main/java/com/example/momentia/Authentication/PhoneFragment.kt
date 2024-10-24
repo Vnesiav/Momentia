@@ -1,4 +1,4 @@
-package com.example.momentia
+package com.example.momentia.Authentication
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.momentia.DTO.User
+import com.example.momentia.R
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -17,19 +18,21 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class PhoneFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
-    private lateinit var phoneNumberEditText: EditText
+    private lateinit var db: FirebaseFirestore
     private lateinit var email: String
     private lateinit var password: String
+    private lateinit var username: String
     private lateinit var firstName: String
     private lateinit var lastName: String
+    private lateinit var phoneNumberEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        db = FirebaseFirestore.getInstance()
         email = arguments?.getString("email") ?: ""
         password = arguments?.getString("password") ?: ""
+        username = arguments?.getString("username") ?: ""
         firstName = arguments?.getString("firstName") ?: ""
         lastName = arguments?.getString("lastName") ?: ""
     }
@@ -90,11 +93,17 @@ class PhoneFragment : Fragment() {
             firstName = firstName,
             lastName = lastName,
             email = email,
+            username = username,
             phoneNumber = phoneNumber,
+            avatarUrl = null,
+            friends = emptyList(),
+            snapsReceived = emptyList(),
+            snapsSent = emptyList(),
+            stories = emptyList(),
             createdAt = Timestamp.now()
         )
 
-        firestore.collection("users")
+        db.collection("users")
             .document(currentUserId)
             .set(userData)
             .addOnSuccessListener {

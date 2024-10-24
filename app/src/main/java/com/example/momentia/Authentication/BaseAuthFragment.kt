@@ -1,9 +1,10 @@
-package com.example.momentia
+package com.example.momentia.Authentication
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
 
 open class BaseAuthFragment : Fragment() {

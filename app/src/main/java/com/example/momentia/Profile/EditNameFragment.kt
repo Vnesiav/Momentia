@@ -1,4 +1,4 @@
-package com.example.momentia
+package com.example.momentia.Profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,47 +9,46 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.momentia.Authentication.BaseAuthFragment
+import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-class NameFragment : Fragment() {
+class EditNameFragment : BaseAuthFragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firstNameEditText: EditText
     private lateinit var lastNameEditText: EditText
-    private lateinit var email: String
-    private lateinit var password: String
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-        email = arguments?.getString("email") ?: ""
-        password = arguments?.getString("password") ?: ""
+        firestore = FirebaseFirestore.getInstance()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_name, container, false)
+        val view = inflater.inflate(R.layout.fragment_edit_name, container, false)
 
         firstNameEditText = view.findViewById(R.id.first_name)
         lastNameEditText = view.findViewById(R.id.last_name)
         val backButton: ImageButton = view.findViewById(R.id.back_button)
-        val continueButton: View = view.findViewById(R.id.continue_button)
-
-        auth = FirebaseAuth.getInstance()
+        val saveButton: View = view.findViewById(R.id.save_button)
 
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_nameFragment_to_passwordFragment)
+            findNavController().navigateUp()
         }
 
-        continueButton.setOnClickListener {
-            handleContinueButtonClick()
+        saveButton.setOnClickListener {
+            handleSaveButtonClick()
         }
 
         return view
     }
 
-    private fun handleContinueButtonClick() {
+    private fun handleSaveButtonClick() {
         val firstName = firstNameEditText.text.toString().trim()
         val lastName = lastNameEditText.text.toString().trim()
 
@@ -65,15 +64,20 @@ class NameFragment : Fragment() {
             return
         }
 
-        val email = arguments?.getString("email") ?: ""
-        val password = arguments?.getString("password") ?: ""
-
-        val bundle = Bundle().apply {
-            putString("email", email)
-            putString("password", password)
-            putString("firstName", firstName)
-            putString("lastName", lastName)
+        val user = auth.currentUser
+        user?.let {
+            val userId = it.uid
+            val userRef = firestore.collection("users").document(userId)
+            userRef.update("firstName", firstName, "lastName", lastName)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Name updated successfully", Toast.LENGTH_SHORT)
+                        .show()
+                    findNavController().navigateUp()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Failed to update name: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
         }
-        findNavController().navigate(R.id.action_nameFragment_to_phoneFragment, bundle)
     }
 }

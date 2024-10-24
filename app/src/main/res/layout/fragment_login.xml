@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginFragment"
+    tools:context=".Authentication.LoginFragment"
     android:layout_marginTop="32dp"
     android:layout_marginHorizontal="32dp">
 
