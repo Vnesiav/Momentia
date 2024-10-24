@@ -83,7 +83,6 @@
             android:id="@+id/action_phoneFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
-    app:startDestination="@id/friendFragment">
 
     <fragment
         android:id="@+id/cameraFragment"
