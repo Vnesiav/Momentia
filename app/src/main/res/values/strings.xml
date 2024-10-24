@@ -64,5 +64,5 @@
     <string name="change_your_email">Change your email?</string>
     <string name="current_email">Your current email address</string>
     <string name="new_email">New email address</string>
-
+    <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 </resources>
