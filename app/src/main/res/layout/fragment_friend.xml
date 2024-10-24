@@ -41,12 +41,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/editProfileButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit Profile"
-        android:layout_gravity="center" />
+<!--    <Button-->
+<!--        android:id="@+id/editProfileButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Edit Profile"-->
+<!--        android:layout_gravity="center" />-->
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_friend"

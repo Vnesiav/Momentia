@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
@@ -69,7 +68,7 @@ class FriendFragment : BaseAuthFragment() {
 
         // Find the ImageButton by its ID
 //        profileImageButton = view.findViewById(R.id.imageButton)
-        editProfileButton = view.findViewById(R.id.editProfileButton)
+//        editProfileButton = view.findViewById(R.id.editProfileButton)
 
         // Set OnClickListener for the profileImageButton (if needed)
 //        profileImageButton.setOnClickListener {
@@ -77,9 +76,9 @@ class FriendFragment : BaseAuthFragment() {
 //        }
 
         // Set OnClickListener for the editProfileButton to navigate to EditProfileFragment
-        editProfileButton.setOnClickListener {
-            findNavController().navigate(R.id.action_friendFragment_to_editProfileFragment)
-        }
+//        editProfileButton.setOnClickListener {
+//            findNavController().navigate(R.id.action_friendFragment_to_editProfileFragment)
+//        }
     }
 
     private fun setFontSize(view: View) {

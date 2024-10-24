@@ -1,6 +1,5 @@
 package com.example.momentia.AddFriend
 
-import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -13,7 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.momentia.BaseAuthFragment
+import com.example.momentia.Authentication.BaseAuthFragment
 import com.example.momentia.DTO.Friend
 import com.example.momentia.DTO.FriendRequest
 import com.example.momentia.R

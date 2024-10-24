@@ -20,16 +20,11 @@
             app:destination="@id/chatFragment" />
     </fragment>
 
-  <fragment
+    <fragment
         android:id="@+id/addFriendFragment"
         android:name="com.example.momentia.AddFriend.AddFriendFragment"
         android:label="fragment_add_friend"
         tools:layout="@layout/fragment_add_friend" />
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.momentia.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/registerFragment"
@@ -106,18 +101,6 @@
         android:name="com.example.momentia.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
-
-<!--    <fragment-->
-<!--        android:id="@+id/friendFragment"-->
-<!--        android:name="com.example.momentia.FriendFragment"-->
-<!--        android:label="fragment_friend"-->
-<!--        tools:layout="@layout/fragment_friend" />-->
-
-    <fragment
-        android:id="@+id/addFriendFragment"
-        android:name="com.example.momentia.Profile.AddFriendFragment"
-        android:label="fragment_add_friend"
-        tools:layout="@layout/fragment_add_friend" />
 
     <fragment
         android:id="@+id/profileFragment"
