@@ -1,11 +1,12 @@
-package com.example.momentia
+package com.example.momentia.Profile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import com.example.momentia.Authentication.BaseAuthFragment
+import com.example.momentia.R
 
 class AddFriendFragment : BaseAuthFragment() {
     private lateinit var backButton: ImageButton

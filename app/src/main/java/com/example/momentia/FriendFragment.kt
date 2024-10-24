@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.navigation.fragment.findNavController
+import com.example.momentia.Authentication.BaseAuthFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 

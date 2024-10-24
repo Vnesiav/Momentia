@@ -1,4 +1,4 @@
-package com.example.momentia
+package com.example.momentia.Authentication
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -14,12 +14,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
+    private lateinit var db: FirebaseFirestore
     private lateinit var termsTextView: TextView
 
     override fun onCreateView(
@@ -33,7 +34,7 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        db = FirebaseFirestore.getInstance()
 
         val emailEditText = view.findViewById<EditText>(R.id.emailEditText)
         val continueButton = view.findViewById<Button>(R.id.continueButton)
@@ -63,7 +64,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun checkIfEmailExists(email: String, callback: (Boolean) -> Unit) {
-        firestore.collection("users")
+        db.collection("users")
             .whereEqualTo("email", email)
             .get()
             .addOnSuccessListener { documents ->
@@ -80,7 +81,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setTermsText() {
-        val termsText = "By tapping Continue, you are agreeing to our Terms of Service and Privacy Policy"
+        val termsText = "By tapping continue, you are agreeing to our Terms of Service and Privacy Policy"
         val spannableString = SpannableString(termsText)
 
         val termsStart = termsText.indexOf("Terms of Service")
