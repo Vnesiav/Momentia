@@ -5,101 +5,122 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginFragment"
-    android:padding="28dp">
+    android:layout_marginTop="16dp"
+    android:layout_marginHorizontal="32dp">
 
     <ImageButton
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/circle_back"
-        android:contentDescription="@string/back_button_desc"
+        android:id="@+id/back_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:paddingStart="8dp"
         android:src="@drawable/arrow_back"
+        android:contentDescription="@string/back_button"
+        android:background="@drawable/circle_back"
         android:backgroundTint="@color/app_bar"
+        android:elevation="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlSymmetry" />
 
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_marginTop="60dp"
         android:contentDescription="@string/logo_desc"
         android:src="@drawable/momentia_logo"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/titleTextView"
-        android:layout_marginTop="20dp" />
+        app:layout_constraintBottom_toTopOf="@id/titleTextView" />
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/momentia"
-        android:textColor="@color/dark_brown"
+        android:textColor="@color/momentia"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logoImageView" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@drawable/underline"
+        app:layout_constraintEnd_toEndOf="@id/titleTextView"
+        app:layout_constraintStart_toStartOf="@id/titleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+
     <TextView
         android:id="@+id/whats_your_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="70dp"
         android:gravity="center"
         android:text="@string/whats_your_name"
-        android:textColor="@color/black"
+        android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
-    <EditText
-        android:id="@+id/first_name"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/firstNameLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:autofillHints="name"
-        android:backgroundTint="@color/white"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="20sp"
+        android:layout_marginTop="28dp"
+        android:hint="@string/first_name"
+        app:boxStrokeColor="@color/light_gray"
+        app:hintTextColor="@color/dark_brown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/whats_your_name" />
+        app:layout_constraintTop_toBottomOf="@id/whats_your_name">
 
-    <EditText
-        android:id="@+id/last_name"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:autofillHints="name"
+            android:maxLength="50" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lastNameLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:autofillHints="name"
-        android:backgroundTint="@color/white"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="20sp"
+        app:boxStrokeColor="@color/light_gray"
+        app:hintTextColor="@color/dark_brown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/first_name" />
+        app:layout_constraintTop_toBottomOf="@id/firstNameLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/last_name"
+            android:inputType="text"
+            android:maxLength="50" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/continue_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="70dp"
         android:backgroundTint="@color/dark_brown"
         android:text="@string/continue_button"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/last_name" />
+        app:layout_constraintTop_toBottomOf="@+id/lastNameLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

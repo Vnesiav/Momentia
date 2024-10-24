@@ -4,30 +4,24 @@
     <string name="bottom_menu_chat">Chat</string>
     <string name="bottom_menu_camera">Camera</string>
     <string name="bottom_menu_friend">Friends</string>
-    <string name="login">Login to Your Account</string>
-    <string name="email_input_message">Enter Email</string>
-    <string name="password_input_message">Enter Password</string>
-    <string name="register">Register</string>
-    <string name="register_button">Register</string>
-    <string name="submit_button">SUBMIT</string>
-    <string name="logo_desc">momentia_logo\n</string>
+
+    <!--    Login-->
+    <string name="logo_desc">momentia_logo</string>
     <string name="momentia">MOMENTIA</string>
-    <string name="email_button">Email</string>
-    <string name="phone_number_button">Phone Number</string>
-    <string name="send_otp_button">Send OTP</string>
-    <string name="do_not_have_acc">Don’t have account?</string>
-    <string name="create_account">Create Account</string>
-    <string name="phone_number">Phone Number</string>
-    <string name="email">email</string>
-    <string name="back_button_desc">back_button</string>
-    <string name="phone_verification" />
-    <string name="enter_verification_code" />
-    <string name="resend_code">Resend Code</string>
-    <string name="whats_your_name">What\'s your name?</string>
-    <string name="continue_button">Continue</string>
-    <string name="back_button">back button\n</string>
-    <string name="password">password</string>
+    <string name="login">Login to your account</string>
+    <string name="email_input_message">Email</string>
+    <string name="password_input_message">Password</string>
+    <string name="login_button">Login</string>
+    <string name="create_account">>Don\'t have account? Create Account</string>
+    <!--    Register-->
+    <string name="back_button">back</string>
     <string name="whats_your_email">What\'s your email?</string>
-    <string name="choose_your_password">Choose your password</string>
     <string name="email_verification">Email Verification</string>
+    <string name="choose_your_password">Choose your password</string>
+    <string name="continue_button">Continue</string>
+    <string name="whats_your_name">What\'s your name?</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="whats_your_number">What\'s your number?</string>
 </resources>

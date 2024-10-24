@@ -5,14 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 
 class NameFragment : Fragment() {
-
+    private lateinit var auth: FirebaseAuth
     private lateinit var firstNameEditText: EditText
     private lateinit var lastNameEditText: EditText
+    private lateinit var email: String
+    private lateinit var password: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        auth = FirebaseAuth.getInstance()
+        email = arguments?.getString("email") ?: ""
+        password = arguments?.getString("password") ?: ""
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,8 +33,15 @@ class NameFragment : Fragment() {
 
         firstNameEditText = view.findViewById(R.id.first_name)
         lastNameEditText = view.findViewById(R.id.last_name)
-
+        val backButton: ImageButton = view.findViewById(R.id.back_button)
         val continueButton: View = view.findViewById(R.id.continue_button)
+
+        auth = FirebaseAuth.getInstance()
+
+        backButton.setOnClickListener {
+            findNavController().navigate(R.id.action_nameFragment_to_passwordFragment)
+        }
+
         continueButton.setOnClickListener {
             handleContinueButtonClick()
         }
@@ -36,17 +54,26 @@ class NameFragment : Fragment() {
         val lastName = lastNameEditText.text.toString().trim()
 
         if (firstName.isEmpty()) {
-            Toast.makeText(requireContext(), "Please enter your first name", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please enter your first name", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
         if (lastName.isEmpty()) {
-            Toast.makeText(requireContext(), "Please enter your last name", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please enter your last name", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
-        findNavController().navigate(R.id.cameraFragment)
+        val email = arguments?.getString("email") ?: ""
+        val password = arguments?.getString("password") ?: ""
 
-        Toast.makeText(requireContext(), "Welcome $firstName $lastName!", Toast.LENGTH_SHORT).show()
+        val bundle = Bundle().apply {
+            putString("email", email)
+            putString("password", password)
+            putString("firstName", firstName)
+            putString("lastName", lastName)
+        }
+        findNavController().navigate(R.id.action_nameFragment_to_phoneFragment, bundle)
     }
 }
