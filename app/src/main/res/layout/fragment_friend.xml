@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FriendFragment"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".FriendFragment">
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/profile_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/circle_profile"
+        android:background="@drawable/circle_profile_button"
         android:contentDescription="@string/profile"
         android:src="@drawable/person"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,11 +21,47 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
         android:text="@string/bottom_menu_friend"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        android:textColor="@color/text_color"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/add_friend_button"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintStart_toEndOf="@+id/profile_button"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/add_friend_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/add_friend"
+        android:src="@drawable/add_friend"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_friend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/search_view_bg"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:queryHint="@string/search" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friend_chat_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_friend" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
