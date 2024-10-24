@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/delete_account_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_account"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/delete_account_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_confirmation"
+        android:layout_marginTop="16dp"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/delete_account_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/confirm_delete_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/delete"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/dark_brown"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/delete_account_message"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/cancel_delete_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/gray"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/confirm_delete_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
