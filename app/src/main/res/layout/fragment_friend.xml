@@ -9,9 +9,9 @@
 
     <ImageButton
         android:id="@+id/profile_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/circle_profile_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/circle_profile"
         android:contentDescription="@string/profile"
         android:src="@drawable/person"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,26 +21,32 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/bottom_menu_friend"
         android:textColor="@color/text_color"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/add_friend_button"
-        app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toEndOf="@+id/profile_button"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/add_friend_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/add_friend"
         android:src="@drawable/add_friend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <Button-->
+<!--        android:id="@+id/editProfileButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Edit Profile"-->
+<!--        android:layout_gravity="center" />-->
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_friend"

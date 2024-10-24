@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/cameraFragment">
 
     <action
         android:id="@+id/action_global_cameraFragment"
@@ -19,6 +19,12 @@
             android:id="@+id/action_loginFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/addFriendFragment"
+        android:name="com.example.momentia.AddFriend.AddFriendFragment"
+        android:label="fragment_add_friend"
+        tools:layout="@layout/fragment_add_friend" />
 
     <fragment
         android:id="@+id/registerFragment"
@@ -82,18 +88,6 @@
         tools:layout="@layout/fragment_chat" />
 
     <fragment
-        android:id="@+id/friendFragment"
-        android:name="com.example.momentia.FriendFragment"
-        android:label="fragment_friend"
-        tools:layout="@layout/fragment_friend" />
-
-    <fragment
-        android:id="@+id/addFriendFragment"
-        android:name="com.example.momentia.Profile.AddFriendFragment"
-        android:label="fragment_add_friend"
-        tools:layout="@layout/fragment_add_friend" />
-
-    <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.momentia.Profile.ProfileFragment">
         <action
@@ -145,5 +139,14 @@
         android:name="com.example.momentia.Profile.DeleteAccountDialogFragment"
         android:label="DeleteAccountDialogFragment"
         tools:layout="@layout/fragment_delete_account_dialog" />
+
+    <fragment
+        android:id="@+id/friendFragment"
+        android:name="com.example.momentia.FriendFragment"
+        android:label="FriendFragment">
+        <action
+            android:id="@+id/action_friendFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
 
 </navigation>

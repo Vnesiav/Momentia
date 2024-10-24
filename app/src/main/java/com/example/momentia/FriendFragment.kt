@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import android.widget.Button
 import com.example.momentia.Authentication.BaseAuthFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,6 +17,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 class FriendFragment : BaseAuthFragment() {
     private val db = FirebaseFirestore.getInstance()
     private val currentUser = FirebaseAuth.getInstance().currentUser
+    private lateinit var profileImageButton: ImageButton
+    private lateinit var editProfileButton: Button
     private lateinit var addFriendButton: ImageButton
     private lateinit var profileButton: ImageButton
 
@@ -48,7 +52,33 @@ class FriendFragment : BaseAuthFragment() {
 
     private fun navigateToAddFriend() {
         val navController = findNavController()
-        navController.navigate(R.id.addFriendFragment)
+
+        val navOptions = NavOptions.Builder()
+            .setEnterAnim(R.anim.slide_in_right)
+            .setExitAnim(R.anim.slide_out_left)
+            .setPopEnterAnim(R.anim.slide_in_left)
+            .setPopExitAnim(R.anim.slide_out_right)
+            .build()
+
+        navController.navigate(R.id.addFriendFragment, null, navOptions)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Find the ImageButton by its ID
+//        profileImageButton = view.findViewById(R.id.imageButton)
+//        editProfileButton = view.findViewById(R.id.editProfileButton)
+
+        // Set OnClickListener for the profileImageButton (if needed)
+//        profileImageButton.setOnClickListener {
+//            findNavController().navigate(R.id.action_friendFragment_to_profileFragment)
+//        }
+
+        // Set OnClickListener for the editProfileButton to navigate to EditProfileFragment
+//        editProfileButton.setOnClickListener {
+//            findNavController().navigate(R.id.action_friendFragment_to_editProfileFragment)
+//        }
     }
 
     private fun setFontSize(view: View) {

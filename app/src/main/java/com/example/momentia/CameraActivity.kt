@@ -8,9 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -18,12 +16,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
-class CameraFragment : Fragment() {
+class CameraActivity : AppCompatActivity() {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
@@ -39,27 +36,25 @@ class CameraFragment : Fragment() {
     private val CAMERA_REQUEST_CODE = 100
     private val GALLERY_REQUEST_CODE = 102
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_camera, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_camera)
 
         firestore = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
 
-        capturedImageView = view.findViewById(R.id.capturedImageView)
-        cameraButton = view.findViewById(R.id.cameraButton)
-        retakeButton = view.findViewById(R.id.retakeButton)
-        galleryButton = view.findViewById(R.id.galleryButton)
-        saveButton = view.findViewById(R.id.saveButton)
-        sendToFriendButton = view.findViewById(R.id.sendToFriendButton)
-        closeButton = view.findViewById(R.id.closeButton)
+        capturedImageView = findViewById(R.id.capturedImageView)
+        cameraButton = findViewById(R.id.cameraButton)
+        retakeButton = findViewById(R.id.retakeButton)
+        galleryButton = findViewById(R.id.galleryButton)
+        saveButton = findViewById(R.id.saveButton)
+        sendToFriendButton = findViewById(R.id.sendToFriendButton)
+        closeButton = findViewById(R.id.closeButton)
 
         retakeButton.isEnabled = false
 
         cameraButton.setOnClickListener {
-            Log.d("CameraFragment", "Camera button clicked")
+            Log.d("CameraActivity", "Camera button clicked")
             if (checkCameraPermission()) {
                 openCamera()
             } else {
@@ -90,13 +85,11 @@ class CameraFragment : Fragment() {
         galleryButton.setOnClickListener {
             openGallery()
         }
-
-        return view
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == AppCompatActivity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             when (requestCode) {
                 CAMERA_REQUEST_CODE -> {
                     capturedImage = data?.extras?.get("data") as? Bitmap
@@ -113,13 +106,13 @@ class CameraFragment : Fragment() {
                         sendToFriendButton.visibility = View.VISIBLE
                         closeButton.visibility = View.VISIBLE
                     } else {
-                        Toast.makeText(requireContext(), "Gagal mengambil gambar", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Gagal mengambil gambar", Toast.LENGTH_SHORT).show()
                     }
                 }
                 GALLERY_REQUEST_CODE -> {
                     val imageUri: Uri? = data?.data
                     if (imageUri != null) {
-                        val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
+                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
                         capturedImage = bitmap
                         capturedImageView.setImageBitmap(bitmap)
 
@@ -132,7 +125,7 @@ class CameraFragment : Fragment() {
                         sendToFriendButton.visibility = View.VISIBLE
                         closeButton.visibility = View.VISIBLE
                     } else {
-                        Toast.makeText(requireContext(), "Gagal memilih gambar", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Gagal memilih gambar", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -141,17 +134,17 @@ class CameraFragment : Fragment() {
 
     private fun checkCameraPermission(): Boolean {
         val permissionGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
+            this,
             Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
-        Log.d("CameraFragment", "Camera permission granted: $permissionGranted")
+        Log.d("CameraActivity", "Camera permission granted: $permissionGranted")
         return permissionGranted
     }
 
     private fun requestCameraPermission() {
-        Log.d("CameraFragment", "Requesting camera permission")
+        Log.d("CameraActivity", "Requesting camera permission")
         ActivityCompat.requestPermissions(
-            requireActivity(),
+            this,
             arrayOf(Manifest.permission.CAMERA),
             CAMERA_PERMISSION_REQUEST_CODE
         )
@@ -165,24 +158,24 @@ class CameraFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Log.d("CameraFragment", "Camera permission granted by user")
+                Log.d("CameraActivity", "Camera permission granted by user")
                 openCamera()
             } else {
-                Log.d("CameraFragment", "Camera permission denied by user")
-                Toast.makeText(requireContext(), "Camera permission is required to use the camera", Toast.LENGTH_SHORT).show()
+                Log.d("CameraActivity", "Camera permission denied by user")
+                Toast.makeText(this, "Camera permission is required to use the camera", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun openCamera() {
-        Log.d("CameraFragment", "Opening camera")
+        Log.d("CameraActivity", "Opening camera")
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (cameraIntent.resolveActivity(requireActivity().packageManager) != null) {
+        if (cameraIntent.resolveActivity(packageManager) != null) {
             startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
-            Log.d("CameraFragment", "Camera intent started")
+            Log.d("CameraActivity", "Camera intent started")
         } else {
-            Log.d("CameraFragment", "No camera app available")
-            Toast.makeText(requireContext(), "Tidak ada aplikasi kamera yang tersedia", Toast.LENGTH_SHORT).show()
+            Log.d("CameraActivity", "No camera app available")
+            Toast.makeText(this, "Tidak ada aplikasi kamera yang tersedia", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -198,7 +191,7 @@ class CameraFragment : Fragment() {
         storageRef.putBytes(data).addOnSuccessListener {
             storageRef.downloadUrl.addOnSuccessListener { uri ->
                 val photoUrl = uri.toString()
-                Log.d("CameraFragment", "URL Foto: $photoUrl")
+                Log.d("CameraActivity", "URL Foto: $photoUrl")
 
                 val attendanceRecordId = firestore.collection("story").document().id
 
@@ -210,29 +203,29 @@ class CameraFragment : Fragment() {
                 firestore.collection("absensi").document(attendanceRecordId)
                     .set(storyData)
                     .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Absensi berhasil disimpan", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Absensi berhasil disimpan", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(requireContext(), "Gagal menyimpan data absensi: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Gagal menyimpan data absensi: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
             }
         }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Gagal mengunggah foto", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Gagal mengunggah foto", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun saveImageToGallery(bitmap: Bitmap) {
         val savedImageURL = MediaStore.Images.Media.insertImage(
-            requireContext().contentResolver,
+            contentResolver,
             bitmap,
             "Momentia_Image_${System.currentTimeMillis()}",
             "Image captured using Momentia App"
         )
 
         if (savedImageURL != null) {
-            Toast.makeText(requireContext(), "Image saved to gallery", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Image saved to gallery", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(requireContext(), "Failed to save image", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -244,7 +237,7 @@ class CameraFragment : Fragment() {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(
-            requireContext().contentResolver, bitmap, "temp", null
+            contentResolver, bitmap, "temp", null
         )
 
         val uri = Uri.parse(path)
