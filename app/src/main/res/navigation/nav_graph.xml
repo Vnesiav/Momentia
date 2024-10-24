@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/cameraFragment">
+    app:startDestination="@id/friendFragment">
 
     <fragment
         android:id="@+id/cameraFragment"
@@ -35,5 +35,4 @@
         android:name="com.example.momentia.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
-
 </navigation>

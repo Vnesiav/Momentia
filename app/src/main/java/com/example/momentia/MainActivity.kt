@@ -25,9 +25,4 @@ class MainActivity : AppCompatActivity() {
     fun hideBottomNavigation() {
         bottomNavigation.visibility = View.GONE
     }
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment)
-//
-//    }
 }
