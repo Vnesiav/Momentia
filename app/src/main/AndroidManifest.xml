@@ -1,5 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Add camera feature and permissions -->
     <uses-feature
@@ -27,6 +32,8 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.MOMENTIA"
         tools:targetApi="31">
+        <activity android:name=".MainActivity"
+            android:exported="true">
 
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
