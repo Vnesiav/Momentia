@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#333333</color>
     <color name="gray">#939393</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#F3F2ED</color>
     <color name="light_brown">#C2663C</color>
+    <color name="dark_brown">#4A463B</color>
+    <color name="light_gray">#C4C1B8</color>
     <color name="background_color">#F3F2ED</color>
+    <color name="momentia">#636365</color>
     <color name="app_bar">#7B7368</color>
     <color name="text_color">#333333</color>
 </resources>

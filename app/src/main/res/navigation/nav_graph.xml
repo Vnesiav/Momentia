@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/cameraFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/cameraFragment"
@@ -27,14 +27,12 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.momentia.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
-
-    <fragment
-        android:id="@+id/registerFragment"
-        android:name="com.example.momentia.RegisterFragment"
-        android:label="fragment_register"
-        tools:layout="@layout/fragment_register" />
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addFriendFragment"
         android:name="com.example.momentia.AddFriendFragment"
@@ -45,5 +43,51 @@
         android:name="com.example.momentia.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
-
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.momentia.RegisterFragment"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_passwordFragment"
+            app:destination="@id/passwordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/passwordFragment"
+        android:name="com.example.momentia.PasswordFragment"
+        android:label="fragment_password"
+        tools:layout="@layout/fragment_password">
+        <action
+            android:id="@+id/action_passwordFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_passwordFragment_to_nameFragment"
+            app:destination="@id/nameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nameFragment"
+        android:name="com.example.momentia.NameFragment"
+        android:label="fragment_name"
+        tools:layout="@layout/fragment_name">
+        <action
+            android:id="@+id/action_nameFragment_to_passwordFragment"
+            app:destination="@id/passwordFragment" />
+        <action
+            android:id="@+id/action_nameFragment_to_phoneFragment"
+            app:destination="@id/phoneFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/phoneFragment"
+        android:name="com.example.momentia.PhoneFragment"
+        android:label="fragment_phone"
+        tools:layout="@layout/fragment_phone">
+        <action
+            android:id="@+id/action_phoneFragment_to_nameFragment"
+            app:destination="@id/nameFragment" />
+<!--        <action-->
+<!--            android:id="@+id/action_phoneFragment_to_cameraFragment"-->
+<!--            app:destination="@id/cameraFragment" />-->
+        <action
+            android:id="@+id/action_phoneFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>
