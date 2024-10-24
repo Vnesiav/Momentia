@@ -1,6 +1,7 @@
 package com.example.momentia.AddFriend
 
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,7 +14,7 @@ class FriendRequestViewHolder(containerView: View, private val imageLoader: Imag
     private val profilePicture: ImageView = containerView.findViewById(R.id.profile_picture)
     private val username: TextView = containerView.findViewById(R.id.username)
     private val name: TextView = containerView.findViewById(R.id.name)
-    private val acceptButton: ImageButton = containerView.findViewById(R.id.accept_button)
+    private val acceptButton: Button = containerView.findViewById(R.id.accept_button)
     private val declineButton: ImageButton = containerView.findViewById(R.id.decline_button)
 
     fun bindData(friendRequest: FriendRequest,
