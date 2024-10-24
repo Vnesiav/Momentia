@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.momentia.Authentication.BaseAuthFragment
+import com.example.momentia.MainActivity
 import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +32,8 @@ class ProfileFragment : BaseAuthFragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         profileNameView = view.findViewById(R.id.profile_name)
+        (activity as MainActivity).hideBottomNavigation()
+
 
         val backButton = view.findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
@@ -97,4 +100,5 @@ class ProfileFragment : BaseAuthFragment() {
             Toast.makeText(requireContext(), "Failed to load profile", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

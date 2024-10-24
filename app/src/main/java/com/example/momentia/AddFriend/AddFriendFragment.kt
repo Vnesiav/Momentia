@@ -20,6 +20,7 @@ import com.example.momentia.glide.GlideImageLoader
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import org.w3c.dom.Text
 
 class AddFriendFragment : BaseAuthFragment() {
     private lateinit var backButton: ImageButton
@@ -75,7 +76,6 @@ class AddFriendFragment : BaseAuthFragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        showFriendRequests()
         showRandomUsers()
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -93,6 +93,11 @@ class AddFriendFragment : BaseAuthFragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        showFriendRequests()
+    }
+
     private fun showFriendRequests() {
         Log.d("ShowFriendRequests", "showFriendRequests called")
         val currentUser = auth.currentUser
@@ -104,8 +109,17 @@ class AddFriendFragment : BaseAuthFragment() {
                 .collection("friendRequests")
                 .get()
                 .addOnSuccessListener { querySnapshot ->
-                    val friendRequests = mutableListOf<FriendRequest>() // List to hold friend requests
-                    Log.d("ShowFriendRequests", "Query snapshot size: ${querySnapshot.size()}")
+                    val friendRequests = mutableListOf<FriendRequest>()
+
+                    if (!querySnapshot.isEmpty) {
+                        Log.d("ShowFriendRequests", "Snapshot is empty, hiding views")
+                        val addedTitle = view?.findViewById<TextView>(R.id.added_me)
+                        val underline1 = view?.findViewById<View>(R.id.view1)
+
+                        addedTitle?.visibility = View.VISIBLE
+                        underline1?.visibility = View.VISIBLE
+                    }
+
                     for (request in querySnapshot.documents) {
                         val avatarUrl = request.getString("avatarUrl") ?: ""
                         val senderId = request.getString("senderId") ?: ""
@@ -142,45 +156,6 @@ class AddFriendFragment : BaseAuthFragment() {
         }
     }
 
-
-//    private fun sendFriendRequest(friend: Friend) {
-//        val currentUser = auth.currentUser
-//        val context = requireContext()
-//
-//        if (currentUser != null) {
-//            db.collection("users")
-//                .document(currentUser.uid)
-//                .get()
-//                .addOnSuccessListener { document ->
-//                    val friendRequestData = FriendRequest(
-//                        senderId = currentUser.uid,
-//                        username = document.getString("username").toString(),
-//                        avatarUrl = document.getString("avatarUrl").toString(),
-//                        firstName = document.getString("firstName").toString(),
-//                        sentAt = Timestamp.now()
-//                    )
-//                    db.collection("users")
-//                        .document(friend.userId) // Sending request to this user
-//                        .collection("friendRequests")
-//                        .add(friendRequestData)
-//                        .addOnSuccessListener {
-//                            Toast.makeText(context, "Friend request sent", Toast.LENGTH_SHORT).show()
-//
-//                            // Update friend list after sending the request
-//                            updateFriendListAfterRequest(friend.userId)
-//                        }
-//                        .addOnFailureListener { exception ->
-//                            Toast.makeText(context, "Failed to send friend request", Toast.LENGTH_SHORT).show()
-//                            exception.printStackTrace()
-//                        }
-//                }.addOnFailureListener { exception ->
-//                    Toast.makeText(context, "Failed to send friend request", Toast.LENGTH_SHORT).show()
-//                    exception.printStackTrace()
-//                }
-//        } else {
-//            Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     private fun sendFriendRequest(friend: Friend) {
         val currentUser = auth.currentUser
@@ -225,7 +200,6 @@ class AddFriendFragment : BaseAuthFragment() {
         }
     }
 
-
     private fun updateFriendListAfterRequest(friendUserId: String) {
         // Add the friend's user ID to the current user's friends list (locally)
         currentUserFriends.add(friendUserId)
@@ -233,7 +207,6 @@ class AddFriendFragment : BaseAuthFragment() {
         // Notify the adapter to refresh the data
         friendAdapter.setData(filteredList, currentUserFriends)
     }
-
 
     private fun searchFriends(query: String?) {
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -311,8 +284,6 @@ class AddFriendFragment : BaseAuthFragment() {
                 }
         }
     }
-
-
 
     private fun setFontSize(view: View) {
         val searchView = view.findViewById<SearchView>(R.id.search_friend)
