@@ -115,6 +115,10 @@ class FriendFragment : BaseAuthFragment() {
                     val friendIds = documentSnapshot.get("friends") as? List<String> ?: emptyList()
 
                     if (friendIds.isNotEmpty()) {
+                        val warningText = requireView().findViewById<TextView>(R.id.warning_text)
+                        warningText.visibility = View.GONE
+                        friendChatRecyclerView.visibility = View.VISIBLE
+
                         db.collection("users")
                             .whereIn(FieldPath.documentId(), friendIds)
                             .get()
