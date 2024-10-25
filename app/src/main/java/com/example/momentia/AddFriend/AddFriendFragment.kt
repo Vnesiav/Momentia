@@ -407,8 +407,6 @@ class AddFriendFragment : BaseAuthFragment() {
 
                                 val friend = Friend(userId, username, avatarUrl, null, null)
                                 filteredList.add(friend)
-
-                                Log.d("ShowRandomUsers", "Friend added: $friend")
                             }
 
                             if (filteredList.isEmpty()) {

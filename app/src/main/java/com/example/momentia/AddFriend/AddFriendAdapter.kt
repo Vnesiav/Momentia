@@ -25,7 +25,6 @@ class AddFriendAdapter(
         notifyDataSetChanged()
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddFriendViewHolder {
         val view = layoutInflater.inflate(R.layout.add_friend_list, parent, false)
         return AddFriendViewHolder(view, imageLoader, onFriendRequestSent)
