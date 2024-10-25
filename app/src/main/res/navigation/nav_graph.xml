@@ -142,7 +142,7 @@
 
     <fragment
         android:id="@+id/friendFragment"
-        android:name="com.example.momentia.FriendFragment"
+        android:name="com.example.momentia.Friend.FriendFragment"
         android:label="FriendFragment">
         <action
             android:id="@+id/action_friendFragment_to_editProfileFragment"
