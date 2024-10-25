@@ -36,13 +36,14 @@
 
     <ImageButton
         android:id="@+id/add_button"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:background="@drawable/oval_button"
         android:backgroundTint="@color/app_bar"
         android:contentDescription="@string/add"
-        android:src="@drawable/add_friend_white"
+        android:src="@drawable/add_friend_icon"
         app:iconTint="@color/white"
+        android:paddingHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/profile_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

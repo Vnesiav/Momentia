@@ -17,10 +17,11 @@ class FriendRequestViewHolder(containerView: View, private val imageLoader: Imag
     private val acceptButton: Button = containerView.findViewById(R.id.accept_button)
     private val declineButton: ImageButton = containerView.findViewById(R.id.decline_button)
 
-    fun bindData(friendRequest: FriendRequest,
-                 imageLoader: ImageLoader,
-//                 onAcceptClick: () -> Unit,
-//                 onDeclineClick: () -> Unit\
+    fun bindData(
+        friendRequest: FriendRequest,
+        imageLoader: ImageLoader,
+        onAcceptClick: () -> Unit,
+        onDeclineClick: () -> Unit
     ) {
         if (!friendRequest.avatarUrl.isNullOrEmpty()) {
             imageLoader.loadImage(friendRequest.avatarUrl, profilePicture)
@@ -31,8 +32,7 @@ class FriendRequestViewHolder(containerView: View, private val imageLoader: Imag
         username.text = friendRequest.username
         name.text = friendRequest.firstName
 
-
-//        acceptButton.setOnClickListener { onAcceptClick() }
-//        declineButton.setOnClickListener { onDeclineClick() }
+        acceptButton.setOnClickListener { onAcceptClick() }
+        declineButton.setOnClickListener { onDeclineClick() }
     }
 }
