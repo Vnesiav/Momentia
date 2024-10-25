@@ -132,7 +132,6 @@ class FriendFragment : BaseAuthFragment() {
                                     )
                                 }
 
-                                // Update the complete friend list and the RecyclerView
                                 friendList.clear()
                                 friendList.addAll(friends)
                                 friendChatAdapter.setData(friends)
@@ -187,7 +186,7 @@ class FriendFragment : BaseAuthFragment() {
     private fun showSelectionDialog(friend: FriendChat) {
         AlertDialog.Builder(requireContext())
             .setTitle("Friend selected")
-            .setMessage("${friend.firstName} ${friend.lastName} is clicked")
+            .setMessage("Work is on progress")
             .setPositiveButton("OK") { _, _ -> }.show()
     }
 
