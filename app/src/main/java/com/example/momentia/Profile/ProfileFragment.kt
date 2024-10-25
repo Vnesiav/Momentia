@@ -121,4 +121,3 @@ class ProfileFragment : BaseAuthFragment() {
         }
     }
 }
-}
