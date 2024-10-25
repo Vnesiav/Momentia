@@ -153,10 +153,16 @@ class AddFriendFragment : BaseAuthFragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchFriends(query)
+                stopUpdatingTime()
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrEmpty()) {
+                    startUpdatingTime()
+                } else {
+                    stopUpdatingTime()
+                }
                 searchFriends(newText)
                 return true
             }
@@ -172,8 +178,11 @@ class AddFriendFragment : BaseAuthFragment() {
 
     override fun onResume() {
         super.onResume()
-        showFriendRequests()
-        startUpdatingTime()
+
+        if (searchView.query.isEmpty()) {
+            showFriendRequests()
+            startUpdatingTime()
+        }
     }
 
     override fun onPause() {
@@ -203,6 +212,8 @@ class AddFriendFragment : BaseAuthFragment() {
 
     private fun showFriendRequests() {
         val currentUser = auth.currentUser
+        val addedTitle = view?.findViewById<TextView>(R.id.added_me)
+        val underline1 = view?.findViewById<View>(R.id.view1)
 
         if (currentUser != null) {
             db.collection("users")
@@ -213,34 +224,35 @@ class AddFriendFragment : BaseAuthFragment() {
                     val friendRequests = mutableListOf<FriendRequest>()
 
                     if (!querySnapshot.isEmpty) {
-                        val addedTitle = view?.findViewById<TextView>(R.id.added_me)
-                        val underline1 = view?.findViewById<View>(R.id.view1)
-
                         addedTitle?.visibility = View.VISIBLE
                         underline1?.visibility = View.VISIBLE
-                    }
+                        friendRequestRecyclerView.visibility = View.VISIBLE
 
-                    for (request in querySnapshot.documents) {
-                        val avatarUrl = request.getString("avatarUrl")
-                        val senderId = request.getString("senderId") ?: ""
-                        val username = request.getString("username") ?: ""
-                        val sentAt = request.getTimestamp("sentAt")
+                        for (request in querySnapshot.documents) {
+                            val avatarUrl = request.getString("avatarUrl")
+                            val senderId = request.getString("senderId") ?: ""
+                            val username = request.getString("username") ?: ""
+                            val sentAt = request.getTimestamp("sentAt")
 
-                        if (senderId.isNotEmpty()) {
-                            db.collection("users").document(senderId).get().addOnSuccessListener { document ->
-                                val firstName = document.getString("firstName") ?: ""
+                            if (senderId.isNotEmpty()) {
+                                db.collection("users").document(senderId).get().addOnSuccessListener { document ->
+                                    val firstName = document.getString("firstName") ?: ""
 
-                                sentAt?.let {
-                                    val friendRequest = FriendRequest(senderId, username, avatarUrl, firstName, it)
-                                    Log.d("ShowFriendRequests", "Friend request added: $friendRequest")
-                                    friendRequests.add(friendRequest)
+                                    sentAt?.let {
+                                        val friendRequest = FriendRequest(senderId, username, avatarUrl, firstName, it)
+                                        friendRequests.add(friendRequest)
 
-                                    if (friendRequests.size == querySnapshot.size()) {
-                                        requestAdapter.setData(friendRequests)
+                                        if (friendRequests.size == querySnapshot.size()) {
+                                            requestAdapter.setData(friendRequests)
+                                        }
                                     }
                                 }
                             }
                         }
+                    } else {
+                        addedTitle?.visibility = View.GONE
+                        underline1?.visibility = View.GONE
+                        friendRequestRecyclerView.visibility = View.GONE
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -329,7 +341,6 @@ class AddFriendFragment : BaseAuthFragment() {
                 .get()
                 .addOnSuccessListener { result ->
                     friendList.clear()
-                    Log.d("FirestoreQuery", "Number of documents found: ${result.size()}")
 
                     for (document in result) {
                         val userId = document.id
@@ -346,16 +357,12 @@ class AddFriendFragment : BaseAuthFragment() {
 
                     filteredList.clear()
                     filteredList.addAll(friendList)
-                    Log.d("FirestoreQuery", "Filtered list size: ${filteredList.size}")
 
                     if (filteredList.isEmpty()) {
-                        Log.d("FirestoreQuery", "No users found, showing warning text.")
                         warningText.visibility = View.VISIBLE
                         warningText.text = "No users found"
                         addFriendRecyclerView.visibility = View.GONE
-
                     } else {
-                        Log.d("FirestoreQuery", "Users found, hiding warning text.")
                         addFriendRecyclerView.visibility = View.VISIBLE
                         warningText.visibility = View.GONE
                     }
