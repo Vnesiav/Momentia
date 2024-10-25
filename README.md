@@ -28,4 +28,5 @@ Fitur yang ditambahkan:
 3. Fitur friend request
 
 Struktur tabel:
+
 ![image](https://github.com/user-attachments/assets/9e2c9b0f-6eea-4678-9a4c-6b38ca951eab)
