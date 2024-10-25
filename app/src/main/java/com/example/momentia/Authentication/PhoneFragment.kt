@@ -48,7 +48,7 @@ class PhoneFragment : Fragment() {
         val continueButton: View = view.findViewById(R.id.continue_button)
 
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_phoneFragment_to_nameFragment)
+            findNavController().popBackStack()
         }
 
         continueButton.setOnClickListener {

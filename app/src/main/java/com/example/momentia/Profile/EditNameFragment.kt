@@ -38,7 +38,7 @@ class EditNameFragment : BaseAuthFragment() {
         val saveButton: View = view.findViewById(R.id.save_button)
 
         backButton.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
         saveButton.setOnClickListener {

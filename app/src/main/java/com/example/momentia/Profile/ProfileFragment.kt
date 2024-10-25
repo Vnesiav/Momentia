@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.momentia.Authentication.BaseAuthFragment
+import com.example.momentia.MainActivity
 import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,6 +37,13 @@ class ProfileFragment : BaseAuthFragment() {
         // Inisialisasi views
         profileNameView = view.findViewById(R.id.profile_name)
         profileImageView = view.findViewById(R.id.profile_image)
+        (activity as MainActivity).hideBottomNavigation()
+
+
+        val backButton = view.findViewById<ImageButton>(R.id.back_button)
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         // Muat data pengguna
         loadUserData()
@@ -111,4 +120,5 @@ class ProfileFragment : BaseAuthFragment() {
             Toast.makeText(requireContext(), "Failed to load profile", Toast.LENGTH_SHORT).show()
         }
     }
+}
 }

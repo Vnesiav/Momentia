@@ -24,8 +24,10 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomNavigation?.setupWithNavController(navController)
+
+        bottomNavigation = findViewById(R.id.bottom_nav)
+        bottomNavigation.setupWithNavController(navController)
+        showBottomNavigation()
 
         val fragmentsWithoutBottomNav = setOf(
             R.id.loginFragment,
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             R.id.usernameFragment,
             R.id.nameFragment,
             R.id.phoneFragment,
+            R.id.profileFragment,
             R.id.editProfileFragment,
             R.id.editNameFragment,
             R.id.changeEmailFragment,
@@ -49,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (auth.currentUser != null) {
-            // Pengguna sudah login, arahkan ke CameraFragment
             navController.navigate(R.id.action_global_cameraFragment)
         }
     }
@@ -57,6 +59,13 @@ class MainActivity : AppCompatActivity() {
     fun hideBottomNavigation() {
         bottomNavigation.visibility = View.GONE
     }
+
+
+
+//    override fun onSupportNavigateUp(): Boolean {
+//        val navController = findNavController(R.id.nav_host_fragment)
+//
+//    }
 
     fun showBottomNavigation() {
         bottomNavigation.visibility = View.VISIBLE

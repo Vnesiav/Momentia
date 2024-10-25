@@ -42,7 +42,7 @@ class NameFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_nameFragment_to_usernameFragment)
+            findNavController().popBackStack()
         }
 
         continueButton.setOnClickListener {

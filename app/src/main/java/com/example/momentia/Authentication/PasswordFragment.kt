@@ -44,7 +44,7 @@ class PasswordFragment : Fragment() {
         setPasswordRequirementsText(view)
 
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_passwordFragment_to_registerFragment)
+            findNavController().popBackStack()
         }
 
         continueButton.setOnClickListener {

@@ -1,24 +1,33 @@
 <resources>
+
     <string name="app_name">Momentia</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--  Nav  -->
     <string name="bottom_menu_chat">Chat</string>
     <string name="bottom_menu_camera">Camera</string>
     <string name="bottom_menu_friend">Friends</string>
     <string name="profile">Profile</string>
+
+    <!--  Friend  -->
     <string name="add_friend">Add Friend</string>
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
     <string name="profile_picture">Profile Picture</string>
     <string name="tap_to_send_message">Tap to send message</string>
     <string name="back">Back</string>
+    <string name="add_friends">Add friends</string>
 
-    <!--    Login-->
+
+    <!--  Login  -->
     <string name="logo_desc">momentia_logo</string>
     <string name="momentia">MOMENTIA</string>
     <string name="login">Login to your account</string>
     <string name="email_input_message">Email address</string>
     <string name="password_input_message">Password</string>
+    <string name="forgot_password">Forgot password?</string>
     <string name="login_button">Login</string>
     <string name="create_account">>Don\'t have account? Create Account</string>
+
 
     <!--    Register-->
     <string name="back_button">back</string>
@@ -31,6 +40,12 @@
     <string name="last_name">Last name</string>
     <string name="phone_number">Phone number</string>
     <string name="whats_your_number">What\'s your number?</string>
+    <string name="add">Add</string>
+    <string name="quick_add">Quick add</string>
+    <string name="added_me">Added me</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+
     <string name="whats_your_username">What\'s your username?</string>
     <string name="username">username</string>
 
@@ -44,7 +59,6 @@
     <string name="change_email_address">Change email address</string>
     <string name="change_phone_number">Change phone number</string>
     <string name="friends">Friends</string>
-    <string name="add_friends">Add Friends</string>
     <string name="my_friends">My friends</string>
     <string name="account_actions">Account actions</string>
     <string name="sign_out">Sign out</string>
@@ -55,7 +69,6 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
 
-
     <string name="edit_your_name">Want to edit your name?</string>
     <string name="save">Save</string>
     <string name="change_your_number">Change your number?</string>
@@ -64,6 +77,7 @@
     <string name="change_your_password">Change your password?</string>
     <string name="current_email">Your current email address</string>
     <string name="new_email">New email address</string>
+    
     <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
     <string name="password">Change password?</string>
 </resources>

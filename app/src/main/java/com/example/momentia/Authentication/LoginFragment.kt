@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var forgotPasswordTextView: TextView
     private lateinit var registerTextView: TextView
 
     override fun onCreateView(
@@ -38,6 +39,7 @@ class LoginFragment : Fragment() {
         val emailEditText = view.findViewById<EditText>(R.id.emailEditText)
         val passwordEditText = view.findViewById<EditText>(R.id.passwordEditText)
         val loginButton = view.findViewById<Button>(R.id.loginButton)
+        forgotPasswordTextView = view.findViewById<TextView>(R.id.forgotPassword)
         registerTextView = view.findViewById<TextView>(R.id.registerTextView)
 
         setRegisterText()
@@ -59,6 +61,15 @@ class LoginFragment : Fragment() {
             loginUser(email, password)
         }
 
+        forgotPasswordTextView.setOnClickListener {
+            val email = emailEditText.text.toString().trim()
+            if (email.isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter your email to reset password", Toast.LENGTH_SHORT).show()
+            } else {
+                sendPasswordResetEmail(email)
+            }
+        }
+
         registerTextView.setOnClickListener {
             findNavController().navigate(R.id.registerFragment)
         }
@@ -77,6 +88,17 @@ class LoginFragment : Fragment() {
                     }
                 } else {
                     Toast.makeText(requireContext(), "Login failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun sendPasswordResetEmail(email: String) {
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(requireContext(), "Password reset email sent to $email", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
