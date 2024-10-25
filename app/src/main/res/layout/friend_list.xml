@@ -12,6 +12,7 @@
         android:layout_height="60dp"
         android:contentDescription="@string/profile"
         android:scaleType="centerCrop"
+        android:layout_marginVertical="8dp"
         android:src="@drawable/circle_profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +71,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
         android:background="?android:attr/dividerVertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
