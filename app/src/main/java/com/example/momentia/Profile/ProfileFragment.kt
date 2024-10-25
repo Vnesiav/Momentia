@@ -34,7 +34,6 @@ class ProfileFragment : BaseAuthFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        // Inisialisasi views
         profileNameView = view.findViewById(R.id.profile_name)
         profileImageView = view.findViewById(R.id.profile_image)
         (activity as MainActivity).hideBottomNavigation()
@@ -45,7 +44,6 @@ class ProfileFragment : BaseAuthFragment() {
             findNavController().popBackStack()
         }
 
-        // Muat data pengguna
         loadUserData()
 
         view.findViewById<TextView>(R.id.edit_profile_picture).setOnClickListener {
@@ -55,10 +53,6 @@ class ProfileFragment : BaseAuthFragment() {
         view.findViewById<TextView>(R.id.edit_name).setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_editNameFragment)
         }
-
-//        view.findViewById<TextView>(R.id.change_email).setOnClickListener {
-//            findNavController().navigate(R.id.actionUpdateEmail)
-//        }
 
         view.findViewById<TextView>(R.id.change_phone).setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_changeNumberFragment)
@@ -100,21 +94,18 @@ class ProfileFragment : BaseAuthFragment() {
             if (document != null) {
                 val firstName = document.getString("firstName") ?: ""
                 val lastName = document.getString("lastName") ?: ""
-                val avatarUrl = document.getString("avatarUrl") ?: ""  // Ambil avatarUrl
+                val avatarUrl = document.getString("avatarUrl") ?: ""
                 val fullName = "$firstName $lastName"
 
-                // Tampilkan nama pengguna
                 profileNameView.text = fullName
 
-                // Tampilkan avatar dengan Glide
                 if (avatarUrl.isNotEmpty()) {
                     Glide.with(this)
                         .load(avatarUrl)
-                        .placeholder(R.drawable.profile) // Placeholder sementara gambar di-load
-                        .error(R.drawable.profile) // Gambar default jika URL gagal dimuat
+                        .placeholder(R.drawable.profile)
+                        .error(R.drawable.profile)
                         .into(profileImageView)
                 } else {
-                    // Jika avatarUrl kosong, tampilkan gambar default
                     profileImageView.setImageResource(R.drawable.profile)
                 }
             }
