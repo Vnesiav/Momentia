@@ -124,6 +124,7 @@
         android:id="@+id/changeEmailFragment"
         android:name="com.example.momentia.Profile.ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password">
+      
         <action
             android:id="@+id/actionEmailUpdated"
             app:destination="@id/profileFragment" />
