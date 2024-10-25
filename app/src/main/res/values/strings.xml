@@ -56,7 +56,7 @@
     <string name="icon">icon</string>
     <string name="edit_profile_picture">Edit profile picture</string>
     <string name="edit_name">Edit name</string>
-    <string name="change_email_address">Change email address</string>
+    <string name="change_password">Change password</string>
     <string name="change_phone_number">Change phone number</string>
     <string name="friends">Friends</string>
     <string name="my_friends">My friends</string>
@@ -74,9 +74,9 @@
     <string name="change_your_number">Change your number?</string>
     <string name="current_number">Your current phone number</string>
     <string name="new_number">New phone number</string>
-    <string name="change_your_email">Change your email?</string>
-    <string name="current_email">Your current email address</string>
-    <string name="new_email">New email address</string>
+    <string name="change_your_password">Change your password?</string>
+    <string name="current_password">Your current password</string>
+    <string name="new_password">New password</string>
     
     <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
 </resources>

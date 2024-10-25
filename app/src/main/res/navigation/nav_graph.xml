@@ -16,8 +16,8 @@
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
+            android:id="@+id/action_loginFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
     </fragment>
 
     <fragment
@@ -126,8 +126,8 @@
 
     <fragment
         android:id="@+id/changeEmailFragment"
-        android:name="com.example.momentia.Profile.ChangeEmailFragment"
-        tools:layout="@layout/fragment_change_email" />
+        android:name="com.example.momentia.Profile.ChangePasswordFragment"
+        tools:layout="@layout/fragment_change_password" />
 
     <fragment
         android:id="@+id/changeNumberFragment"
