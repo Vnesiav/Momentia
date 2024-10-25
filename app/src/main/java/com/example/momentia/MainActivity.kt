@@ -1,6 +1,7 @@
 package com.example.momentia
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -50,10 +51,6 @@ class MainActivity : AppCompatActivity() {
                 showBottomNavigation()
             }
         }
-
-        if (auth.currentUser != null) {
-            navController.navigate(R.id.action_global_cameraFragment)
-        }
     }
 
     fun hideBottomNavigation() {
@@ -61,18 +58,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment)
-//
-//    }
-
     fun showBottomNavigation() {
         bottomNavigation.visibility = View.VISIBLE
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        navController.removeOnDestinationChangedListener { _, _, _ -> }
     }
 }

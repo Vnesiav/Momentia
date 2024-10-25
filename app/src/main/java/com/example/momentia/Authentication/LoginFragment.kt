@@ -82,7 +82,8 @@ class LoginFragment : Fragment() {
                     val user = auth.currentUser
                     if (user != null && user.isEmailVerified) {
                         Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.action_loginFragment_to_chatFragment)
+
+                        findNavController().navigate(R.id.action_loginFragment_to_cameraFragment)
                     } else {
                         Toast.makeText(requireContext(), "Please verify your email first.", Toast.LENGTH_SHORT).show()
                     }

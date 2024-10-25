@@ -80,17 +80,19 @@ class ProfileFragment : BaseAuthFragment() {
 
         view.findViewById<TextView>(R.id.delete_account).setOnClickListener {
             showDeleteAccountDialog()
+            Toast.makeText(requireContext(), "Account deleted successfully", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
 
         return view
     }
 
-    private fun showDeleteAccountDialog() {
+    fun showDeleteAccountDialog() {
         val deleteAccountDialog = DeleteAccountDialogFragment()
         deleteAccountDialog.show(childFragmentManager, "DeleteAccountDialogFragment")
     }
 
-    private fun loadUserData() {
+    fun loadUserData() {
         val userId = auth.currentUser?.uid ?: return
         val userRef = db.collection("users").document(userId)
 
@@ -117,7 +119,9 @@ class ProfileFragment : BaseAuthFragment() {
                 }
             }
         }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Failed to load profile", Toast.LENGTH_SHORT).show()
+            if (isAdded) {
+                Toast.makeText(requireContext(), "Failed to load profile", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

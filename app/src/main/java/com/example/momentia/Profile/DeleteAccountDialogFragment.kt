@@ -3,8 +3,8 @@ package com.example.momentia.Profile
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
@@ -33,21 +33,35 @@ class DeleteAccountDialogFragment : DialogFragment() {
 
         user?.let {
             val userId = it.uid
+
             db.collection("users").document(userId).delete().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     it.delete().addOnCompleteListener { authTask ->
                         if (authTask.isSuccessful) {
-                            Toast.makeText(requireContext(), "Account deleted successfully", Toast.LENGTH_SHORT).show()
-                            dismiss()
-                            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
+                            showToast("Account deleted successfully")
+                            navigateToLogin()
                         } else {
-                            Toast.makeText(requireContext(), "Failed to delete account from authentication", Toast.LENGTH_SHORT).show()
+                            showToast("Failed to delete account from authentication: ${authTask.exception?.message}")
                         }
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Failed to delete account from Firestore", Toast.LENGTH_SHORT).show()
+                    showToast("Failed to delete account from Firestore: ${task.exception?.message}")
                 }
             }
+        }
+    }
+
+    private fun showToast(message: String) {
+        activity?.runOnUiThread {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun navigateToLogin() {
+        // Ensure dialog is dismissed before navigating, and check if the fragment is attached to avoid crashes
+        dismissAllowingStateLoss()
+        if (isAdded && findNavController().currentDestination?.id == R.id.profileFragment) {
+            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
     }
 }

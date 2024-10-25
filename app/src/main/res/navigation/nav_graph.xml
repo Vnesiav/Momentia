@@ -6,18 +6,14 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/cameraFragment">
 
-    <action
-        android:id="@+id/action_global_cameraFragment"
-        app:destination="@id/cameraFragment" />
-
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.momentia.Authentication.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
+            android:id="@+id/action_loginFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
     </fragment>
 
     <fragment
@@ -149,10 +145,5 @@
     <fragment
         android:id="@+id/friendFragment"
         android:name="com.example.momentia.Friend.FriendFragment"
-        android:label="FriendFragment">
-        <action
-            android:id="@+id/action_friendFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
-    </fragment>
-
+        android:label="FriendFragment" />
 </navigation>
