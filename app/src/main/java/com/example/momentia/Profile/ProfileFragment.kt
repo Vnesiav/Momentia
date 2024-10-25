@@ -95,28 +95,31 @@ class ProfileFragment : BaseAuthFragment() {
         val userRef = db.collection("users").document(userId)
 
         userRef.get().addOnSuccessListener { document ->
-            if (document != null) {
-                val firstName = document.getString("firstName") ?: ""
-                val lastName = document.getString("lastName") ?: ""
-                val avatarUrl = document.getString("avatarUrl") ?: ""
-                val fullName = "$firstName $lastName"
+            if (isAdded) {  // Check if Fragment is attached to the Activity
+                if (document != null) {
+                    val firstName = document.getString("firstName") ?: ""
+                    val lastName = document.getString("lastName") ?: ""
+                    val avatarUrl = document.getString("avatarUrl") ?: ""
+                    val fullName = "$firstName $lastName"
 
-                profileNameView.text = fullName
+                    profileNameView.text = fullName
 
-                if (avatarUrl.isNotEmpty()) {
-                    Glide.with(this)
-                        .load(avatarUrl)
-                        .placeholder(R.drawable.profile)
-                        .error(R.drawable.profile)
-                        .into(profileImageView)
-                } else {
-                    profileImageView.setImageResource(R.drawable.profile)
+                    if (avatarUrl.isNotEmpty()) {
+                        Glide.with(this@ProfileFragment) // Use the Fragment instance
+                            .load(avatarUrl)
+                            .placeholder(R.drawable.profile)
+                            .error(R.drawable.profile)
+                            .into(profileImageView)
+                    } else {
+                        profileImageView.setImageResource(R.drawable.profile)
+                    }
                 }
             }
         }.addOnFailureListener {
-            if (isAdded) {
+            if (isAdded) {  // Check if Fragment is attached before displaying the Toast
                 Toast.makeText(requireContext(), "Failed to load profile", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 }
