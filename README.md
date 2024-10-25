@@ -28,35 +28,4 @@ Fitur yang ditambahkan:
 3. Fitur friend request
 
 Struktur tabel:
-users (collection)
-  └── {userId} (document)
-      ├── username: string
-      ├── email: string
-      ├── phoneNumber: string
-      ├── firstName: string
-      ├── lastName: string
-      ├── avatarUrl: string (link to Firebase Storage)
-      ├── friends: array of userId (references to friends)
-      ├── snapsReceived: array of {snapId}
-      ├── snapsSent: array of {snapId}
-      ├── stories: array of {storyId}
-      ├── createdAt: timestamp
-      
-chats (collection)
-  └── {chatId} (document)
-      ├── users: array of userId (2 userIds for the participants)
-      └── messages (subcollection)
-          └── {messageId} (document)
-              ├── senderId: string (userId of sender)
-              ├── messageText: string
-              ├── mediaUrl: string (optional, link to photo/video in Storage)
-              ├── sentAt: timestamp
-
-memories (collection)
-  └── {memoryId} (document)
-      ├── location: GeoPoint (latitude, longitude)
-      ├── mediaUrl: string (link to photo/video in Firebase Storage)
-      ├── receiverId: string (userId of the receiver)
-      ├── senderId: string (userId of the sender)
-      ├── sentAt: timestamp
-      ├── viewed: boolean (true if the memory has been viewed)
+![image](https://github.com/user-attachments/assets/9e2c9b0f-6eea-4678-9a4c-6b38ca951eab)
