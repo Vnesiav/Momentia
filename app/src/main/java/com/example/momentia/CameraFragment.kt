@@ -19,11 +19,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.momentia.Authentication.BaseAuthFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
-class CameraFragment : Fragment() {
+class CameraFragment : BaseAuthFragment() {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
@@ -99,15 +100,15 @@ class CameraFragment : Fragment() {
         // Additional setup if needed
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as MainActivity).hideBottomNavigation()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        (activity as MainActivity).showBottomNavigation()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        (activity as MainActivity).hideBottomNavigation()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        (activity as MainActivity).showBottomNavigation()
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
