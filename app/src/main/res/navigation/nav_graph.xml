@@ -93,8 +93,8 @@
             android:id="@+id/action_profileFragment_to_editNameFragment"
             app:destination="@id/editNameFragment" />
         <action
-            android:id="@+id/actionUpdateEmail"
-            app:destination="@id/changeEmailFragment" />
+            android:id="@+id/action_profileFragment_to_changeProfileFragment"
+            app:destination="@id/changePasswordFragment" />
         <action
             android:id="@+id/action_profileFragment_to_changeNumberFragment"
             app:destination="@id/changeNumberFragment" />
@@ -121,16 +121,14 @@
         tools:layout="@layout/fragment_edit_name" />
 
     <fragment
-        android:id="@+id/changeEmailFragment"
+        android:id="@+id/changePasswordFragment"
         android:name="com.example.momentia.Profile.ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password">
       
         <action
-            android:id="@+id/actionEmailUpdated"
+            android:id="@+id/actionPasswordUpdated"
             app:destination="@id/profileFragment" />
     </fragment>
-        android:name="com.example.momentia.Profile.ChangeEmailFragment"
-        tools:layout="@layout/fragment_change_email" />
 
     <fragment
         android:id="@+id/changeNumberFragment"
