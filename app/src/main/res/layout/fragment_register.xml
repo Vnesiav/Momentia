@@ -1,45 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterFragment"
-    android:layout_marginTop="16dp"
-    android:orientation="vertical">
+    tools:context=".Authentication.RegisterFragment"
+    android:layout_marginTop="32dp"
+    android:layout_marginHorizontal="32dp">
+
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="60dp"
+        android:contentDescription="@string/logo_desc"
+        android:src="@drawable/momentia_logo"
+        app:layout_constraintBottom_toTopOf="@id/titleTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/add_coffee_title"
-        android:layout_width="match_parent"
-        style="@style/text_display"
-        android:text="@string/register" />
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/email_input_wrapper"
-        android:layout_width="match_parent"
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/text_input"
-        android:hint="@string/email_input_message">
+        android:gravity="center"
+        android:text="@string/momentia"
+        android:textColor="@color/momentia"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logoImageView" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@drawable/underline"
+        app:layout_constraintEnd_toEndOf="@id/titleTextView"
+        app:layout_constraintStart_toStartOf="@id/titleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+
+    <TextView
+        android:id="@+id/registerTitleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/whats_your_email"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginTop="72dp"
+        app:layout_constraintBottom_toTopOf="@id/emailLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_input_message"
+        android:layout_marginTop="28dp"
+        app:boxStrokeColor="@color/light_gray"
+        app:hintTextColor="@color/dark_brown"
+        app:layout_constraintTop_toBottomOf="@id/registerTitleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email_input_field"
+            android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="textEmailAddress"
+            android:maxLength="50" />
     </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password_input_wrapper"
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/termsTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/text_input"
-        android:hint="@string/password_input_message">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_input_field"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="40dp"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailLayout" />
+
     <Button
-        android:id="@+id/submit_button"
-        android:layout_width="200dp"
+        android:id="@+id/continueButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/button"
-        android:text="@string/submit_button"/>
-</LinearLayout>
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/dark_brown"
+        android:text="@string/continue_button"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/termsTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
