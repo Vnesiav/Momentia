@@ -55,6 +55,12 @@ class UsernameFragment : Fragment() {
             return
         }
 
+        val usernamePattern = Regex("^[a-z0-9]+$")
+        if (!username.matches(usernamePattern)) {
+            Toast.makeText(requireContext(), "Username can only contain lowercase letters and numbers.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         checkIfUsernameExists(username) { usernameExists ->
             if (usernameExists) {
                 Toast.makeText(requireContext(), "Username is already taken. Please choose another.", Toast.LENGTH_SHORT).show()

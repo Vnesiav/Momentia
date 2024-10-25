@@ -2,6 +2,7 @@
 agp = "8.5.2"
 ccp = "2.1.2"
 ccpVersion = "2.5.8"
+compiler = "4.15.1"
 firebaseBom = "33.5.1"
 glide = "4.15.1"
 googleServices = "4.4.2"
@@ -26,6 +27,7 @@ firebaseStorageKtx = "21.0.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 com-google-firebase-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

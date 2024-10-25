@@ -43,7 +43,7 @@ class RegisterFragment : Fragment() {
         setTermsText()
 
         continueButton.setOnClickListener {
-            val email = emailEditText.text.toString()
+            val email = emailEditText.text.toString().trim()
             if (email.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter your email", Toast.LENGTH_SHORT).show()
             } else if (!email.contains("@")) {

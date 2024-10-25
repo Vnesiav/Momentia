@@ -16,7 +16,11 @@
     <string name="tap_to_send_message">Tap to send message</string>
     <string name="back">Back</string>
     <string name="add_friends">Add friends</string>
-
+    <string name="add">Add</string>
+    <string name="quick_add">Quick add</string>
+    <string name="added_me">Added me</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
 
     <!--  Login  -->
     <string name="logo_desc">momentia_logo</string>
@@ -38,14 +42,8 @@
     <string name="whats_your_name">What\'s your name?</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
-    <string name="phone_number">Phone number</string>
     <string name="whats_your_number">What\'s your number?</string>
-    <string name="add">Add</string>
-    <string name="quick_add">Quick add</string>
-    <string name="added_me">Added me</string>
-    <string name="accept">Accept</string>
-    <string name="decline">Decline</string>
-
+    <string name="phone_number">Phone number</string>
     <string name="whats_your_username">What\'s your username?</string>
     <string name="username">username</string>
 
@@ -74,9 +72,11 @@
     <string name="change_your_number">Change your number?</string>
     <string name="current_number">Your current phone number</string>
     <string name="new_number">New phone number</string>
-    <string name="change_your_password">Change your password?</string>
+    <string name="change_your_password">Change your password</string>
     <string name="current_password">Your current password</string>
     <string name="new_password">New password</string>
-    
+
+
     <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="password">Change password?</string>
 </resources>

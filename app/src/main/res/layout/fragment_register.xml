@@ -84,7 +84,7 @@
         android:layout_marginHorizontal="40dp"
         android:layout_marginTop="40dp"
         android:textSize="14sp"
-        android:gravity=""
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailLayout" />
@@ -93,6 +93,7 @@
         android:id="@+id/continueButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/dark_brown"
         android:text="@string/continue_button"
         android:textColor="@color/white"
@@ -101,7 +102,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/termsTextView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/termsTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    android:paddingHorizontal="8dp">
+    android:layout_gravity="center_horizontal">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile_picture"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -15,6 +14,7 @@
         android:clipToOutline="true"
         android:contentDescription="@string/profile_picture"
         android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/CircleImageView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,13 +36,14 @@
 
     <ImageButton
         android:id="@+id/add_button"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:background="@drawable/oval_button"
         android:backgroundTint="@color/app_bar"
         android:contentDescription="@string/add"
-        android:src="@drawable/add_friend_white"
+        android:src="@drawable/add_friend_icon"
         app:iconTint="@color/white"
+        android:paddingHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/profile_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

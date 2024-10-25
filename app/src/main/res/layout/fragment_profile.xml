@@ -10,8 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp"
+        android:layout_margin="16dp"
         tools:context=".Profile.ProfileFragment">
 
         <ImageButton
@@ -135,11 +134,11 @@
                     android:drawablePadding="12dp"
                     android:paddingHorizontal="14dp"
                     android:paddingVertical="6dp"
-                    android:text="@string/change_password"
+                    android:text="@string/change_email_address"
                     android:textSize="14sp"
                     android:gravity="center_vertical"
                     android:background="?attr/selectableItemBackground"
-                    app:drawableStartCompat="@drawable/password_icon"
+                    app:drawableStartCompat="@drawable/email"
                     app:drawableEndCompat="@drawable/arrow_right"/>
 
                 <TextView
