@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".CameraFragment">
 
+    <TextView
+        android:id="@+id/wip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/work_in_progress"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/capturedImageView" />
+
     <ImageView
         android:id="@+id/capturedImageView"
         android:layout_width="match_parent"
@@ -14,7 +25,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/buttonLayout"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.015"
+        tools:layout_editor_absoluteX="0dp" />
 
     <LinearLayout
         android:id="@+id/buttonLayout"
