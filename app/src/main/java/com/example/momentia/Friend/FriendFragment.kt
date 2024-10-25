@@ -62,7 +62,7 @@ class FriendFragment : BaseAuthFragment() {
         friendChatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         setFontSize(view)
-        getFriendList()
+        getFriendList(view)
         setupSearch()
 
         return view
@@ -101,7 +101,7 @@ class FriendFragment : BaseAuthFragment() {
         friendChatAdapter.setData(filteredList)
     }
 
-    private fun getFriendList() {
+    private fun getFriendList(view: View) {
         if (currentUser == null) {
             findNavController().navigate(R.id.loginFragment)
             return
@@ -114,8 +114,8 @@ class FriendFragment : BaseAuthFragment() {
                 if (documentSnapshot.exists()) {
                     val friendIds = documentSnapshot.get("friends") as? List<String> ?: emptyList()
 
+                    val warningText = view.findViewById<TextView>(R.id.warning_text) // Pass view here
                     if (friendIds.isNotEmpty()) {
-                        val warningText = requireView().findViewById<TextView>(R.id.warning_text)
                         warningText.visibility = View.GONE
                         friendChatRecyclerView.visibility = View.VISIBLE
 
@@ -141,12 +141,9 @@ class FriendFragment : BaseAuthFragment() {
                                 Log.e("FriendFragment", "Error getting friend list: ", e)
                             }
                     } else {
-                        val warningText = requireView().findViewById<TextView>(R.id.warning_text)
-
-                        friendChatRecyclerView.visibility = View.GONE
                         warningText.visibility = View.VISIBLE
                         warningText.text = "No friends found"
-
+                        friendChatRecyclerView.visibility = View.GONE
                         Log.d("FriendFragment", "No friends found.")
                     }
                 }
@@ -156,6 +153,7 @@ class FriendFragment : BaseAuthFragment() {
                 Log.e("FriendFragment", "Error getting current user document: ", e)
             }
     }
+
 
     private fun navigateToProfile() {
         val navController = findNavController()

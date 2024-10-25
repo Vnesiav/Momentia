@@ -128,17 +128,17 @@
                     app:drawableEndCompat="@drawable/arrow_right"/>
 
                 <TextView
-                    android:id="@+id/change_email"
+                    android:id="@+id/change_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="12dp"
                     android:paddingHorizontal="14dp"
                     android:paddingVertical="6dp"
-                    android:text="@string/change_email_address"
+                    android:text="@string/change_your_password"
                     android:textSize="14sp"
                     android:gravity="center_vertical"
                     android:background="?attr/selectableItemBackground"
-                    app:drawableStartCompat="@drawable/email"
+                    app:drawableStartCompat="@drawable/password_icon"
                     app:drawableEndCompat="@drawable/arrow_right"/>
 
                 <TextView

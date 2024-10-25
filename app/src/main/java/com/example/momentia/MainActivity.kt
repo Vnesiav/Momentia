@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             R.id.profileFragment,
             R.id.editProfileFragment,
             R.id.editNameFragment,
-            R.id.changeEmailFragment,
+            R.id.changePasswordFragment,
             R.id.changeNumberFragment
         )
 
