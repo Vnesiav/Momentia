@@ -31,7 +31,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_section"
-        app:tint="@color/light_choco"
         android:layout_marginBottom="16dp"/>
 
     <!-- FrameLayout for bottom section -->
@@ -39,7 +38,7 @@
         android:id="@+id/bottom_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dark_choco"
+        android:background="@color/dark_brown"
         android:paddingTop="24dp"
         android:paddingBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,7 +81,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/camera_profile" />
+                    android:src="@drawable/nav_camera"
+                    app:tint="#FFFFFF" />
 
                 <!-- Change Photo Button -->
                 <ImageButton
@@ -91,7 +91,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/picture_profile" />
+                    android:src="@drawable/gallery"
+                    app:tint="#FFFFFF"/>
 
                 <!-- Delete Photo Button -->
                 <ImageButton
@@ -100,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/trash_profile" />
+                    android:src="@drawable/delete" />
 
             </LinearLayout>
 

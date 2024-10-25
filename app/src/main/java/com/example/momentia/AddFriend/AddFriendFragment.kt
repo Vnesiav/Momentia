@@ -1,6 +1,8 @@
 package com.example.momentia.AddFriend
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.Authentication.BaseAuthFragment
@@ -19,6 +22,7 @@ import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import org.w3c.dom.Text
 
@@ -29,6 +33,9 @@ class AddFriendFragment : BaseAuthFragment() {
     private lateinit var friendRequestRecyclerView: RecyclerView
     private var currentUserFriends = mutableListOf<String>()
 
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var updateTimeRunnable: Runnable
+
     private var friendList = mutableListOf<Friend>()
     private var filteredList = mutableListOf<Friend>()
 
@@ -38,7 +45,74 @@ class AddFriendFragment : BaseAuthFragment() {
     private val requestAdapter by lazy {
         FriendRequestAdapter(
             layoutInflater,
-            GlideImageLoader(requireContext())
+            GlideImageLoader(requireContext()),
+            { friendRequest ->
+                // Accept friend request logic
+                val currentUser = FirebaseAuth.getInstance().currentUser
+
+                if (currentUser != null) {
+                    val userDocRef = db.collection("users").document(currentUser.uid)
+
+                    // Tambahkan senderId ke daftar teman currentUser
+                    userDocRef.update("friends", FieldValue.arrayUnion(friendRequest.senderId))
+                        .addOnSuccessListener {
+                            // Tambahkan currentUser.uid ke daftar teman sender
+                            db.collection("users").document(friendRequest.senderId)
+                                .update("friends", FieldValue.arrayUnion(currentUser.uid))
+                                .addOnSuccessListener {
+                                    // Hapus permintaan pertemanan setelah diterima
+                                    db.collection("users")
+                                        .document(currentUser.uid)
+                                        .collection("friendRequests")
+                                        .whereEqualTo("senderId", friendRequest.senderId)
+                                        .get()
+                                        .addOnSuccessListener { querySnapshot ->
+                                            for (document in querySnapshot) {
+                                                db.collection("users")
+                                                    .document(currentUser.uid)
+                                                    .collection("friendRequests")
+                                                    .document(document.id)
+                                                    .delete()
+                                                    .addOnSuccessListener {
+                                                        Log.d("FriendRequest", "Friend request accepted, both users are now friends.")
+                                                        Toast.makeText(context, "Friend request accepted", Toast.LENGTH_SHORT).show()
+                                                    }
+                                            }
+                                        }
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w("FriendRequest", "Failed to add current user as friend to sender", e)
+                                }
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("FriendRequest", "Failed to add sender as friend to current user", e)
+                        }
+                }
+            },
+            { friendRequest ->
+                // Decline friend request logic
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                if (currentUser != null) {
+                    db.collection("users")
+                        .document(currentUser.uid)
+                        .collection("friendRequests")
+                        .whereEqualTo("senderId", friendRequest.senderId)
+                        .get()
+                        .addOnSuccessListener { querySnapshot ->
+                            for (document in querySnapshot) {
+                                db.collection("users")
+                                    .document(currentUser.uid)
+                                    .collection("friendRequests")
+                                    .document(document.id)
+                                    .delete()
+                                    .addOnSuccessListener {
+                                        Log.d("FriendRequest", "Friend request accepted and removed.")
+                                        Toast.makeText(context, "Friend request declined", Toast.LENGTH_SHORT).show()
+                                    }
+                            }
+                        }
+                }
+            }
         )
     }
 
@@ -76,34 +150,72 @@ class AddFriendFragment : BaseAuthFragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        showRandomUsers()
-
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchFriends(query)
+                stopUpdatingTime()
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrEmpty()) {
+                    startUpdatingTime()
+                } else {
+                    stopUpdatingTime()
+                }
                 searchFriends(newText)
                 return true
             }
         })
 
+        searchView.setOnCloseListener {
+            showRandomUsers()
+            false
+        }
+
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (searchView.query.isEmpty()) {
+            showFriendRequests()
+            startUpdatingTime()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopUpdatingTime()
+    }
+
+    private fun startUpdatingTime() {
+        updateTimeRunnable = object : Runnable {
+            override fun run() {
+                showFriendRequests()
+                handler.postDelayed(this, 1000)
+            }
+        }
+        handler.post(updateTimeRunnable)
+    }
+
+    private fun stopUpdatingTime() {
+        handler.removeCallbacks(updateTimeRunnable)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showFriendRequests()
+        showRandomUsers()
     }
 
     private fun showFriendRequests() {
-        Log.d("ShowFriendRequests", "showFriendRequests called")
         val currentUser = auth.currentUser
+        val addedTitle = view?.findViewById<TextView>(R.id.added_me)
+        val underline1 = view?.findViewById<View>(R.id.view1)
 
         if (currentUser != null) {
-            Log.d("ShowFriendRequests", "User is not null")
             db.collection("users")
                 .document(currentUser.uid)
                 .collection("friendRequests")
@@ -112,50 +224,45 @@ class AddFriendFragment : BaseAuthFragment() {
                     val friendRequests = mutableListOf<FriendRequest>()
 
                     if (!querySnapshot.isEmpty) {
-                        Log.d("ShowFriendRequests", "Snapshot is empty, hiding views")
-                        val addedTitle = view?.findViewById<TextView>(R.id.added_me)
-                        val underline1 = view?.findViewById<View>(R.id.view1)
-
                         addedTitle?.visibility = View.VISIBLE
                         underline1?.visibility = View.VISIBLE
-                    }
+                        friendRequestRecyclerView.visibility = View.VISIBLE
 
-                    for (request in querySnapshot.documents) {
-                        val avatarUrl = request.getString("avatarUrl") ?: ""
-                        val senderId = request.getString("senderId") ?: ""
-                        val username = request.getString("username") ?: ""
-                        val sentAt = request.getTimestamp("sentAt")
+                        for (request in querySnapshot.documents) {
+                            val avatarUrl = request.getString("avatarUrl")
+                            val senderId = request.getString("senderId") ?: ""
+                            val username = request.getString("username") ?: ""
+                            val sentAt = request.getTimestamp("sentAt")
 
-                        Log.d("ShowFriendRequests", "Avatar URL: $avatarUrl" + "Sender ID: $senderId" + "Username: $username" + "Sent At: $sentAt")
+                            if (senderId.isNotEmpty()) {
+                                db.collection("users").document(senderId).get().addOnSuccessListener { document ->
+                                    val firstName = document.getString("firstName") ?: ""
 
-                        // Fetch first name from the sender's document
-                        if (senderId.isNotEmpty()) {
-                            db.collection("users").document(senderId).get().addOnSuccessListener { document ->
-                                val firstName = document.getString("firstName") ?: ""
+                                    sentAt?.let {
+                                        val friendRequest = FriendRequest(senderId, username, avatarUrl, firstName, it)
+                                        friendRequests.add(friendRequest)
 
-                                // Create FriendRequest object if sentAt is not null
-                                sentAt?.let {
-                                    val friendRequest = FriendRequest(senderId, username, avatarUrl, firstName, it)
-                                    friendRequests.add(friendRequest)
-
-                                    // Update the adapter with the friend requests once all requests are processed
-                                    if (friendRequests.size == querySnapshot.size()) {
-                                        // Assuming you have an instance of your FriendRequestAdapter
-                                        requestAdapter.setData(friendRequests) // Update this line accordingly
+                                        if (friendRequests.size == querySnapshot.size()) {
+                                            requestAdapter.setData(friendRequests)
+                                        }
                                     }
                                 }
                             }
                         }
+                    } else {
+                        addedTitle?.visibility = View.GONE
+                        underline1?.visibility = View.GONE
+                        friendRequestRecyclerView.visibility = View.GONE
                     }
                 }
                 .addOnFailureListener { exception ->
                     Log.w("ShowFriendRequests", "Error getting documents: ", exception)
+                    Toast.makeText(context, "Failed to fetch friend requests", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            Log.d("ShowFriendRequests", "User is null")
+            findNavController().navigate(R.id.loginFragment)
         }
     }
-
 
     private fun sendFriendRequest(friend: Friend) {
         val currentUser = auth.currentUser
@@ -210,9 +317,22 @@ class AddFriendFragment : BaseAuthFragment() {
 
     private fun searchFriends(query: String?) {
         val currentUser = FirebaseAuth.getInstance().currentUser
+        val addedMe: TextView = view?.findViewById(R.id.added_me) ?: return
+        val underline1: View = view?.findViewById(R.id.view1) ?: return
+        val friendRequestRecyclerView: RecyclerView = view?.findViewById(R.id.friend_request_recycler) ?: return
+        val quickAdd: TextView = view?.findViewById(R.id.quick_add) ?: return
+        val underline2: View = view?.findViewById(R.id.view2) ?: return
+        val warningText: TextView = view?.findViewById(R.id.warning_text) ?: return
+        val addFriendRecyclerView: RecyclerView = view?.findViewById(R.id.add_friend_recycler) ?: return
 
         if (!TextUtils.isEmpty(query)) {
             val searchText = query!!.lowercase()
+
+            friendRequestRecyclerView.visibility = View.GONE
+            quickAdd.visibility = View.GONE
+            underline2.visibility = View.GONE
+            addedMe.visibility = View.GONE
+            underline1.visibility = View.GONE
 
             db.collection("users")
                 .orderBy("username")
@@ -221,6 +341,7 @@ class AddFriendFragment : BaseAuthFragment() {
                 .get()
                 .addOnSuccessListener { result ->
                     friendList.clear()
+
                     for (document in result) {
                         val userId = document.id
                         if (userId == currentUser?.uid) {
@@ -236,6 +357,16 @@ class AddFriendFragment : BaseAuthFragment() {
 
                     filteredList.clear()
                     filteredList.addAll(friendList)
+
+                    if (filteredList.isEmpty()) {
+                        warningText.visibility = View.VISIBLE
+                        warningText.text = "No users found"
+                        addFriendRecyclerView.visibility = View.GONE
+                    } else {
+                        addFriendRecyclerView.visibility = View.VISIBLE
+                        warningText.visibility = View.GONE
+                    }
+
                     friendAdapter.setData(filteredList, null)
                 }
                 .addOnFailureListener { exception ->
@@ -248,6 +379,10 @@ class AddFriendFragment : BaseAuthFragment() {
 
     private fun showRandomUsers() {
         val currentUser = FirebaseAuth.getInstance().currentUser
+        val warningText: TextView = view?.findViewById(R.id.warning_text) ?: return
+        val quickAdd: TextView = view?.findViewById(R.id.quick_add) ?: return
+        val underline2: View = view?.findViewById(R.id.view2) ?: return
+        val addFriendRecyclerView: RecyclerView = view?.findViewById(R.id.add_friend_recycler) ?: return
 
         if (currentUser != null) {
             db.collection("users")
@@ -273,7 +408,22 @@ class AddFriendFragment : BaseAuthFragment() {
                                 val friend = Friend(userId, username, avatarUrl, null, null)
                                 filteredList.add(friend)
                             }
-                            friendAdapter.setData(filteredList, friends)
+
+                            if (filteredList.isEmpty()) {
+                                warningText.visibility = View.VISIBLE
+                                warningText.text = "No users found"
+                                addFriendRecyclerView.visibility = View.GONE
+                            } else {
+                                warningText.visibility = View.GONE
+                                quickAdd.visibility = View.VISIBLE
+                                underline2.visibility = View.VISIBLE
+                                addFriendRecyclerView.visibility = View.VISIBLE
+
+                                filteredList.shuffle()
+
+                                friendAdapter.setData(filteredList, friends)
+                            }
+
                         }
                         .addOnFailureListener { exception ->
                             exception.printStackTrace()

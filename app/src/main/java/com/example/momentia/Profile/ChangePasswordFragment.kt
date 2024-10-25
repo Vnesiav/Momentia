@@ -1,18 +1,14 @@
-package com.example.momentia.Profile
+package com.example.momentia
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.momentia.Authentication.BaseAuthFragment
-import com.example.momentia.R
 
-class ChangeEmailFragment : BaseAuthFragment() {
-
+class ChangePasswordFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -20,6 +16,10 @@ class ChangeEmailFragment : BaseAuthFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_change_email, container, false)
+        return inflater.inflate(R.layout.fragment_password, container, false)
+    }
+
+    companion object {
+
     }
 }

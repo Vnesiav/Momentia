@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".FriendFragment">
+    tools:context=".Friend.FriendFragment">
 
     <ImageButton
         android:id="@+id/profile_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/circle_profile"
+        android:background="@drawable/circle_profile_button"
         android:contentDescription="@string/profile"
         android:src="@drawable/person"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,13 +41,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <Button-->
-<!--        android:id="@+id/editProfileButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Edit Profile"-->
-<!--        android:layout_gravity="center" />-->
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_friend"
         android:layout_width="0dp"
@@ -59,6 +52,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:queryHint="@string/search" />
+
+    <TextView
+        android:id="@+id/warning_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:textColor="@color/text_color"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_friend" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friend_chat_recycler"
