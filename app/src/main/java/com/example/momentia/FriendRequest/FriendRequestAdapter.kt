@@ -1,5 +1,6 @@
 package com.example.momentia.AddFriend
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,8 +54,10 @@ class FriendRequestAdapter(
             onAcceptClick: (FriendRequest) -> Unit,
             onDeclineClick: (FriendRequest) -> Unit
         ) {
-            // Load profile picture
-            if (friendRequest.avatarUrl?.isNotEmpty() == true) {
+            // Adjusted check for avatarUrl
+            val isAvatarUrlValid = !friendRequest.avatarUrl.isNullOrEmpty() && friendRequest.avatarUrl != "null"
+
+            if (isAvatarUrlValid && friendRequest.avatarUrl != null) {
                 imageLoader.loadImage(friendRequest.avatarUrl, profilePicture)
             } else {
                 profilePicture.setImageResource(R.drawable.account_circle)

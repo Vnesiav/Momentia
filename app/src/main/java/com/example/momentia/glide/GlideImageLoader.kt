@@ -11,7 +11,7 @@ class GlideImageLoader(private val context: Context) : ImageLoader {
         Glide.with(context)
             .load(imageUrl)
             .centerCrop()
-            .error(ContextCompat.getDrawable(context, R.drawable.image_fail))
+            .placeholder(R.drawable.image_fail)
             .into(imageView)
     }
 }

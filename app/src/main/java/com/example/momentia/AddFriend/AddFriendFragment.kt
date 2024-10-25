@@ -221,7 +221,7 @@ class AddFriendFragment : BaseAuthFragment() {
                     }
 
                     for (request in querySnapshot.documents) {
-                        val avatarUrl = request.getString("avatarUrl") ?: ""
+                        val avatarUrl = request.getString("avatarUrl")
                         val senderId = request.getString("senderId") ?: ""
                         val username = request.getString("username") ?: ""
                         val sentAt = request.getTimestamp("sentAt")
@@ -232,6 +232,7 @@ class AddFriendFragment : BaseAuthFragment() {
 
                                 sentAt?.let {
                                     val friendRequest = FriendRequest(senderId, username, avatarUrl, firstName, it)
+                                    Log.d("ShowFriendRequests", "Friend request added: $friendRequest")
                                     friendRequests.add(friendRequest)
 
                                     if (friendRequests.size == querySnapshot.size()) {

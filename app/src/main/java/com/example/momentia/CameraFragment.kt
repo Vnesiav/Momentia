@@ -99,15 +99,15 @@ class CameraFragment : Fragment() {
         // Additional setup if needed
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as MainActivity).hideBottomNavigation()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        (activity as MainActivity).showBottomNavigation()
-    }
+//    override fun onResume() {
+//        super.onResume()
+////        (activity as MainActivity).hideBottomNavigation()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        (activity as MainActivity).showBottomNavigation()
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
