@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.momentia.Authentication.BaseAuthFragment
 import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
@@ -16,6 +18,7 @@ class ProfileFragment : BaseAuthFragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var profileNameView: TextView
+    private lateinit var profileImageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +32,11 @@ class ProfileFragment : BaseAuthFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        // Inisialisasi views
         profileNameView = view.findViewById(R.id.profile_name)
+        profileImageView = view.findViewById(R.id.profile_image)
 
+        // Muat data pengguna
         loadUserData()
 
         view.findViewById<TextView>(R.id.edit_profile_picture).setOnClickListener {
@@ -41,9 +47,9 @@ class ProfileFragment : BaseAuthFragment() {
             findNavController().navigate(R.id.action_profileFragment_to_editNameFragment)
         }
 
-        view.findViewById<TextView>(R.id.change_email).setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_changeEmailFragment)
-        }
+//        view.findViewById<TextView>(R.id.change_email).setOnClickListener {
+//            findNavController().navigate(R.id.actionUpdateEmail)
+//        }
 
         view.findViewById<TextView>(R.id.change_phone).setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_changeNumberFragment)
@@ -83,9 +89,23 @@ class ProfileFragment : BaseAuthFragment() {
             if (document != null) {
                 val firstName = document.getString("firstName") ?: ""
                 val lastName = document.getString("lastName") ?: ""
+                val avatarUrl = document.getString("avatarUrl") ?: ""  // Ambil avatarUrl
                 val fullName = "$firstName $lastName"
 
+                // Tampilkan nama pengguna
                 profileNameView.text = fullName
+
+                // Tampilkan avatar dengan Glide
+                if (avatarUrl.isNotEmpty()) {
+                    Glide.with(this)
+                        .load(avatarUrl)
+                        .placeholder(R.drawable.profile) // Placeholder sementara gambar di-load
+                        .error(R.drawable.profile) // Gambar default jika URL gagal dimuat
+                        .into(profileImageView)
+                } else {
+                    // Jika avatarUrl kosong, tampilkan gambar default
+                    profileImageView.setImageResource(R.drawable.profile)
+                }
             }
         }.addOnFailureListener {
             Toast.makeText(requireContext(), "Failed to load profile", Toast.LENGTH_SHORT).show()

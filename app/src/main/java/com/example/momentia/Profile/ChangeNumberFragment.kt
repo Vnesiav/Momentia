@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.momentia.Authentication.BaseAuthFragment
 import com.example.momentia.R
@@ -26,15 +24,15 @@ class ChangeNumberFragment : BaseAuthFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_change_email, container, false)
+        val view = inflater.inflate(R.layout.fragment_change_password, container, false)
 
         // Inisialisasi Firebase Auth
         auth = FirebaseAuth.getInstance()
 
         // Mendapatkan referensi UI
-        currentEmailEditText = view.findViewById(R.id.current_email)
-        newEmailEditText = view.findViewById(R.id.new_email)
-        saveButton = view.findViewById(R.id.save_button)
+//        currentEmailEditText = view.findViewById(R.id.current_email)
+//        newEmailEditText = view.findViewById(R.id.new_email)
+//        saveButton = view.findViewById(R.id.save_button)
 
         // Mengisi email pengguna yang sudah terautentikasi
         val currentUser = auth.currentUser

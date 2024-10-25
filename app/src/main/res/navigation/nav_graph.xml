@@ -118,7 +118,7 @@
             android:id="@+id/action_profileFragment_to_editNameFragment"
             app:destination="@id/editNameFragment" />
         <action
-            android:id="@+id/action_profileFragment_to_changeEmailFragment"
+            android:id="@+id/actionUpdateEmail"
             app:destination="@id/changeEmailFragment" />
         <action
             android:id="@+id/action_profileFragment_to_changeNumberFragment"
@@ -154,10 +154,10 @@
 
     <fragment
         android:id="@+id/changeEmailFragment"
-        android:name="com.example.momentia.Profile.ChangeEmailFragment"
-        tools:layout="@layout/fragment_change_email">
+        android:name="com.example.momentia.Profile.ChangePasswordFragment"
+        tools:layout="@layout/fragment_change_password">
         <action
-            android:id="@+id/action_changeEmailFragment_to_profileFragment"
+            android:id="@+id/actionEmailUpdated"
             app:destination="@id/profileFragment" />
     </fragment>
 
@@ -175,9 +175,4 @@
         android:name="com.example.momentia.Profile.DeleteAccountDialogFragment"
         android:label="DeleteAccountDialogFragment"
         tools:layout="@layout/fragment_delete_account_dialog" />
-
-        android:id="@+id/registerFragment"
-        android:name="com.example.momentia.RegisterFragment"
-        android:label="fragment_register"
-        tools:layout="@layout/fragment_register" />
 </navigation>
