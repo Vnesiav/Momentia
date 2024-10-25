@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.momentia.Authentication.BaseAuthFragment
 import com.example.momentia.R
@@ -26,7 +24,7 @@ class ChangeNumberFragment : BaseAuthFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_change_email, container, false)
+        val view = inflater.inflate(R.layout.fragment_change_password, container, false)
 
         auth = FirebaseAuth.getInstance()
 
