@@ -47,7 +47,7 @@
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="Gallery"
             android:scaleType="centerInside"
-            android:src="@drawable/gallery" />
+            android:src="@drawable/gallery_photo" />
 
         <ImageButton
             android:id="@+id/cameraButton"

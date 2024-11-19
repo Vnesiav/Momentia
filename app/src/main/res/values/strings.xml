@@ -32,7 +32,6 @@
     <string name="login_button">Login</string>
     <string name="create_account">>Don\'t have account? Create Account</string>
 
-
     <!--    Register-->
     <string name="back_button">back</string>
     <string name="whats_your_email">What\'s your email?</string>
@@ -45,13 +44,14 @@
     <string name="whats_your_number">What\'s your number?</string>
     <string name="phone_number">Phone number</string>
     <string name="whats_your_username">What\'s your username?</string>
-    <string name="username">username</string>
+    <string name="username">Username</string>
 
     <!--    Profile-->
     <string name="profile_title">My Profile</string>
     <string name="profile_image">profile image</string>
     <string name="general">General</string>
     <string name="icon">icon</string>
+    <string name="account_details">Account details</string>
     <string name="edit_profile_picture">Edit profile picture</string>
     <string name="edit_name">Edit name</string>
     <string name="change_password">Change password</string>
@@ -67,6 +67,8 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
 
+    <!--    Edit Profile-->
+    <string name="your_account_details">Your account details</string>
     <string name="edit_your_name">Want to edit your name?</string>
     <string name="save">Save</string>
     <string name="change_your_number">Change your number?</string>
@@ -76,7 +78,6 @@
     <string name="current_password">Your current password</string>
     <string name="new_password">New password</string>
 
-
     <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
     <string name="password">Change password?</string>
     <string name="work_in_progress">Work in progress</string>
@@ -84,4 +85,5 @@
     <string name="search_a_friend">Search a friend</string>
     <string name="send_a_message">Send a message</string>
     <string name="open_gallery">Open gallery</string>
+
 </resources>

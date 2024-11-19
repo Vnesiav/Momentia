@@ -1,19 +1,18 @@
 package com.example.momentia
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.momentia.Profile.EditProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
-    private lateinit var navController: NavController
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             R.id.nameFragment,
             R.id.phoneFragment,
             R.id.profileFragment,
-            R.id.editProfileFragment,
+            R.id.accountDetailsFragment,
             R.id.editNameFragment,
             R.id.changePasswordFragment,
             R.id.changeNumberFragment
@@ -49,6 +48,19 @@ class MainActivity : AppCompatActivity() {
                 hideBottomNavigation()
             } else {
                 showBottomNavigation()
+            }
+        }
+
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.profileFragment -> {
+                    startActivity(Intent(this, EditProfileActivity::class.java))
+                    true
+                }
+                else -> {
+                    navController.navigate(item.itemId)
+                    true
+                }
             }
         }
     }

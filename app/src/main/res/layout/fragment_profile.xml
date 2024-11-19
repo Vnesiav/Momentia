@@ -101,6 +101,20 @@
                 android:paddingVertical="8dp">
 
                 <TextView
+                    android:id="@+id/account_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="12dp"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="6dp"
+                    android:text="@string/account_details"
+                    android:textSize="14sp"
+                    android:gravity="center_vertical"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/account_details"
+                    app:drawableEndCompat="@drawable/arrow_right"/>
+
+                <TextView
                     android:id="@+id/edit_profile_picture"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
