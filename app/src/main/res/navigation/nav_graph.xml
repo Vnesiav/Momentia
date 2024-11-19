@@ -86,9 +86,9 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.momentia.Profile.ProfileFragment">
-        <action
-            android:id="@+id/action_profileFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
+<!--        <action-->
+<!--            android:id="@+id/action_profileFragment_to_editProfileFragment"-->
+<!--            app:destination="@id/editProfileFragment" />-->
         <action
             android:id="@+id/action_profileFragment_to_editNameFragment"
             app:destination="@id/editNameFragment" />
@@ -109,11 +109,11 @@
             app:destination="@id/loginFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/editProfileFragment"
-        android:name="com.example.momentia.Profile.EditProfileFragment"
-        tools:layout="@layout/fragment_edit_profile">
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/editProfileFragment"-->
+<!--        android:name="com.example.momentia.Profile.EditProfileFragment"-->
+<!--        tools:layout="@layout/fragment_edit_profile">-->
+<!--    </fragment>-->
 
     <fragment
         android:id="@+id/editNameFragment"

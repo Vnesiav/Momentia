@@ -1,5 +1,6 @@
 package com.example.momentia.Profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,7 +48,8 @@ class ProfileFragment : BaseAuthFragment() {
         loadUserData()
 
         view.findViewById<TextView>(R.id.edit_profile_picture).setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
+            val intent = Intent(requireContext(), EditProfileActivity::class.java)
+            startActivity(intent)
         }
 
         view.findViewById<TextView>(R.id.edit_name).setOnClickListener {
@@ -95,7 +97,7 @@ class ProfileFragment : BaseAuthFragment() {
         val userRef = db.collection("users").document(userId)
 
         userRef.get().addOnSuccessListener { document ->
-            if (isAdded) {  // Check if Fragment is attached to the Activity
+            if (isAdded) {
                 if (document != null) {
                     val firstName = document.getString("firstName") ?: ""
                     val lastName = document.getString("lastName") ?: ""
@@ -105,7 +107,7 @@ class ProfileFragment : BaseAuthFragment() {
                     profileNameView.text = fullName
 
                     if (avatarUrl.isNotEmpty()) {
-                        Glide.with(this@ProfileFragment) // Use the Fragment instance
+                        Glide.with(this@ProfileFragment)
                             .load(avatarUrl)
                             .placeholder(R.drawable.profile)
                             .error(R.drawable.profile)
@@ -116,7 +118,7 @@ class ProfileFragment : BaseAuthFragment() {
                 }
             }
         }.addOnFailureListener {
-            if (isAdded) {  // Check if Fragment is attached before displaying the Toast
+            if (isAdded) {
                 Toast.makeText(requireContext(), "Failed to load profile", Toast.LENGTH_SHORT).show()
             }
         }

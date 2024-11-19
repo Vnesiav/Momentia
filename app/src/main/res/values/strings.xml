@@ -67,6 +67,7 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
 
+    <!--    Edit Profile-->
     <string name="edit_your_name">Want to edit your name?</string>
     <string name="save">Save</string>
     <string name="change_your_number">Change your number?</string>

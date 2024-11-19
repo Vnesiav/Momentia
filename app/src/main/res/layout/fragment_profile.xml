@@ -42,6 +42,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/profile_image" />
 
+
+<!--        ini harus foto asli-->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_image"
             android:layout_width="125dp"
