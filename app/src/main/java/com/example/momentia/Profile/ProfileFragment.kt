@@ -52,6 +52,10 @@ class ProfileFragment : BaseAuthFragment() {
             startActivity(intent)
         }
 
+        view.findViewById<TextView>(R.id.account_details).setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_accountDetailsFragment)
+        }
+
         view.findViewById<TextView>(R.id.edit_name).setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_editNameFragment)
         }

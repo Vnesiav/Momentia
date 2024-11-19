@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.momentia.Profile.EditProfileActivity
@@ -38,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             R.id.nameFragment,
             R.id.phoneFragment,
             R.id.profileFragment,
+            R.id.accountDetailsFragment,
             R.id.editNameFragment,
             R.id.changePasswordFragment,
             R.id.changeNumberFragment
