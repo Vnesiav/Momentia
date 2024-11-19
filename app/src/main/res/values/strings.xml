@@ -81,5 +81,7 @@
     <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
     <string name="password">Change password?</string>
     <string name="work_in_progress">Work in progress</string>
+    <string name="button_camera">button camera</string>
+    <string name="memories">Memories</string>
 
 </resources>
