@@ -7,6 +7,16 @@
     app:startDestination="@id/cameraFragment">
 
     <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.momentia.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.momentia.Authentication.LoginFragment"
         android:label="LoginFragment"
