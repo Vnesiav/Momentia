@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.momentia.Profile.EditProfileActivity
@@ -64,6 +65,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser == null || !currentUser.isEmailVerified) {
+            val navController = findNavController(R.id.nav_host_fragment)
+            navController.navigate(R.id.loginFragment)
+        } else {
+            val navController = findNavController(R.id.nav_host_fragment)
+            navController.navigate(R.id.homeFragment)
+        }
+    }
+
 
     fun hideBottomNavigation() {
         bottomNavigation.visibility = View.GONE
