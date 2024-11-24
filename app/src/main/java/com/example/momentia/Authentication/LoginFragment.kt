@@ -86,7 +86,7 @@ class LoginFragment : Fragment() {
                             findNavController().navigate(R.id.action_loginFragment_to_cameraFragment)
                         } else {
                             Toast.makeText(requireContext(), "Please verify your email first.", Toast.LENGTH_SHORT).show()
-                            auth.signOut()  // Keluar agar tidak bisa login lagi
+                            auth.signOut()
                         }
                     }
                 } else {
