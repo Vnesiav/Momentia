@@ -80,12 +80,14 @@ class LoginFragment : Fragment() {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    if (user != null && user.isEmailVerified) {
-                        Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-
-                        findNavController().navigate(R.id.action_loginFragment_to_cameraFragment)
-                    } else {
-                        Toast.makeText(requireContext(), "Please verify your email first.", Toast.LENGTH_SHORT).show()
+                    if (user != null) {
+                        if (user.isEmailVerified) {
+                            Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                            findNavController().navigate(R.id.action_loginFragment_to_cameraFragment)
+                        } else {
+                            Toast.makeText(requireContext(), "Please verify your email first.", Toast.LENGTH_SHORT).show()
+                            auth.signOut()  // Keluar agar tidak bisa login lagi
+                        }
                     }
                 } else {
                     Toast.makeText(requireContext(), "Login failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
