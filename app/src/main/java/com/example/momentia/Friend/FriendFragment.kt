@@ -1,6 +1,7 @@
 package com.example.momentia.Friend
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.Authentication.BaseAuthFragment
+import com.example.momentia.Chat.ChatMessageActivity
 import com.example.momentia.DTO.FriendChat
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
@@ -33,7 +35,7 @@ class FriendFragment : BaseAuthFragment() {
     private val friendList = mutableListOf<FriendChat>()
     private val friendChatAdapter by lazy {
         FriendAdapter(layoutInflater, GlideImageLoader(requireContext()), object: FriendAdapter.OnClickListener {
-            override fun onItemClick(friend: FriendChat) = showSelectionDialog(friend)
+            override fun onItemClick(friend: FriendChat) = navigateToChatMessage(friend)
         })
     }
 
@@ -154,7 +156,6 @@ class FriendFragment : BaseAuthFragment() {
             }
     }
 
-
     private fun navigateToProfile() {
         val navController = findNavController()
 
@@ -181,12 +182,16 @@ class FriendFragment : BaseAuthFragment() {
         navController.navigate(R.id.addFriendFragment, null, navOptions)
     }
 
-    private fun showSelectionDialog(friend: FriendChat) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Friend selected")
-            .setMessage("Work is on progress")
-            .setPositiveButton("OK") { _, _ -> }.show()
+    private fun navigateToChatMessage(friend: FriendChat) {
+        val intent = Intent(requireContext(), ChatMessageActivity::class.java).apply {
+            putExtra("userId", friend.userId) // Konsisten dengan "userId"
+            putExtra("firstName", friend.firstName) // Konsisten dengan "firstName"
+            putExtra("lastName", friend.lastName ?: "") // Konsisten dengan "lastName"
+            putExtra("imageUrl", friend.avatarUrl) // Konsisten dengan "imageUrl"
+        }
+        startActivity(intent)
     }
+
 
     private fun setFontSize(view: View) {
         val searchView = view.findViewById<SearchView>(R.id.search_friend)
