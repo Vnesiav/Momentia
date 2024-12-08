@@ -7,7 +7,7 @@
         android:title="@string/bottom_menu_chat" />
 
     <item
-        android:id="@+id/cameraFragment"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/nav_camera"
         android:title="@string/bottom_menu_camera"/>
 

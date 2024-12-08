@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 class PasswordFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var email: String
+    private var lastClickTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,12 @@ class PasswordFragment : Fragment() {
         }
 
         continueButton.setOnClickListener {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime < 3000) {
+                return@setOnClickListener
+            }
+            lastClickTime = currentTime
+
             val password = passwordEditText.text.toString()
 
             if (password.isEmpty() || !isPasswordValid(password)) {

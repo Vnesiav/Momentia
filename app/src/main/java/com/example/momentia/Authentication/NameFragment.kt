@@ -19,6 +19,7 @@ class NameFragment : Fragment() {
     private lateinit var username: String
     private lateinit var firstNameEditText: EditText
     private lateinit var lastNameEditText: EditText
+    private var lastClickTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +47,12 @@ class NameFragment : Fragment() {
         }
 
         continueButton.setOnClickListener {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime < 3000) {
+                return@setOnClickListener
+            }
+            lastClickTime = currentTime
+
             handleContinueButtonClick()
         }
 

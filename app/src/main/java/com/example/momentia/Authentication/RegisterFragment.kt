@@ -22,6 +22,7 @@ class RegisterFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var termsTextView: TextView
+    private var lastClickTime: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +44,12 @@ class RegisterFragment : Fragment() {
         setTermsText()
 
         continueButton.setOnClickListener {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime < 3000) {
+                return@setOnClickListener
+            }
+            lastClickTime = currentTime
+
             val email = emailEditText.text.toString().trim()
             if (email.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter your email", Toast.LENGTH_SHORT).show()
