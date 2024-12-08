@@ -66,7 +66,7 @@ class PhoneFragment : Fragment() {
             return
         }
 
-        val phonePattern = Regex("^08[0-9]{8,12}$")
+        val phonePattern = Regex("^08[0-9]{7,8}$")
         if (!phoneNumber.matches(phonePattern)) {
             Toast.makeText(requireContext(), "Invalid phone number. Please enter a valid phone number.", Toast.LENGTH_SHORT).show()
             return

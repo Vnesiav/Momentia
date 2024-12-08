@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/first_name"
             android:inputType="text"
-            android:maxLength="50" />
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/last_name"
             android:inputType="text"
-            android:maxLength="50" />
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/username"
             android:inputType="text"
-            android:maxLength="50" />
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -150,7 +150,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/phone_number"
             android:inputType="phone"
-            android:maxLength="15" />
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -171,7 +171,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/email_input_message"
             android:inputType="textEmailAddress"
-            android:maxLength="100" />
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
