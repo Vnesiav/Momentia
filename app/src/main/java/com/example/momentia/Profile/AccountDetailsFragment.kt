@@ -41,6 +41,12 @@ class AccountDetailsFragment : BaseAuthFragment() {
         phoneNumberEditText = view.findViewById(R.id.phone_number)
         emailEditText = view.findViewById(R.id.email)
 
+        firstNameEditText.isEnabled = false
+        lastNameEditText.isEnabled = false
+        usernameEditText.isEnabled = false
+        phoneNumberEditText.isEnabled = false
+        emailEditText.isEnabled = false
+
         val backButton: ImageButton = view.findViewById(R.id.back_button)
 
         backButton.setOnClickListener {

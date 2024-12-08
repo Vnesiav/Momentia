@@ -87,7 +87,8 @@
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:autofillHints="phone"
-            android:maxLength="15" />
+            android:maxLength="13"
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
