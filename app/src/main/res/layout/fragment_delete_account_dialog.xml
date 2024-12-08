@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="20dp"
+    tools:context=".Profile.DeleteAccountDialogFragment">
 
     <TextView
         android:id="@+id/delete_account_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/delete_account"
         android:textSize="18sp"
@@ -32,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/delete"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/dark_brown"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/delete_account_message"
@@ -44,7 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/gray"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/confirm_delete_button"

@@ -90,7 +90,7 @@ class LoginFragment : Fragment() {
                     if (user != null) {
                         if (user.isEmailVerified) {
                             Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_loginFragment_to_cameraFragment)
+                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                         } else {
                             Toast.makeText(requireContext(), "Please verify your email first.", Toast.LENGTH_SHORT).show()
                             auth.signOut()
@@ -135,7 +135,7 @@ class LoginFragment : Fragment() {
         )
 
         spannableString.setSpan(
-            ForegroundColorSpan(resources.getColor(R.color.light_gray, null)),
+            ForegroundColorSpan(resources.getColor(R.color.dark_brown, null)),
             accountStart, accountEnd,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )

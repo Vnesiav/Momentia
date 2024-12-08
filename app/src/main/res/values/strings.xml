@@ -30,7 +30,7 @@
     <string name="password_input_message">Password</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="login_button">Login</string>
-    <string name="create_account">>Don\'t have account? Create Account</string>
+    <string name="create_account">Don\'t have account? Create Account</string>
 
     <!--    Register-->
     <string name="back_button">back</string>
@@ -60,7 +60,7 @@
     <string name="my_friends">My friends</string>
     <string name="account_actions">Account actions</string>
     <string name="sign_out">Sign out</string>
-    <string name="delete_account">Delete Account</string>
+    <string name="delete_account">Delete account</string>
 
     <!--    Modal Delete-->
     <string name="delete_confirmation">Are you sure you want to delete your account? This action cannot be undone.</string>
