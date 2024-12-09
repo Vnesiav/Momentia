@@ -13,4 +13,5 @@
     <color name="text_color">#333333</color>
     <color name="dark_choco">#4A463B</color>
     <color name="primaryColor">#FF6200EE</color>
+    <color name="bot_nav">#7B7368</color>
 </resources>

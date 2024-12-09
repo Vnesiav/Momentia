@@ -89,4 +89,8 @@
     <string name="send_a_message">Send a message</string>
     <string name="open_gallery">Open gallery</string>
 
+    <!-- Camera -->
+    <string name="button_tick">Button Tick</string>
+    <string name="send_button">Send To Friend</string>
+
 </resources>

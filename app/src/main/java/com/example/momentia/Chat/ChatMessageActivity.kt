@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.Chat
 import com.example.momentia.R
-import com.example.momentia.glide.GlideImageLoader
 import com.example.momentia.glide.GlideImageLoaderCircle
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
