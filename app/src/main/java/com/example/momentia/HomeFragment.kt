@@ -1,17 +1,19 @@
 package com.example.momentia
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import com.example.momentia.Camera.CameraActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
-
     private var currentUser: FirebaseUser? = null
 
     override fun onCreateView(
@@ -32,7 +34,6 @@ class HomeFragment : Fragment() {
                 }
         }
 
-
         return view
     }
 
@@ -45,6 +46,12 @@ class HomeFragment : Fragment() {
             return
         }
 
-        (activity as MainActivity).showBottomNavigation()
+        // Set click listener for camera_button
+        val cameraButton = view.findViewById<ImageView>(R.id.camera_button)
+        cameraButton.setOnClickListener {
+            // Navigate to ActivityCamera
+            val intent = Intent(requireContext(), CameraActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

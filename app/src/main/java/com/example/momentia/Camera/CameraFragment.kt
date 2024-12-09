@@ -1,4 +1,4 @@
-package com.example.momentia
+package com.example.momentia.Camera
 
 import android.Manifest
 import android.content.Intent
@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.momentia.Authentication.BaseAuthFragment
+import com.example.momentia.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream

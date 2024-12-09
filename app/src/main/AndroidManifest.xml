@@ -33,19 +33,30 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.MOMENTIA"
         tools:targetApi="31">
+
         <activity
             android:name=".Chat.ChatMessageActivity"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".Profile.EditProfileActivity" />
+
+        <activity
+            android:name=".Camera.CameraActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".Camera.SendPhotoActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
