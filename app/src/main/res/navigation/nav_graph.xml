@@ -134,7 +134,6 @@
         android:id="@+id/changePasswordFragment"
         android:name="com.example.momentia.Profile.ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password">
-      
         <action
             android:id="@+id/actionPasswordUpdated"
             app:destination="@id/profileFragment" />
@@ -155,4 +154,8 @@
         android:id="@+id/friendFragment"
         android:name="com.example.momentia.Friend.FriendFragment"
         android:label="FriendFragment" />
+
+    <action
+        android:id="@+id/action_sendPhotoActivity_to_homeFragment"
+        app:destination="@id/homeFragment" />
 </navigation>
