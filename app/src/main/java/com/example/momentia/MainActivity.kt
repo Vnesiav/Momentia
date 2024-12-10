@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.momentia.Chat.ChatMessageActivity
 import com.example.momentia.Profile.EditProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, EditProfileActivity::class.java))
                     true
                 }
+
                 else -> {
                     navController.navigate(item.itemId)
                     true
@@ -83,7 +85,6 @@ class MainActivity : AppCompatActivity() {
     fun hideBottomNavigation() {
         bottomNavigation.visibility = View.GONE
     }
-
 
     fun showBottomNavigation() {
         bottomNavigation.visibility = View.VISIBLE

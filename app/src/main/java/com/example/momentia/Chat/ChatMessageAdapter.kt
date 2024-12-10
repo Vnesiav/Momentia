@@ -11,7 +11,7 @@ import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
 import com.example.momentia.glide.GlideImageLoaderCircle
 
-class ChatAdapter(
+class ChatMessageAdapter(
     private val messages: List<Chat>,
     private val friendImageUrl: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

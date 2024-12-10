@@ -11,7 +11,8 @@ import com.example.momentia.glide.ImageLoader
 class FriendViewHolder(
     private val containerView: View,
     private val imageLoader: ImageLoader,
-    private val onClickListener: OnClickListener) : RecyclerView.ViewHolder(containerView) {
+    private val onClickListener: OnClickListener
+) : RecyclerView.ViewHolder(containerView) {
     private val profilePicture: ImageView by lazy {
         containerView.findViewById(R.id.profile_picture)
     }
