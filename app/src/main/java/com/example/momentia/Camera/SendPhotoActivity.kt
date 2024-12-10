@@ -101,7 +101,10 @@ class SendPhotoActivity : AppCompatActivity() {
                                         userId = friendDoc.id,
                                         firstName = friendDoc.getString("firstName") ?: "Unknown",
                                         lastName = friendDoc.getString("lastName"),
-                                        avatarUrl = friendDoc.getString("avatarUrl") ?: ""
+                                        avatarUrl = friendDoc.getString("avatarUrl") ?: "",
+                                        timestamp = null,
+                                        lastMessage = null,
+                                        counter = null
                                     )
                                 }
 
