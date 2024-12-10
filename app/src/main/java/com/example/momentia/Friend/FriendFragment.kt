@@ -30,6 +30,7 @@ class FriendFragment : BaseAuthFragment() {
     private lateinit var addFriendButton: ImageButton
     private lateinit var profileButton: ImageButton
     private lateinit var searchView: SearchView
+    private lateinit var warningText: TextView
 
     private lateinit var friendChatRecyclerView: RecyclerView
     private val friendList = mutableListOf<FriendChat>()
@@ -50,6 +51,8 @@ class FriendFragment : BaseAuthFragment() {
         addFriendButton = view.findViewById(R.id.add_friend_button)
         profileButton = view.findViewById(R.id.profile_button)
         friendChatRecyclerView = view.findViewById(R.id.friend_chat_recycler)
+        warningText = view.findViewById(R.id.warning_text)
+        warningText.text = "Loading..."
 
         addFriendButton.setOnClickListener {
             navigateToAddFriend()
@@ -64,6 +67,7 @@ class FriendFragment : BaseAuthFragment() {
         friendChatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         setFontSize(view)
+
         getFriendList(view)
         setupSearch()
 
@@ -130,7 +134,10 @@ class FriendFragment : BaseAuthFragment() {
                                         userId = friendDoc.id,
                                         firstName = friendDoc.getString("firstName") ?: "Unknown",
                                         lastName = friendDoc.getString("lastName"),
-                                        avatarUrl = friendDoc.getString("avatarUrl") ?: ""
+                                        avatarUrl = friendDoc.getString("avatarUrl") ?: "",
+                                        timestamp = null,
+                                        lastMessage = null,
+                                        counter = null
                                     )
                                 }
 
@@ -188,10 +195,10 @@ class FriendFragment : BaseAuthFragment() {
             putExtra("firstName", friend.firstName) // Konsisten dengan "firstName"
             putExtra("lastName", friend.lastName ?: "") // Konsisten dengan "lastName"
             putExtra("imageUrl", friend.avatarUrl) // Konsisten dengan "imageUrl"
+            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
         }
         startActivity(intent)
     }
-
 
     private fun setFontSize(view: View) {
         val searchView = view.findViewById<SearchView>(R.id.search_friend)

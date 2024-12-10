@@ -34,6 +34,9 @@
         android:theme="@style/Base.Theme.MOMENTIA"
         tools:targetApi="31">
         <activity
+            android:name=".Chat.ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".Chat.ChatMessageActivity"
             android:exported="false" />
         <activity

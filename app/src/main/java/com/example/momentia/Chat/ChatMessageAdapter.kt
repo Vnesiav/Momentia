@@ -1,6 +1,5 @@
 package com.example.momentia.Chat
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.Chat
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoaderCircle
-import com.google.firebase.auth.FirebaseAuth
 
-class ChatAdapter(
+class ChatMessageAdapter(
     private val messages: List<Chat>,
     private val friendImageUrl: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

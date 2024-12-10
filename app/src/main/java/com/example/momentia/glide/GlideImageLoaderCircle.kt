@@ -2,7 +2,6 @@ package com.example.momentia.glide
 
 import android.content.Context
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.momentia.R
 
