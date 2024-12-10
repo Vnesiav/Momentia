@@ -17,15 +17,33 @@
         android:src="@drawable/account_circle"
         android:layout_marginEnd="4dp"/>
 
-    <TextView
-        android:id="@+id/message_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/item_chat_received_background"
-        android:padding="12dp"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:maxWidth="250dp"
-        tools:text="asfsdjahkfjhsjdkafhsdjkhfjksdhfakjfjkhasjfkhdsajkhf" />
+        android:layout_weight="1">
+
+        <!-- Text message -->
+        <TextView
+            android:id="@+id/message_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/item_chat_received_background"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:maxWidth="250dp"
+            tools:text="asfsdjahkfjhsjdkafhsdjkhfjksdhfakjfjkhasjfkhdsajkhf" />
+
+        <!-- Image message (if any) -->
+        <ImageView
+            android:id="@+id/message_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/image_message"
+            android:layout_gravity="center" />
+    </LinearLayout>
 
 </LinearLayout>

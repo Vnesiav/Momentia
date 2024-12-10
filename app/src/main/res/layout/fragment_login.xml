@@ -75,7 +75,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:maxLength="50" />
+            android:maxLength="50"
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -84,6 +85,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/password_input_message"
         android:layout_marginTop="16dp"
+        app:passwordToggleEnabled="true"
         app:boxStrokeColor="@color/light_gray"
         app:hintTextColor="@color/dark_brown"
         app:layout_constraintTop_toBottomOf="@id/emailLayout"
@@ -95,7 +97,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:maxLength="50" />
+            android:hint="@string/password_input_message"
+            android:maxLength="50"
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.Chat
 import com.example.momentia.R
-import com.example.momentia.glide.GlideImageLoader
 import com.example.momentia.glide.GlideImageLoaderCircle
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
@@ -210,14 +209,26 @@ class ChatMessageActivity : AppCompatActivity() {
                     }
 
                     if (querySnapshot != null) {
-                        messages.clear() // Clear previous messages
+                        messages.clear() // Hapus pesan sebelumnya
                         for (document in querySnapshot) {
-                            val message = document.getString("messageText").toString()
-                            val senderId = document.getString("senderId").toString()
+                            val messageText = document.getString("message") ?: ""
+                            val senderId = document.getString("senderId") ?: ""
+                            val photoUrl = document.getString("photoUrl") // Bisa null jika pesan adalah teks
                             val timestamp = document.getTimestamp("timestamp")
                             val isRead = document.getBoolean("isRead") ?: false
-                            timestamp?.let { Chat(senderId, message, it, isRead, senderId == currentUser.uid) }
-                                ?.let { messages.add(it) }
+
+                            if (timestamp != null) {
+                                // Buat objek Chat berdasarkan data yang diambil
+                                val chatMessage = Chat(
+                                    senderId = senderId,
+                                    message = messageText,
+                                    lastMessageTime = timestamp,
+                                    isRead = isRead,
+                                    isSentByCurrentUser = senderId == currentUser.uid,
+                                    photoUrl = photoUrl // Masukkan URL foto (null jika tidak ada)
+                                )
+                                messages.add(chatMessage)
+                            }
                         }
                         chatAdapter.notifyDataSetChanged() // Notify adapter of data change
                         chatRecyclerView.scrollToPosition(messages.size - 1) // Scroll to the latest message

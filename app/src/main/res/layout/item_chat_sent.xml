@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:padding="8dp"
     android:orientation="horizontal"
     android:gravity="end">
 
+    <!-- Gambar pesan (jika ada) -->
+    <ImageView
+        android:id="@+id/message_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/image_fail" />
+
+    <!-- Pesan teks -->
     <TextView
         android:id="@+id/message_text"
         android:layout_width="wrap_content"
@@ -16,6 +27,6 @@
         android:textColor="@android:color/black"
         android:textSize="14sp"
         android:maxWidth="250dp"
-        tools:text="awokaokwaofsdfsdfsdfdsfdsfdsfsdfdsfdsfsdfdskwoawk"/>
-
+        android:layout_gravity="center_vertical"
+        tools:text="awokaokwaofsdfsdfsdfdsfdsfdsfsdfdsfdsfsdfdskwoawk" />
 </LinearLayout>

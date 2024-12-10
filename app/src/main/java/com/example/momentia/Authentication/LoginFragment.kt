@@ -21,8 +21,8 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
-    private lateinit var forgotPasswordTextView: TextView
     private lateinit var registerTextView: TextView
+    private var lastClickTime: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +39,19 @@ class LoginFragment : Fragment() {
         val emailEditText = view.findViewById<EditText>(R.id.emailEditText)
         val passwordEditText = view.findViewById<EditText>(R.id.passwordEditText)
         val loginButton = view.findViewById<Button>(R.id.loginButton)
-        forgotPasswordTextView = view.findViewById<TextView>(R.id.forgotPassword)
+        val forgotPasswordTextView = view.findViewById<TextView>(R.id.forgotPassword)
         registerTextView = view.findViewById<TextView>(R.id.registerTextView)
 
         setRegisterText()
 
         loginButton.setOnClickListener {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime < 3000) {
+                return@setOnClickListener
+            }
+
+            lastClickTime = currentTime
+
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
@@ -83,7 +90,7 @@ class LoginFragment : Fragment() {
                     if (user != null) {
                         if (user.isEmailVerified) {
                             Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_loginFragment_to_cameraFragment)
+                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                         } else {
                             Toast.makeText(requireContext(), "Please verify your email first.", Toast.LENGTH_SHORT).show()
                             auth.signOut()
@@ -128,7 +135,7 @@ class LoginFragment : Fragment() {
         )
 
         spannableString.setSpan(
-            ForegroundColorSpan(resources.getColor(R.color.light_gray, null)),
+            ForegroundColorSpan(resources.getColor(R.color.dark_brown, null)),
             accountStart, accountEnd,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )

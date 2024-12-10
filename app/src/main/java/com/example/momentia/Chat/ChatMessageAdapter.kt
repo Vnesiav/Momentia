@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.Chat
 import com.example.momentia.R
+import com.example.momentia.glide.GlideImageLoader
 import com.example.momentia.glide.GlideImageLoaderCircle
 
 class ChatMessageAdapter(
@@ -48,23 +49,42 @@ class ChatMessageAdapter(
 
     class SentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val messageText: TextView = itemView.findViewById(R.id.message_text)
+        private val messageImage: ImageView = itemView.findViewById(R.id.message_image)
 
         fun bind(message: Chat) {
-            messageText.text = message.message
+            if (!message.photoUrl.isNullOrEmpty()) {
+                messageImage.visibility = View.VISIBLE
+                messageText.visibility = View.GONE
+                // Load image using Glide or another library
+                GlideImageLoaderCircle(itemView.context).loadImage(message.photoUrl, messageImage)
+            } else {
+                messageText.visibility = View.VISIBLE
+                messageImage.visibility = View.GONE
+                messageText.text = message.message
+            }
         }
     }
 
     class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val messageText: TextView = itemView.findViewById(R.id.message_text)
+        private val messageImage: ImageView = itemView.findViewById(R.id.message_image)
         private val profileImage: ImageView = itemView.findViewById(R.id.profile_image)
 
         fun bind(message: Chat, friendImageUrl: String) {
-            messageText.text = message.message
-            // Load the friend's profile image using Glide or any image loader library
-            val glideImageLoader = GlideImageLoaderCircle(itemView.context)
-            glideImageLoader.loadImage(friendImageUrl, profileImage)
+            if (!message.photoUrl.isNullOrEmpty()) {
+                messageImage.visibility = View.VISIBLE
+                messageText.visibility = View.GONE
+                // Load image for the message
+                GlideImageLoader(itemView.context).loadImage(message.photoUrl, messageImage)
+            } else {
+                messageText.visibility = View.VISIBLE
+                messageImage.visibility = View.GONE
+                // Ensure that text is not empty
+                messageText.text = message.message ?: ""  // Ensure message is not null
+            }
+
+            // Load the friend's profile image
+            GlideImageLoaderCircle(itemView.context).loadImage(friendImageUrl, profileImage)
         }
     }
 }
-
-

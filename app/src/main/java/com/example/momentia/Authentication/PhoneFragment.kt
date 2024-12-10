@@ -25,6 +25,7 @@ class PhoneFragment : Fragment() {
     private lateinit var firstName: String
     private lateinit var lastName: String
     private lateinit var phoneNumberEditText: EditText
+    private var lastClickTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,12 @@ class PhoneFragment : Fragment() {
         }
 
         continueButton.setOnClickListener {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime < 3000) {
+                return@setOnClickListener
+            }
+            lastClickTime = currentTime
+
             handleContinueButtonClick()
         }
 
@@ -77,6 +84,7 @@ class PhoneFragment : Fragment() {
                 if (task.isSuccessful) {
                     val currentUser = auth.currentUser
                     if (currentUser != null && !currentUser.isEmailVerified) {
+                        saveUserToFirestore(currentUser, phoneNumber)
                         sendEmailVerification(currentUser)
                     } else {
                         Toast.makeText(requireContext(), "User already verified or not registered!", Toast.LENGTH_SHORT).show()
@@ -89,6 +97,33 @@ class PhoneFragment : Fragment() {
                         Toast.makeText(requireContext(), "Registration Failed: $errorMessage", Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
+    }
+
+    private fun saveUserToFirestore(user: FirebaseUser, phoneNumber: String) {
+        val currentUserId = user.uid
+        val userData = User(
+            firstName = firstName,
+            lastName = lastName,
+            email = email,
+            username = username,
+            phoneNumber = phoneNumber,
+            avatarUrl = null,
+            friends = emptyList(),
+            snapsReceived = emptyList(),
+            snapsSent = emptyList(),
+            stories = emptyList(),
+            createdAt = Timestamp.now()
+        )
+
+        db.collection("users")
+            .document(currentUserId)
+            .set(userData)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Your information has been saved successfully.", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Failed to save your information, please try again later.", Toast.LENGTH_SHORT).show()
             }
     }
 
