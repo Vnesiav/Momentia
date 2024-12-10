@@ -92,5 +92,6 @@
     <!-- Camera -->
     <string name="button_tick">Button Tick</string>
     <string name="send_button">Send To Friend</string>
+    <string name="image_message">Image</string>
 
 </resources>

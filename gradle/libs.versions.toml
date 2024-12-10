@@ -24,6 +24,7 @@ playServicesAuth = "21.2.0"
 playServicesLocation = "21.3.0"
 playServicesVersion = "17.0.0"
 firebaseStorageKtx = "21.0.1"
+firebaseCrashlyticsBuildtools = "3.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +52,7 @@ material-v130alpha02 = { module = "com.google.android.material:material", versio
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-v1900 = { module = "com.google.android.gms:play-services", version.ref = "playServices" }
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
+firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

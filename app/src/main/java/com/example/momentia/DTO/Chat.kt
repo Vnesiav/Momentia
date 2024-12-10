@@ -8,5 +8,6 @@ data class Chat(
     val message: String,
     val lastMessageTime: Timestamp,
     val isRead: Boolean,
-    val isSentByCurrentUser: Boolean
+    val isSentByCurrentUser: Boolean,
+    val photoUrl: String?
 )

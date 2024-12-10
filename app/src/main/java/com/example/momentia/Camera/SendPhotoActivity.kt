@@ -1,6 +1,10 @@
 package com.example.momentia.Camera
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,15 +12,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.FriendChat
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
 class SendPhotoActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val currentUser = FirebaseAuth.getInstance().currentUser
+    private val storage = FirebaseStorage.getInstance()
     private lateinit var friendListRecyclerView: RecyclerView
+    private lateinit var sendButton: ImageButton
     private val friendList = mutableListOf<FriendChat>()
+    private var selectedFriend: FriendChat? = null
+    private var capturedImage: Bitmap? = null
 
     private val friendAdapter by lazy {
         FriendListAdapter(
@@ -24,8 +35,13 @@ class SendPhotoActivity : AppCompatActivity() {
             GlideImageLoader(this),
             object : FriendListAdapter.OnClickListener {
                 override fun onItemClick(friend: FriendChat) {
-                    // Handle sending photo to selected friend
-                    sendPhotoToFriend(friend)
+                    // Highlight selected friend
+                    selectedFriend = friend
+                    Toast.makeText(
+                        this@SendPhotoActivity,
+                        "Selected: ${friend.firstName}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         )
@@ -40,6 +56,24 @@ class SendPhotoActivity : AppCompatActivity() {
         friendListRecyclerView.layoutManager = LinearLayoutManager(this)
         friendListRecyclerView.adapter = friendAdapter
 
+        // Initialize send button
+        sendButton = findViewById(R.id.send_button)
+        sendButton.setOnClickListener {
+            if (selectedFriend == null) {
+                Toast.makeText(this, "Please select a friend to send the photo", Toast.LENGTH_SHORT).show()
+            } else if (capturedImage == null) {
+                Toast.makeText(this, "No image to send", Toast.LENGTH_SHORT).show()
+            } else {
+                sendPhotoToFriend(selectedFriend!!, capturedImage!!)
+            }
+        }
+
+        // Receive image from CameraActivity
+        val byteArray = intent.getByteArrayExtra("capturedImage")
+        if (byteArray != null) {
+            capturedImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        }
+
         // Load friends
         getFriendList()
     }
@@ -50,7 +84,6 @@ class SendPhotoActivity : AppCompatActivity() {
             return
         }
 
-        // Fetch user's friends from Firestore
         db.collection("users")
             .document(currentUser.uid)
             .get()
@@ -90,8 +123,49 @@ class SendPhotoActivity : AppCompatActivity() {
             }
     }
 
-    private fun sendPhotoToFriend(friend: FriendChat) {
-        // Placeholder for sending photo logic
-        Toast.makeText(this, "Photo sent to ${friend.firstName}", Toast.LENGTH_SHORT).show()
+    private fun sendPhotoToFriend(friend: FriendChat, image: Bitmap) {
+        val chatId = "${currentUser!!.uid}_${friend.userId}"
+        val messageId = db.collection("chats")
+            .document(chatId)
+            .collection("messages")
+            .document()
+            .id
+
+        val imageRef = storage.reference.child("chat_images/$chatId/$messageId.jpg")
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageData = baos.toByteArray()
+
+        imageRef.putBytes(imageData)
+            .continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    throw task.exception ?: Exception("Image upload failed")
+                }
+                imageRef.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUrl = task.result.toString()
+                    val message = mapOf(
+                        "senderId" to currentUser.uid,
+                        "photoUrl" to downloadUrl,
+                        "timestamp" to Timestamp.now(),
+                        "isRead" to false
+                    )
+
+                    db.collection("chats")
+                        .document(chatId)
+                        .collection("messages")
+                        .document(messageId)
+                        .set(message)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Photo sent to ${friend.firstName}", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(this, "Failed to upload photo", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 }
