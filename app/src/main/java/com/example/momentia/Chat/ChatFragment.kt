@@ -190,7 +190,12 @@ class ChatFragment : BaseAuthFragment() {
                         .addOnSuccessListener { messageResult ->
                             if (!messageResult.isEmpty) {
                                 val lastMessage = messageResult.documents[0].getString("messageText")
-                                callback(lastMessage)
+
+                                if (lastMessage != null) {
+                                    callback(lastMessage)
+                                } else {
+                                    callback("Photo")
+                                }
                             } else {
                                 callback(null) // Tidak ada pesan
                             }

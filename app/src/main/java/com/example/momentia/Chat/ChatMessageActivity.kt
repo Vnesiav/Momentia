@@ -211,7 +211,7 @@ class ChatMessageActivity : AppCompatActivity() {
                     if (querySnapshot != null) {
                         messages.clear() // Hapus pesan sebelumnya
                         for (document in querySnapshot) {
-                            val messageText = document.getString("message") ?: ""
+                            val messageText = document.getString("messageText") ?: ""
                             val senderId = document.getString("senderId") ?: ""
                             val photoUrl = document.getString("photoUrl") // Bisa null jika pesan adalah teks
                             val timestamp = document.getTimestamp("timestamp")
