@@ -209,16 +209,18 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun sendImageToFriend(bitmap: Bitmap) {
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "image/jpeg"
+        val intent = Intent(this, SendPhotoActivity::class.java)
 
+        // Konversi Bitmap menjadi ByteArray
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "temp", null)
+        val byteArray = bytes.toByteArray()
 
-        val uri = Uri.parse(path)
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
-        startActivity(Intent.createChooser(shareIntent, "Send Image"))
+        // Tambahkan gambar sebagai extra
+        intent.putExtra("capturedImage", byteArray)
+
+        // Mulai activity
+        startActivity(intent)
     }
 
     private fun closeCapturedImage() {

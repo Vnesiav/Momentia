@@ -83,14 +83,17 @@
     <string name="work_in_progress">Work in progress</string>
     <string name="button_camera">button camera</string>
     <string name="memories">Memories</string>
-  
+
     <string name="chats">Chats</string>
     <string name="search_a_friend">Search a friend</string>
     <string name="send_a_message">Send a message</string>
     <string name="open_gallery">Open gallery</string>
+    <string name="new_chat">New chat</string>
+    <string name="last_message">Last message</string>
 
     <!-- Camera -->
     <string name="button_tick">Button Tick</string>
     <string name="send_button">Send To Friend</string>
+    <string name="image_message">Image</string>
 
 </resources>

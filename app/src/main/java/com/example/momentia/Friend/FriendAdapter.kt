@@ -7,7 +7,11 @@ import com.example.momentia.DTO.FriendChat
 import com.example.momentia.R
 import com.example.momentia.glide.ImageLoader
 
-class FriendAdapter(private val layoutInflater: LayoutInflater, private val imageLoader: ImageLoader, private val onClickListener: OnClickListener) : RecyclerView.Adapter<FriendViewHolder>() {
+class FriendAdapter(
+    private val layoutInflater: LayoutInflater,
+    private val imageLoader: ImageLoader,
+    private val onClickListener: OnClickListener
+) : RecyclerView.Adapter<FriendViewHolder>() {
     private val friends = mutableListOf<FriendChat>()
 
     fun setData(newFriend: List<FriendChat>) {

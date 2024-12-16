@@ -9,7 +9,7 @@ class GlideImageLoader(private val context: Context) : ImageLoader {
     override fun loadImage(imageUrl: String, imageView: ImageView) {
         Glide.with(context)
             .load(imageUrl)
-            .centerCrop()
+            .fitCenter()
             .placeholder(R.drawable.image_fail)
             .into(imageView)
     }
