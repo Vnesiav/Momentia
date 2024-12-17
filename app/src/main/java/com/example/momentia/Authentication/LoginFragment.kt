@@ -7,6 +7,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,14 +15,31 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.credentials.Credential
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.momentia.DTO.User
 import com.example.momentia.R
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class LoginFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var registerTextView: TextView
+    private lateinit var credentialManager: CredentialManager
     private var lastClickTime: Long = 0
 
     override fun onCreateView(
@@ -35,11 +53,14 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        credentialManager = CredentialManager.create(requireContext())
 
         val emailEditText = view.findViewById<EditText>(R.id.emailEditText)
         val passwordEditText = view.findViewById<EditText>(R.id.passwordEditText)
         val loginButton = view.findViewById<Button>(R.id.loginButton)
         val forgotPasswordTextView = view.findViewById<TextView>(R.id.forgotPassword)
+        val googleButton = view.findViewById<Button>(R.id.loginGoogle)
         registerTextView = view.findViewById<TextView>(R.id.registerTextView)
 
         setRegisterText()
@@ -66,6 +87,10 @@ class LoginFragment : Fragment() {
             }
 
             loginUser(email, password)
+        }
+
+        googleButton.setOnClickListener {
+            logInWithGoogle()
         }
 
         forgotPasswordTextView.setOnClickListener {
@@ -110,6 +135,121 @@ class LoginFragment : Fragment() {
                 } else {
                     Toast.makeText(requireContext(), "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
+            }
+    }
+
+    private fun logInWithGoogle() {
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId(getString(R.string.default_web_client_id))
+            .build()
+
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        val coroutineScope = lifecycleScope
+
+        coroutineScope.launch {
+            try {
+                val result: GetCredentialResponse = credentialManager.getCredential(
+                    request = request,
+                    context = requireContext()
+                )
+
+                onLogInWithGoogle(result.credential)
+            } catch (e: GetCredentialException) {
+                Log.d("LoginFragment", e.message.orEmpty())
+            }
+        }
+    }
+
+    private suspend fun onLogInWithGoogle(credential: Credential) {
+        if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+            val idToken = googleIdTokenCredential.idToken
+
+            Log.d("LoginFragment", "Google ID Token: $idToken")
+
+            if (idToken != null) {
+                handleGoogleLogIn(idToken)
+            } else {
+                Log.e("LoginFragment", "Google ID Token is null")
+                Toast.makeText(requireContext(), "Failed to get Google token", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Log.e("LoginFragment", "Unexpected credential type")
+        }
+    }
+
+    private suspend fun handleGoogleLogIn(idToken: String) {
+        try {
+            val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+            val authResult = auth.signInWithCredential(firebaseCredential).await()
+
+            val user = authResult.user
+            if (user != null) {
+                val displayName = user.displayName ?: ""
+                val names = displayName.split(" ", limit = 2)
+                val firstName = if (names.isNotEmpty()) names[0] else ""
+                val lastName = if (names.size > 1) names[1] else ""
+
+                val phoneNumber = user.phoneNumber ?: ""
+
+                val userData = User(
+                    firstName = firstName,
+                    lastName = lastName,
+                    email = user.email ?: "",
+                    username = "",
+                    phoneNumber = phoneNumber,
+                    avatarUrl = user.photoUrl?.toString() ?: "",
+                    friends = emptyList(),
+                    snapsReceived = emptyList(),
+                    snapsSent = emptyList(),
+                    stories = emptyList(),
+                    createdAt = com.google.firebase.Timestamp.now()
+                )
+
+                val userExists = checkIfUserExists(user.uid)
+
+                if (userExists) {
+                   Log.d("LoginFragment", "User already exists: ${user.email}")
+                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                } else {
+                    Log.d("LoginFragment", "User not found, directing to UsernameFragment")
+                    saveUserToFirestore(user.uid, userData)
+                    findNavController().navigate(R.id.action_loginFragment_to_usernameFragment)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("LoginFragment", "Google Sign-In failed: ${e.message}")
+            Toast.makeText(requireContext(), "Login failed: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private suspend fun checkIfUserExists(userId: String): Boolean {
+        return try {
+            val result = db.collection("users")
+                .document(userId)
+                .get()
+                .await()
+
+            result.exists()
+        } catch (e: Exception) {
+            Log.e("LoginFragment", "Error checking user existence: ${e.message}")
+            false
+        }
+    }
+
+    private fun saveUserToFirestore(userId: String, user: User) {
+        db.collection("users").document(userId)
+            .set(user)
+            .addOnSuccessListener {
+                Log.d("LoginFragment", "User data saved successfully.")
+            }
+            .addOnFailureListener { e ->
+                Log.e("LoginFragment", "Error saving user data: ${e.message}")
             }
     }
 

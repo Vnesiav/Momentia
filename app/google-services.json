@@ -12,7 +12,20 @@
           "package_name": "com.example.momentia"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "566977357379-g9dsu65nq2dm1gpkcv1hi5avr6604jc5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.momentia",
+            "certificate_hash": "54b62b4bfd30ec2300e58dee61fbf53caa752847"
+          }
+        },
+        {
+          "client_id": "566977357379-do5s5rofm7e3kg902l23uklgl5mbgk0c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDGpwfVBdGfFZlVc69Mz3gD0D47ccRM-5I"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566977357379-do5s5rofm7e3kg902l23uklgl5mbgk0c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -25,11 +25,12 @@
     <!--  Login  -->
     <string name="logo_desc">momentia_logo</string>
     <string name="momentia">MOMENTIA</string>
-    <string name="login">Login to your account</string>
+    <string name="login">Log in to your account</string>
     <string name="email_input_message">Email address</string>
     <string name="password_input_message">Password</string>
     <string name="forgot_password">Forgot password?</string>
-    <string name="login_button">Login</string>
+    <string name="login_button">Log in</string>
+    <string name="google_button">Log in with Google</string>
     <string name="create_account">Don\'t have account? Create Account</string>
 
     <!--    Register-->
