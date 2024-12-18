@@ -50,6 +50,7 @@
         android:layout_marginTop="70dp"
         android:gravity="center"
         android:text="@string/login"
+        android:textColor="@color/dark_brown"
         android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/emailLayout"
@@ -97,7 +98,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="@string/password_input_message"
             android:maxLength="50"
             android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -109,6 +109,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/forgot_password"
+        android:textColor="@color/dark_brown"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -154,6 +155,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/dark_brown"
         app:layout_constraintTop_toBottomOf="@id/loginGoogle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

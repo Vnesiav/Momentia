@@ -274,12 +274,6 @@ class LoginFragment : Fragment() {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
-        spannableString.setSpan(
-            ForegroundColorSpan(resources.getColor(R.color.dark_brown, null)),
-            accountStart, accountEnd,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
         registerTextView.text = spannableString
     }
 }
