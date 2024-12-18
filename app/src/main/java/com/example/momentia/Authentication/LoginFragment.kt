@@ -213,7 +213,7 @@ class LoginFragment : Fragment() {
                 val userExists = checkIfUserExists(user.uid)
 
                 if (userExists) {
-                   Log.d("LoginFragment", "User already exists: ${user.email}")
+                    Log.d("LoginFragment", "User already exists: ${user.email}")
                     Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 } else {
