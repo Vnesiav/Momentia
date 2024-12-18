@@ -22,7 +22,7 @@
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
 
-    <!--  Login  -->
+    <!--    Login-->
     <string name="logo_desc">momentia_logo</string>
     <string name="momentia">MOMENTIA</string>
     <string name="login">Log in to your account</string>
