@@ -84,8 +84,6 @@ class ProfileFragment : BaseAuthFragment() {
 
         view.findViewById<TextView>(R.id.delete_account).setOnClickListener {
             showDeleteAccountDialog()
-//            Toast.makeText(requireContext(), "Account deleted successfully", Toast.LENGTH_SHORT).show()
-//            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
 
         return view

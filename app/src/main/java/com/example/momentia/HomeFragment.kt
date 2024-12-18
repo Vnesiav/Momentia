@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.fragment.app.Fragment
+import com.example.momentia.Authentication.BaseAuthFragment
 import com.example.momentia.Camera.CameraActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseAuthFragment() {
     private lateinit var db: FirebaseFirestore
     private var currentUser: FirebaseUser? = null
 

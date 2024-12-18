@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_usernameFragment"
+            app:destination="@id/usernameFragment" />
     </fragment>
 
     <fragment
@@ -59,6 +62,9 @@
         <action
             android:id="@+id/action_usernameFragment_to_nameFragment"
             app:destination="@id/nameFragment" />
+        <action
+            android:id="@+id/action_usernameFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 
     <fragment
