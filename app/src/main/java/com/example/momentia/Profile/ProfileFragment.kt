@@ -60,6 +60,10 @@ class ProfileFragment : BaseAuthFragment() {
             findNavController().navigate(R.id.action_profileFragment_to_editNameFragment)
         }
 
+        view.findViewById<TextView>(R.id.change_username).setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_changeUsernameFragment)
+        }
+
         view.findViewById<TextView>(R.id.change_password).setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_changeProfileFragment)
         }

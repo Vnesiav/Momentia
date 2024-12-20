@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.momentia.Chat.ChatMessageActivity
 import com.example.momentia.Profile.EditProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -41,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             R.id.profileFragment,
             R.id.accountDetailsFragment,
             R.id.editNameFragment,
+            R.id.changeUsernameFragment,
             R.id.changePasswordFragment,
             R.id.changeNumberFragment
         )

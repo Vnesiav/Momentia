@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Authentication.UsernameFragment"
     android:layout_marginTop="16dp"
-    android:layout_marginHorizontal="32dp">
+    android:layout_marginHorizontal="16dp"
+    tools:context=".Profile.ChangeUsernameFragment">
 
     <ImageButton
         android:id="@+id/back_button"
@@ -26,13 +26,12 @@
         android:id="@+id/logoImageView"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:contentDescription="@string/logo_desc"
         android:src="@drawable/momentia_logo"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/titleTextView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/titleTextView"
@@ -42,10 +41,9 @@
         android:text="@string/momentia"
         android:textColor="@color/momentia"
         android:textSize="32sp"
+        app:layout_constraintTop_toBottomOf="@id/logoImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoImageView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <View
         android:layout_width="0dp"
@@ -56,12 +54,12 @@
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
     <TextView
-        android:id="@+id/whats_your_username"
+        android:id="@+id/change_username_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:gravity="center"
-        android:text="@string/whats_your_username"
+        android:text="@string/change_your_username"
         android:textColor="@color/dark_brown"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -70,38 +68,60 @@
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/usernameLayout"
+        android:id="@+id/currentUsernameLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:hint="@string/username"
+        android:layout_marginHorizontal="16dp"
+        android:hint="@string/current_username"
         android:textColorHint="@color/dark_brown"
         app:hintTextColor="@color/dark_brown"
         app:boxStrokeColor="@color/light_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/whats_your_username">
+        app:layout_constraintTop_toBottomOf="@id/change_username_text">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_input"
+            android:id="@+id/current_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLength="50"
+            android:enabled="false"
+            android:textColor="@color/dark_brown" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newUsernameLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="16dp"
+        android:textColorHint="@color/dark_brown"
+        app:hintTextColor="@color/dark_brown"
+        app:boxStrokeColor="@color/light_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/currentUsernameLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/new_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/new_username"
             android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/continue_button"
+        android:id="@+id/save_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
+        android:layout_marginHorizontal="16dp"
         android:backgroundTint="@color/dark_brown"
-        android:text="@string/continue_button"
+        android:text="@string/save"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameLayout" />
+        app:layout_constraintTop_toBottomOf="@id/newUsernameLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
