@@ -64,8 +64,9 @@
         android:layout_height="wrap_content"
         android:hint="@string/email_input_message"
         android:layout_marginTop="28dp"
-        app:boxStrokeColor="@color/light_gray"
+        android:textColorHint="@color/dark_brown"
         app:hintTextColor="@color/dark_brown"
+        app:boxStrokeColor="@color/light_gray"
         app:layout_constraintTop_toBottomOf="@id/registerTitleTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

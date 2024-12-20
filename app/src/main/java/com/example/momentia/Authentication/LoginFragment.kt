@@ -4,7 +4,6 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
@@ -171,12 +170,7 @@ class LoginFragment : Fragment() {
 
             Log.d("LoginFragment", "Google ID Token: $idToken")
 
-            if (idToken != null) {
-                handleGoogleLogIn(idToken)
-            } else {
-                Log.e("LoginFragment", "Google ID Token is null")
-                Toast.makeText(requireContext(), "Failed to get Google token", Toast.LENGTH_SHORT).show()
-            }
+            handleGoogleLogIn(idToken)
         } else {
             Log.e("LoginFragment", "Unexpected credential type")
         }
@@ -194,14 +188,15 @@ class LoginFragment : Fragment() {
                 val firstName = if (names.isNotEmpty()) names[0] else ""
                 val lastName = if (names.size > 1) names[1] else ""
 
-                val phoneNumber = user.phoneNumber ?: ""
+                val baseUsername = user.email?.substringBefore("@")?.lowercase() ?: "user"
+                val uniqueUsername = generateUniqueUsernameFromEmail(baseUsername)
 
                 val userData = User(
                     firstName = firstName,
                     lastName = lastName,
                     email = user.email ?: "",
-                    username = "",
-                    phoneNumber = phoneNumber,
+                    username = uniqueUsername,
+                    phoneNumber = user.phoneNumber ?: "",
                     avatarUrl = user.photoUrl?.toString() ?: "",
                     friends = emptyList(),
                     snapsReceived = emptyList(),
@@ -210,17 +205,11 @@ class LoginFragment : Fragment() {
                     createdAt = com.google.firebase.Timestamp.now()
                 )
 
-                val userExists = checkIfUserExists(user.uid)
+                saveUserToFirestore(user.uid, userData)
 
-                if (userExists) {
-                    Log.d("LoginFragment", "User already exists: ${user.email}")
-                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-                } else {
-                    Log.d("LoginFragment", "User not found, directing to UsernameFragment")
-                    saveUserToFirestore(user.uid, userData)
-                    findNavController().navigate(R.id.action_loginFragment_to_usernameFragment)
-                }
+                Log.d("LoginFragment", "Google Sign-In successful: ${user.email}")
+                Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
             }
         } catch (e: Exception) {
             Log.e("LoginFragment", "Google Sign-In failed: ${e.message}")
@@ -228,16 +217,33 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private suspend fun checkIfUserExists(userId: String): Boolean {
+    private suspend fun generateUniqueUsernameFromEmail(baseUsername: String): String {
+        var username = baseUsername
+        var isTaken = checkIfUsernameExistsSuspend(username)
+
+        while (isTaken) {
+            val randomSuffix = (1..2)
+                .map { ('a'..'z') + ('0'..'9') }
+                .flatten()
+                .shuffled()
+                .take(2)
+                .joinToString("")
+
+            username = "$baseUsername$randomSuffix"
+            isTaken = checkIfUsernameExistsSuspend(username)
+        }
+        return username
+    }
+
+    private suspend fun checkIfUsernameExistsSuspend(username: String): Boolean {
         return try {
             val result = db.collection("users")
-                .document(userId)
+                .whereEqualTo("username", username)
                 .get()
                 .await()
-
-            result.exists()
+            !result.isEmpty
         } catch (e: Exception) {
-            Log.e("LoginFragment", "Error checking user existence: ${e.message}")
+            Log.e("LoginFragment", "Error checking username: ${e.message}")
             false
         }
     }
@@ -259,8 +265,6 @@ class LoginFragment : Fragment() {
 
         val registerStart = registerText.indexOf("Create account")
         val registerEnd = registerStart + "Create account".length
-        val accountStart = registerText.indexOf("Don't have an account?")
-        val accountEnd = accountStart + "Don't have an account?".length
 
         spannableString.setSpan(
             StyleSpan(Typeface.BOLD),

@@ -24,9 +24,6 @@
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_usernameFragment"
-            app:destination="@id/usernameFragment" />
     </fragment>
 
     <fragment
@@ -109,6 +106,9 @@
             android:id="@+id/action_profileFragment_to_editNameFragment"
             app:destination="@id/editNameFragment" />
         <action
+            android:id="@+id/action_profileFragment_to_changeUsernameFragment"
+            app:destination="@id/changeUsernameFragment" />
+        <action
             android:id="@+id/action_profileFragment_to_changeProfileFragment"
             app:destination="@id/changePasswordFragment" />
         <action
@@ -137,6 +137,16 @@
         tools:layout="@layout/fragment_edit_name" />
 
     <fragment
+        android:id="@+id/changeNumberFragment"
+        android:name="com.example.momentia.Profile.ChangeNumberFragment"
+        tools:layout="@layout/fragment_change_number" />
+
+    <fragment
+        android:id="@+id/changeUsernameFragment"
+        android:name="com.example.momentia.Profile.ChangeUsernameFragment"
+        tools:layout="@layout/fragment_change_username" />
+
+    <fragment
         android:id="@+id/changePasswordFragment"
         android:name="com.example.momentia.Profile.ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password">
@@ -144,11 +154,6 @@
             android:id="@+id/actionPasswordUpdated"
             app:destination="@id/profileFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/changeNumberFragment"
-        android:name="com.example.momentia.Profile.ChangeNumberFragment"
-        tools:layout="@layout/fragment_change_number" />
 
     <dialog
         android:id="@+id/deleteAccountDialogFragment"

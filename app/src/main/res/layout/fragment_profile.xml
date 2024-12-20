@@ -155,13 +155,28 @@
                         app:drawableEndCompat="@drawable/arrow_right"/>
 
                     <TextView
+                        android:id="@+id/change_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="12dp"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="6dp"
+                        android:text="@string/change_username"
+                        android:textColor="@color/dark_brown"
+                        android:textSize="14sp"
+                        android:gravity="center_vertical"
+                        android:background="?attr/selectableItemBackground"
+                        app:drawableStartCompat="@drawable/username"
+                        app:drawableEndCompat="@drawable/arrow_right"/>
+
+                    <TextView
                         android:id="@+id/change_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="12dp"
                         android:paddingHorizontal="14dp"
                         android:paddingVertical="6dp"
-                        android:text="@string/change_your_password"
+                        android:text="@string/change_password"
                         android:textColor="@color/dark_brown"
                         android:textSize="14sp"
                         android:gravity="center_vertical"
