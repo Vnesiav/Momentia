@@ -189,23 +189,40 @@ class LoginFragment : Fragment() {
                 val lastName = if (names.size > 1) names[1] else ""
 
                 val baseUsername = user.email?.substringBefore("@")?.lowercase() ?: "user"
-                val uniqueUsername = generateUniqueUsernameFromEmail(baseUsername)
+                val uniqueUsername: String
 
-                val userData = User(
-                    firstName = firstName,
-                    lastName = lastName,
-                    email = user.email ?: "",
-                    username = uniqueUsername,
-                    phoneNumber = user.phoneNumber ?: "",
-                    avatarUrl = user.photoUrl?.toString() ?: "",
-                    friends = emptyList(),
-                    snapsReceived = emptyList(),
-                    snapsSent = emptyList(),
-                    stories = emptyList(),
-                    createdAt = com.google.firebase.Timestamp.now()
-                )
+                val existingUser = checkIfUserExistsInFirestore(baseUsername)
+                if (existingUser != null) {
+                   uniqueUsername = existingUser.username
+                    val userData = existingUser.copy(
+                        firstName = firstName,
+                        lastName = lastName,
+                        email = user.email ?: "",
+                        username = uniqueUsername,
+                        phoneNumber = user.phoneNumber ?: "",
+                        avatarUrl = user.photoUrl?.toString() ?: "",
+                        createdAt = com.google.firebase.Timestamp.now()
+                    )
+                    saveUserToFirestore(user.uid, userData)
+                } else {
+                    uniqueUsername = generateUniqueUsernameFromEmail(baseUsername)
 
-                saveUserToFirestore(user.uid, userData)
+                    val userData = User(
+                        firstName = firstName,
+                        lastName = lastName,
+                        email = user.email ?: "",
+                        username = uniqueUsername,
+                        phoneNumber = user.phoneNumber ?: "",
+                        avatarUrl = user.photoUrl?.toString() ?: "",
+                        friends = emptyList(),
+                        snapsReceived = emptyList(),
+                        snapsSent = emptyList(),
+                        stories = emptyList(),
+                        createdAt = com.google.firebase.Timestamp.now()
+                    )
+
+                    saveUserToFirestore(user.uid, userData)
+                }
 
                 Log.d("LoginFragment", "Google Sign-In successful: ${user.email}")
                 Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
@@ -214,6 +231,21 @@ class LoginFragment : Fragment() {
         } catch (e: Exception) {
             Log.e("LoginFragment", "Google Sign-In failed: ${e.message}")
             Toast.makeText(requireContext(), "Login failed: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private suspend fun checkIfUserExistsInFirestore(username: String): User? {
+        return try {
+            val result = db.collection("users")
+                .whereEqualTo("username", username)
+                .get()
+                .await()
+
+            if (result.isEmpty) null else result.documents[0].toObject(User::class.java)
+        } catch (e: Exception) {
+            Log.e("LoginFragment", "Error checking if user exists: ${e.message}")
+            null
         }
     }
 

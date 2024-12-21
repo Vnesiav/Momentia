@@ -100,16 +100,6 @@ class CameraFragment : BaseAuthFragment() {
         // Additional setup if needed
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        (activity as MainActivity).hideBottomNavigation()
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        (activity as MainActivity).showBottomNavigation()
-//    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == AppCompatActivity.RESULT_OK) {
@@ -202,41 +192,6 @@ class CameraFragment : BaseAuthFragment() {
         }
     }
 
-    private fun uploadAbsensi(bitmap: Bitmap) {
-        val timestamp = System.currentTimeMillis()
-        val fileName = "story_${timestamp}.jpg"
-        val storageRef = storage.reference.child("story/$fileName")
-
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-
-        storageRef.putBytes(data).addOnSuccessListener {
-            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                val photoUrl = uri.toString()
-                Log.d("CameraFragment", "URL Foto: $photoUrl")
-
-                val attendanceRecordId = firestore.collection("story").document().id
-
-                val storyData = mapOf(
-                    "photoUrl" to photoUrl,
-                    "timestamp" to timestamp
-                )
-
-                firestore.collection("absensi").document(attendanceRecordId)
-                    .set(storyData)
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Absensi berhasil disimpan", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(requireContext(), "Gagal menyimpan data absensi: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-            }
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Gagal mengunggah foto", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun saveImageToGallery(bitmap: Bitmap) {
         val savedImageURL = MediaStore.Images.Media.insertImage(
             requireContext().contentResolver,
@@ -258,7 +213,7 @@ class CameraFragment : BaseAuthFragment() {
 
         // Save bitmap to a temporary file to be shared
         val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
         val path = MediaStore.Images.Media.insertImage(
             requireContext().contentResolver, bitmap, "temp", null
         )
