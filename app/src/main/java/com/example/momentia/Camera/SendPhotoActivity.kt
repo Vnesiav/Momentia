@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.FriendChat
+import com.example.momentia.DTO.Memory
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
 import com.google.firebase.Timestamp
@@ -161,7 +162,21 @@ class SendPhotoActivity : AppCompatActivity() {
                         .document(messageId)
                         .set(message)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Photo sent to ${friend.firstName}", Toast.LENGTH_SHORT).show()
+                            val memory = Memory(
+                                mediaUrl = downloadUrl,
+                                senderId = currentUser.uid,
+                                receiverId = friend.userId,
+                                sentAt = Timestamp.now()
+                            )
+
+                            db.collection("memories")
+                                .add(memory)
+                                .addOnSuccessListener {
+                                    Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
+                                }
                         }
                         .addOnFailureListener {
                             Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
@@ -171,4 +186,5 @@ class SendPhotoActivity : AppCompatActivity() {
                 }
             }
     }
+
 }

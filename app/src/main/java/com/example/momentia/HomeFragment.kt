@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.navigation.fragment.findNavController
 import com.example.momentia.Authentication.BaseAuthFragment
 import com.example.momentia.Camera.CameraActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -46,12 +47,15 @@ class HomeFragment : BaseAuthFragment() {
             return
         }
 
-        // Set click listener for camera_button
         val cameraButton = view.findViewById<ImageView>(R.id.camera_button)
         cameraButton.setOnClickListener {
-            // Navigate to ActivityCamera
             val intent = Intent(requireContext(), CameraActivity::class.java)
             startActivity(intent)
+        }
+
+        val memoriesButton = view.findViewById<ImageView>(R.id.memories_button)
+        memoriesButton.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_memoriesFragment)
         }
     }
 }
