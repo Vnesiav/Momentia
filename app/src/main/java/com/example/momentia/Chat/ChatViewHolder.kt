@@ -29,6 +29,10 @@ class ChatViewHolder(
         containerView.findViewById(R.id.new_msg_counter)
     }
 
+    private val readStatus: ImageView by lazy {
+        containerView.findViewById(R.id.read_status)
+    }
+
     fun bindData(chat: FriendChat) {
         containerView.setOnClickListener {
             onClickListener.onClick(chat)
@@ -46,6 +50,12 @@ class ChatViewHolder(
             counter.visibility = View.GONE
         } else {
             counter.text = chat.counter.toString()
+        }
+
+        if (chat.isRead) {
+            readStatus.setImageResource(R.drawable.read_icon) // Use setImageResource here
+        } else {
+            readStatus.setImageResource(R.drawable.not_read) // Use setImageResource here
         }
 
         name.text = "${chat.firstName} ${chat.lastName ?: ""}"
