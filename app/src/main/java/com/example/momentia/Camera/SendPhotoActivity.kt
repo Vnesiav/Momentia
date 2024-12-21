@@ -104,7 +104,8 @@ class SendPhotoActivity : AppCompatActivity() {
                                         avatarUrl = friendDoc.getString("avatarUrl") ?: "",
                                         timestamp = null,
                                         lastMessage = null,
-                                        counter = null
+                                        counter = null,
+                                        isRead = false
                                     )
                                 }
 

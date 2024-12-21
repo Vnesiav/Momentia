@@ -23,7 +23,8 @@ class ChatAdapter(
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int): ChatViewHolder {
+        viewType: Int
+    ): ChatViewHolder {
         val view = layoutInflater.inflate(R.layout.chat_list, parent, false)
         return ChatViewHolder(view, imageLoader, object: ChatViewHolder.OnClickListener {
             override fun onClick(chat: FriendChat) = onClickListener.onItemClick(chat)

@@ -9,5 +9,6 @@ data class FriendChat(
     val avatarUrl: String?,
     var timestamp: Timestamp?,
     var lastMessage: String?,
-    var counter: Int?
+    var counter: Int?,
+    var isRead: Boolean = false
 )
