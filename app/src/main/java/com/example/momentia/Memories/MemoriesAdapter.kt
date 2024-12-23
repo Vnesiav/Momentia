@@ -8,7 +8,7 @@ import com.example.momentia.R
 
 class MemoriesAdapter(
     private val memoriesList: List<Memory>,
-    private val onMemoryClick: (Memory) -> Unit
+//    private val onMemoryClick: (Memory) -> Unit
 ) : RecyclerView.Adapter<MemoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoryViewHolder {
@@ -19,7 +19,8 @@ class MemoriesAdapter(
 
     override fun onBindViewHolder(holder: MemoryViewHolder, position: Int) {
         val memory = memoriesList[position]
-        holder.bind(memory, onMemoryClick)
+//        holder.bind(memory, onMemoryClick)
+        holder.bind(memory)
     }
     override fun getItemCount(): Int {
         return memoriesList.size

@@ -5,24 +5,28 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/memoryImageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:scaleType="centerCrop"
+    <TextView
+        android:id="@+id/memoryDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/dark_brown"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/memoryDateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/text_color"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/memoryImageView"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/memoryImageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/memories_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@id/memoryDate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedImageView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
