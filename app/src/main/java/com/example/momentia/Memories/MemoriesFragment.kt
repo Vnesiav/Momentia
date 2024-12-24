@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.Memory
 import com.example.momentia.R
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
 class MemoriesFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
     private lateinit var memoriesRecyclerView: RecyclerView
     private lateinit var memoriesAdapter: MemoriesAdapter
     private val memoriesList = mutableListOf<Memory>()
@@ -27,6 +29,7 @@ class MemoriesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_memories, container, false)
 
         db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
         memoriesRecyclerView = view.findViewById(R.id.memoriesRecyclerView)
         memoriesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
 
@@ -57,7 +60,15 @@ class MemoriesFragment : Fragment() {
     }
 
     private fun loadMemories() {
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            android.util.Log.e("Auth Error", "User not logged in")
+            return
+        }
+
+        val senderId = currentUser.uid
         db.collection("memories")
+            .whereEqualTo("senderId", senderId)
             .get()
             .addOnSuccessListener { result ->
                 memoriesList.clear()
