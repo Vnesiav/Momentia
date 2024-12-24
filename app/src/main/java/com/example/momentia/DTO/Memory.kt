@@ -11,7 +11,7 @@ data class Memory(
     val receiverId: String = "",
     val senderId: String = "",
     val sentAt: Timestamp? = null,
-    val viewed: Boolean = false,
+    val viewed: Boolean = false
 ){
     val formattedDate: String?
         get() = sentAt?.let {
