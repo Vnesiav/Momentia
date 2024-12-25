@@ -7,12 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.FriendChat
 import com.example.momentia.R
 import com.example.momentia.glide.ImageLoader
+import com.google.firebase.auth.FirebaseAuth
 
 class ChatViewHolder(
     private val containerView: View,
     private val imageLoader: ImageLoader,
     private val onClickListener: OnClickListener
 ) : RecyclerView.ViewHolder(containerView) {
+    val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
     private val profilePicture: ImageView by lazy {
         containerView.findViewById(R.id.profile_picture)
     }
@@ -44,12 +47,14 @@ class ChatViewHolder(
             profilePicture.setImageResource(R.drawable.account_circle)
         }
 
-        if (chat.counter!! > 9) {
-            counter.text = "9+"
-        } else if (chat.counter!! <= 0)  {
-            counter.visibility = View.GONE
-        } else {
-            counter.text = chat.counter.toString()
+        if (chat.userId != currentUser) {
+            if (chat.counter!! > 9) {
+                counter.text = "9+"
+            } else if (chat.counter!! <= 0)  {
+                counter.visibility = View.GONE
+            } else {
+                counter.text = chat.counter.toString()
+            }
         }
 
         if (chat.isRead) {

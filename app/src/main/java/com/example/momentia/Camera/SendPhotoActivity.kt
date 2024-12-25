@@ -129,13 +129,22 @@ class SendPhotoActivity : AppCompatActivity() {
 
     private fun sendPhotoToFriend(friend: FriendChat, image: Bitmap) {
         val chatId = "${currentUser!!.uid}_${friend.userId}"
+        val receiverChatId = "${friend.userId}_${currentUser.uid}"
+
         val messageId = db.collection("chats")
             .document(chatId)
             .collection("messages")
             .document()
             .id
 
+        val receiverMessageId = db.collection("chats")
+            .document(receiverChatId)
+            .collection("messages")
+            .document()
+            .id
+
         val imageRef = storage.reference.child("chat_images/$chatId/$messageId.jpg")
+
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageData = baos.toByteArray()
@@ -162,7 +171,17 @@ class SendPhotoActivity : AppCompatActivity() {
                         .document(messageId)
                         .set(message)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Photo sent to ${friend.firstName}", Toast.LENGTH_SHORT).show()
+                            db.collection("chats")
+                                .document(receiverChatId)
+                                .collection("messages")
+                                .document(receiverMessageId)
+                                .set(message)
+                                .addOnSuccessListener {
+                                    Toast.makeText(this, "Photo sent to ${friend.firstName}", Toast.LENGTH_SHORT).show()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
+                                }
                         }
                         .addOnFailureListener {
                             Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
