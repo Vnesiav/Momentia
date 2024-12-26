@@ -51,9 +51,31 @@ class ChatFragment : BaseAuthFragment() {
 
         setFontSize(view)
         getChatList(loadingText)
-//        setupSearch()
+        setupSearch()
 
         return view
+    }
+
+    private fun setupSearch() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // You can handle submission if needed, for now, just return true
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Filter the friend list based on the search query
+                val filteredList = friendList.filter { friendChat ->
+                    friendChat.firstName.contains(newText ?: "", ignoreCase = true) ||
+                            friendChat.lastName?.contains(newText ?: "", ignoreCase = true) == true
+                }
+
+                // Update the RecyclerView with the filtered list
+                friendChatAdapter.setData(filteredList)
+                friendChatAdapter.notifyDataSetChanged()
+                return true
+            }
+        })
     }
 
     private fun getChatList(loadingText: TextView) {
@@ -62,7 +84,7 @@ class ChatFragment : BaseAuthFragment() {
             return
         }
 
-        Log.d("ChatFragment", "Current user UID: ${currentUser.uid}")
+//        Log.d("ChatFragment", "Current user UID: ${currentUser.uid}")
         db.collection("chats")
             .orderBy("lastChatTime", Query.Direction.DESCENDING)
             .get()
@@ -70,9 +92,9 @@ class ChatFragment : BaseAuthFragment() {
                 if (result.isEmpty) {
                     loadingText.text = "No recent chat"
                 } else {
-                    result.forEach { document ->
-                        Log.d("ChatFragment", "Document ID: ${document.id}, Data: ${document.data}")
-                    }
+//                    result.forEach { document ->
+//                        Log.d("ChatFragment", "Document ID: ${document.id}, Data: ${document.data}")
+//                    }
 
                     // Pastikan menambahkan data friendChat pada thread utama
                     for (document in result) {
@@ -87,14 +109,22 @@ class ChatFragment : BaseAuthFragment() {
                             if (currentUser.uid == userId) {
                                 getFriendId(friendId) { friendChat ->
                                     if (friendChat != null) {
-                                        getLastMessage(friendId) { lastMessage ->
+                                        getLastMessage(friendId) { lastMessage, isReadStatus ->
                                             getLastMessageCount(friendId) { unreadCount ->
                                                 friendChat.counter = unreadCount
 
                                                 friendChat.timestamp = lastChatTime
                                                 friendChat.lastMessage = lastMessage
 
-                                                friendList.add(friendChat)
+                                                if (isReadStatus != null) {
+                                                    friendChat.isRead = isReadStatus
+                                                }
+
+                                                if (friendChat.firstName != "Unknown") {
+                                                    Log.d("ChatFragment", "Last message: $lastMessage")
+                                                    friendList.add(friendChat)
+                                                }
+
                                                 Log.d("ChatFragment", "Added friend: $friendChat")
 
                                                 // Pastikan pembaruan UI terjadi pada main thread
@@ -163,7 +193,8 @@ class ChatFragment : BaseAuthFragment() {
                     avatarUrl = document.getString("avatarUrl") ?: "",
                     timestamp = document.getTimestamp("lastChatTime"), // Menambahkan lastChatTime
                     lastMessage = null, // Akan diisi setelah memanggil getLastMessage
-                    counter = null
+                    counter = null,
+                    isRead = false
                 )
                 callback(friendChat)
             }
@@ -173,7 +204,7 @@ class ChatFragment : BaseAuthFragment() {
             }
     }
 
-    private fun getLastMessage(friendId: String, callback: (String?) -> Unit) {
+    private fun getLastMessage(friendId: String, callback: (String?, Boolean?) -> Unit) {
         db.collection("chats")
             .whereEqualTo("firstUserId", currentUser?.uid)
             .whereEqualTo("secondUserId", friendId)
@@ -189,28 +220,33 @@ class ChatFragment : BaseAuthFragment() {
                         .get()
                         .addOnSuccessListener { messageResult ->
                             if (!messageResult.isEmpty) {
-                                val lastMessage = messageResult.documents[0].getString("messageText")
+                                var lastMessage = ""
 
-                                if (lastMessage != null) {
-                                    callback(lastMessage)
-                                } else {
-                                    callback("Photo")
+                                if (messageResult.documents[0].getString("messageText")?.isNotEmpty() == true) {
+                                    lastMessage = messageResult.documents[0].getString("messageText").toString()
+                                } else if (messageResult.documents[0].getString("photoUrl")?.isNotEmpty() == true) {
+                                    lastMessage = "Photo"
                                 }
+
+                                val isRead = messageResult.documents[0].getBoolean("isRead") ?: false
+
+                                // Return the last message and its isRead status
+                                callback(lastMessage, isRead)
                             } else {
-                                callback(null) // Tidak ada pesan
+                                callback(null, null) // No messages
                             }
                         }
                         .addOnFailureListener { e ->
                             Log.e("ChatFragment", "Error getting last message", e)
-                            callback(null) // Gagal mengambil pesan
+                            callback(null, null) // Failed to retrieve message
                         }
                 } else {
-                    callback(null) // Tidak ada percakapan
+                    callback(null, null) // No conversation
                 }
             }
             .addOnFailureListener { e ->
                 Log.e("ChatFragment", "Error getting chat document", e)
-                callback(null) // Gagal mendapatkan percakapan
+                callback(null, null) // Failed to get chat
             }
     }
 

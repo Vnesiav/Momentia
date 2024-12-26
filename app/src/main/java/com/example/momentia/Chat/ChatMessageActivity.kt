@@ -55,8 +55,8 @@ class ChatMessageActivity : AppCompatActivity() {
         lastName = intent.getStringExtra("lastName") ?: ""
         imageUrl = intent.getStringExtra("imageUrl") ?: "none"
 
-        Log.d("ChatMessageActivity", "UserId: $userId")
-        Log.d("ChatMessageActivity", "ImageUrl: $imageUrl")
+//        Log.d("ChatMessageActivity", "UserId: $userId")
+//        Log.d("ChatMessageActivity", "ImageUrl: $imageUrl")
 
         chatRecyclerView = findViewById(R.id.message_container)
         chatAdapter = ChatMessageAdapter(messages, imageUrl)
@@ -97,7 +97,12 @@ class ChatMessageActivity : AppCompatActivity() {
     private fun setIdentity(firstName: String, lastName: String, imageUrl: String) {
         friendName.text = "$firstName $lastName"
         val glideImageLoader = GlideImageLoaderCircle(this)
-        glideImageLoader.loadImage(imageUrl, friendPicture)
+
+        if (imageUrl == "none" || imageUrl == "") {
+            friendPicture.setImageResource(R.drawable.account_circle)
+        } else {
+            glideImageLoader.loadImage(imageUrl, friendPicture)
+        }
     }
 
     private fun sendMessage(userId: String) {
@@ -187,6 +192,7 @@ class ChatMessageActivity : AppCompatActivity() {
     }
 
     private fun getChatId(firstId: String, secondId: String): String {
+        Log.d("ChatMessageActivity", "${firstId}_${secondId}")
         return "${firstId}_${secondId}"
     }
 
@@ -213,7 +219,7 @@ class ChatMessageActivity : AppCompatActivity() {
                         for (document in querySnapshot) {
                             val messageText = document.getString("messageText") ?: ""
                             val senderId = document.getString("senderId") ?: ""
-                            val photoUrl = document.getString("photoUrl") // Bisa null jika pesan adalah teks
+                            val photoUrl = document.getString("photoUrl")
                             val timestamp = document.getTimestamp("timestamp")
                             val isRead = document.getBoolean("isRead") ?: false
 
@@ -227,6 +233,10 @@ class ChatMessageActivity : AppCompatActivity() {
                                     isSentByCurrentUser = senderId == currentUser.uid,
                                     photoUrl = photoUrl // Masukkan URL foto (null jika tidak ada)
                                 )
+
+//                                if (chatMessage.photoUrl != null) {
+//                                    Log.d("ChatMessageActivity", "==============================Received message: $photoUrl by $senderId")
+//                                }
                                 messages.add(chatMessage)
                             }
                         }
@@ -240,27 +250,43 @@ class ChatMessageActivity : AppCompatActivity() {
     }
 
     private fun markMessageAsRead(chatId: String) {
+        // Fetch unread messages that were not sent by the current user
         db.collection("chats")
             .document(chatId)
             .collection("messages")
-            .whereEqualTo("isRead", false)
-            .whereEqualTo("senderId", userId)
+            .whereEqualTo("isRead", false) // Only fetch unread messages
+            .whereNotEqualTo("senderId", FirebaseAuth.getInstance().currentUser?.uid) // Exclude messages sent by the current user
             .get()
             .addOnSuccessListener { result ->
+                // Check if there are any unread messages
+                if (result.isEmpty) {
+                    Log.d("ChatMessageActivity", "No unread messages")
+                    return@addOnSuccessListener
+                }
+
+                // Prepare a batch for updating multiple documents at once
                 val batch = db.batch()
                 for (document in result) {
+                    // Get the reference to the message document
                     val messageRef = document.reference
+
+                    // Add an update operation to the batch to mark the message as read
                     batch.update(messageRef, "isRead", true)
                 }
-                batch.commit().addOnSuccessListener {
-                    Log.d("ChatMessageActivity", "All messages marked as read")
-                }.addOnFailureListener { e ->
-                    Log.e("ChatMessageActivity", "Error marking messages as read", e)
-                }
+
+                // Commit the batch update
+                batch.commit()
+                    .addOnSuccessListener {
+                        Log.d("ChatMessageActivity", "All messages marked as read successfully")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("ChatMessageActivity", "Error marking messages as read", e)
+                    }
             }
             .addOnFailureListener { e ->
                 Log.e("ChatMessageActivity", "Error fetching unread messages", e)
             }
     }
+
 }
 

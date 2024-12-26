@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="16dp"
     tools:context=".Profile.ProfileFragment">
 
@@ -26,7 +26,7 @@
         android:id="@+id/profileTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:text="@string/profile_title"
         android:textColor="@color/dark_brown"
         android:textSize="16sp"
@@ -41,7 +41,7 @@
         android:id="@+id/profile_image"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="32dp"
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/CircleImageView"
         android:src="@drawable/profile"
@@ -53,8 +53,8 @@
     <TextView
         android:id="@+id/profile_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
         android:text=""
         android:textColor="@color/dark_brown"
         android:textStyle="bold"
@@ -63,33 +63,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="600dp"
         app:layout_constraintTop_toBottomOf="@id/profile_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
 
             <TextView
                 android:id="@+id/general_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginHorizontal="16dp"
                 android:drawablePadding="6dp"
                 android:text="@string/general"
                 android:textColor="@color/dark_brown"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                app:drawableStartCompat="@drawable/person_general"
-                app:layout_constraintTop_toBottomOf="@id/profile_name"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:drawableStartCompat="@drawable/person_general" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/general_card"
@@ -99,10 +97,7 @@
                 android:layout_marginHorizontal="16dp"
                 app:cardCornerRadius="20dp"
                 app:cardBackgroundColor="@color/grayish"
-                app:cardElevation="4dp"
-                app:layout_constraintTop_toBottomOf="@id/general_section"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -214,9 +209,7 @@
                 android:textColor="@color/dark_brown"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                app:drawableStartCompat="@drawable/friends"
-                app:layout_constraintTop_toBottomOf="@id/general_card"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:drawableStartCompat="@drawable/friends" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/friends_card"
@@ -226,10 +219,7 @@
                 android:layout_marginHorizontal="16dp"
                 app:cardCornerRadius="20dp"
                 app:cardBackgroundColor="@color/grayish"
-                app:cardElevation="4dp"
-                app:layout_constraintTop_toBottomOf="@id/friends_section"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -289,15 +279,12 @@
                 android:id="@+id/account_actions_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:cardBackgroundColor="@color/grayish"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/account_actions_section">
+                app:cardBackgroundColor="@color/grayish"
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -335,8 +322,9 @@
                         app:drawableEndCompat="@drawable/arrow_right"
                         app:drawableStartCompat="@drawable/delete" />
 
-                        </LinearLayout>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
