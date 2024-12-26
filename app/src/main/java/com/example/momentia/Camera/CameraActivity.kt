@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.example.momentia.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -23,10 +22,6 @@ import java.io.ByteArrayOutputStream
 import androidx.exifinterface.media.ExifInterface
 import android.util.Log
 import java.io.IOException
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class CameraActivity : AppCompatActivity() {
 
@@ -44,7 +39,6 @@ class CameraActivity : AppCompatActivity() {
     private val CAMERA_PERMISSION_REQUEST_CODE = 101
     private val CAMERA_REQUEST_CODE = 100
     private val GALLERY_REQUEST_CODE = 102
-    private lateinit var currentPhotoPath: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,13 +155,6 @@ class CameraActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT).show()
                     }
-
-                    val file = File(currentPhotoPath)
-                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
-                    capturedImage = bitmap
-                    capturedImageView.setImageBitmap(bitmap)
-                    retakeButton.isEnabled = true
-                    toggleButtons(true)
                 }
 
                 GALLERY_REQUEST_CODE -> {
@@ -249,36 +236,9 @@ class CameraActivity : AppCompatActivity() {
     private fun openCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (cameraIntent.resolveActivity(packageManager) != null) {
-            val photoFile: File? = try {
-                createImageFile()
-            } catch (ex: IOException) {
-                Toast.makeText(this, "Error occurred while creating the file", Toast.LENGTH_SHORT).show()
-                null
-            }
-            photoFile?.also {
-                val photoURI: Uri = FileProvider.getUriForFile(
-                    this,
-                    "com.example.momentia.fileprovider",
-                    it
-                )
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
-            }
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
         } else {
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val storageDir: File = getExternalFilesDir(null)!!
-        return File.createTempFile(
-            "JPEG_${timeStamp}_",
-            ".jpg",
-            storageDir
-        ).apply {
-            currentPhotoPath = absolutePath
         }
     }
 

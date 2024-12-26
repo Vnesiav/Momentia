@@ -104,8 +104,7 @@ class SendPhotoActivity : AppCompatActivity() {
                                         avatarUrl = friendDoc.getString("avatarUrl") ?: "",
                                         timestamp = null,
                                         lastMessage = null,
-                                        counter = null,
-                                        isRead = false
+                                        counter = null
                                     )
                                 }
 
@@ -129,22 +128,13 @@ class SendPhotoActivity : AppCompatActivity() {
 
     private fun sendPhotoToFriend(friend: FriendChat, image: Bitmap) {
         val chatId = "${currentUser!!.uid}_${friend.userId}"
-        val receiverChatId = "${friend.userId}_${currentUser.uid}"
-
         val messageId = db.collection("chats")
             .document(chatId)
             .collection("messages")
             .document()
             .id
 
-        val receiverMessageId = db.collection("chats")
-            .document(receiverChatId)
-            .collection("messages")
-            .document()
-            .id
-
         val imageRef = storage.reference.child("chat_images/$chatId/$messageId.jpg")
-
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageData = baos.toByteArray()
@@ -170,6 +160,7 @@ class SendPhotoActivity : AppCompatActivity() {
                         .collection("messages")
                         .document(messageId)
                         .set(message)
+                        .addOnSuccessListener {
                             val memory = Memory(
                                 location = null,
                                 mediaUrl = downloadUrl,
@@ -186,17 +177,6 @@ class SendPhotoActivity : AppCompatActivity() {
                                 }
                                 .addOnFailureListener {
                                     Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
-
-                            db.collection("chats")
-                                .document(receiverChatId)
-                                .collection("messages")
-                                .document(receiverMessageId)
-                                .set(message)
-                                .addOnSuccessListener {
-                                    Toast.makeText(this, "Photo sent to ${friend.firstName}", Toast.LENGTH_SHORT).show()
-                                }
-                                .addOnFailureListener {
-                                    Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
                                 }
                         }
                         .addOnFailureListener {
