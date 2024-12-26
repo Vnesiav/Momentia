@@ -13,6 +13,7 @@ import com.example.momentia.DTO.MemorySection
 import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
 import java.util.Locale
 
 class MemoriesFragment : Fragment() {
@@ -33,12 +34,12 @@ class MemoriesFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         memoriesRecyclerView = view.findViewById(R.id.memoriesRecyclerView)
 
-        val gridLayoutManager = GridLayoutManager(requireContext(), 3) // 3 kolom
+        val gridLayoutManager = GridLayoutManager(requireContext(), 3)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return when (memoriesAdapter.getItemViewType(position)) {
-                    MemoriesAdapter.VIEW_TYPE_HEADER -> gridLayoutManager.spanCount // Header mengisi seluruh baris
-                    MemoriesAdapter.VIEW_TYPE_ITEM -> 1 // Item mengisi 1 kolom
+                    MemoriesAdapter.VIEW_TYPE_HEADER -> gridLayoutManager.spanCount
+                    MemoriesAdapter.VIEW_TYPE_ITEM -> 1
                     else -> 1
                 }
             }
@@ -76,8 +77,17 @@ class MemoriesFragment : Fragment() {
         val sections = mutableListOf<MemorySection>()
         var lastDate: String? = null
 
-        memories.sortedBy { it.formattedDate }.forEach { memory ->
-            val currentDate = memory.formattedDate?.take(7)
+        memories.sortedBy { memory ->
+            memory.sentAt?.let {
+                val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+                dateFormat.format(it.toDate())
+            }
+        }.forEach { memory ->
+            val currentDate = memory.sentAt?.let {
+                val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+                dateFormat.format(it.toDate())
+            }
+
             if (currentDate != lastDate) {
                 sections.add(MemorySection.Header(memory))
                 lastDate = currentDate
@@ -86,6 +96,7 @@ class MemoriesFragment : Fragment() {
         }
         return sections
     }
+
 
     private fun loadMemories() {
         val currentUser = auth.currentUser
@@ -128,7 +139,12 @@ class MemoriesFragment : Fragment() {
 
             filteredMemoriesList.addAll(
                 memoriesList.filter {
-                    it.formattedDate?.lowercase(Locale.getDefault())?.contains(lowerCaseQuery) == true
+                    val formattedDate = it.sentAt?.let { timestamp ->
+                        val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+                        dateFormat.format(timestamp.toDate())
+                    } ?: "Unknown Date"
+
+                    formattedDate.lowercase(Locale.getDefault()).contains(lowerCaseQuery)
                 }
             )
         }
@@ -137,5 +153,6 @@ class MemoriesFragment : Fragment() {
         memoriesAdapter = MemoriesAdapter(organizedSections)
         memoriesRecyclerView.adapter = memoriesAdapter
     }
+
 
 }

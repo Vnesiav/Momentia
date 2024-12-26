@@ -57,6 +57,11 @@
         <activity
             android:name=".Camera.SendPhotoActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".Memories.PhotoActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

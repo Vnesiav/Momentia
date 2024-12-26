@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.FriendChat
@@ -163,10 +162,12 @@ class SendPhotoActivity : AppCompatActivity() {
                         .set(message)
                         .addOnSuccessListener {
                             val memory = Memory(
+                                location = null,
                                 mediaUrl = downloadUrl,
                                 senderId = currentUser.uid,
                                 receiverId = friend.userId,
-                                sentAt = Timestamp.now()
+                                sentAt = Timestamp.now(),
+                                viewed = false
                             )
 
                             db.collection("memories")

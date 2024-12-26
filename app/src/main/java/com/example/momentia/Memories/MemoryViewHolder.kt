@@ -1,5 +1,6 @@
 package com.example.momentia.Memories
 
+import android.content.Intent
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -14,5 +15,12 @@ class MemoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         Glide.with(itemView.context)
             .load(memory.mediaUrl)
             .into(memoryImageView)
+
+        memoryImageView.setOnClickListener {
+            val context = itemView.context
+            val intent = Intent(context, PhotoActivity::class.java)
+            intent.putExtra("IMAGE_URL", memory.mediaUrl)
+            context.startActivity(intent)
+        }
     }
 }

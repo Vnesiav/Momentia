@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.MemorySection
 import com.example.momentia.R
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class MemoriesAdapter(private val sections: List<MemorySection>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -38,11 +40,16 @@ class MemoriesAdapter(private val sections: List<MemorySection>) : RecyclerView.
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val section = sections[position]) {
             is MemorySection.Header -> {
-                (holder as HeaderViewHolder).bind(section.memory.formattedDate ?: "Unknown Date")
+                val formattedDate = section.memory.sentAt?.let {
+                    val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+                    dateFormat.format(it.toDate())
+                } ?: "Unknown Date"
+                (holder as HeaderViewHolder).bind(formattedDate)
             }
             is MemorySection.Item -> (holder as MemoryViewHolder).bind(section.memory)
         }
     }
+
 
     override fun getItemCount(): Int = sections.size
 }
