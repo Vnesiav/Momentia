@@ -85,12 +85,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/cameraFragment"
-        android:name="com.example.momentia.Camera.CameraFragment"
-        android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" />
-
-    <fragment
         android:id="@+id/chatFragment"
         android:name="com.example.momentia.Chat.ChatFragment"
         android:label="fragment_chat"
