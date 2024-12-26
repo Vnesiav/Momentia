@@ -84,7 +84,7 @@ class ChatFragment : BaseAuthFragment() {
             return
         }
 
-        Log.d("ChatFragment", "Current user UID: ${currentUser.uid}")
+//        Log.d("ChatFragment", "Current user UID: ${currentUser.uid}")
         db.collection("chats")
             .orderBy("lastChatTime", Query.Direction.DESCENDING)
             .get()
@@ -92,9 +92,9 @@ class ChatFragment : BaseAuthFragment() {
                 if (result.isEmpty) {
                     loadingText.text = "No recent chat"
                 } else {
-                    result.forEach { document ->
-                        Log.d("ChatFragment", "Document ID: ${document.id}, Data: ${document.data}")
-                    }
+//                    result.forEach { document ->
+//                        Log.d("ChatFragment", "Document ID: ${document.id}, Data: ${document.data}")
+//                    }
 
                     // Pastikan menambahkan data friendChat pada thread utama
                     for (document in result) {

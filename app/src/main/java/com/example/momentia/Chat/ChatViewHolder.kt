@@ -8,6 +8,8 @@ import com.example.momentia.DTO.FriendChat
 import com.example.momentia.R
 import com.example.momentia.glide.ImageLoader
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ChatViewHolder(
     private val containerView: View,
@@ -36,6 +38,10 @@ class ChatViewHolder(
         containerView.findViewById(R.id.read_status)
     }
 
+    private val timestamp: TextView by lazy {
+        containerView.findViewById(R.id.timestamp)
+    }
+
     fun bindData(chat: FriendChat) {
         containerView.setOnClickListener {
             onClickListener.onClick(chat)
@@ -51,7 +57,7 @@ class ChatViewHolder(
             if (chat.counter!! > 9) {
                 counter.text = "9+"
             } else if (chat.counter!! <= 0)  {
-                counter.visibility = View.GONE
+                counter.visibility = View.INVISIBLE
             } else {
                 counter.text = chat.counter.toString()
             }
@@ -61,6 +67,13 @@ class ChatViewHolder(
             readStatus.setImageResource(R.drawable.read_icon) // Use setImageResource here
         } else {
             readStatus.setImageResource(R.drawable.not_read) // Use setImageResource here
+        }
+
+        // Convert Firestore Timestamp to Date and format it
+        chat.timestamp?.let { firestoreTimestamp ->
+            val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val formattedTime = formatter.format(firestoreTimestamp.toDate())
+            timestamp.text = formattedTime
         }
 
         name.text = "${chat.firstName} ${chat.lastName ?: ""}"
