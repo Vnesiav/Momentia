@@ -12,8 +12,8 @@
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            android:id="@+id/action_homeFragment_to_memoriesFragment"
+            app:destination="@id/memoriesFragment" />
     </fragment>
 
     <fragment
@@ -83,12 +83,6 @@
             android:id="@+id/action_phoneFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/cameraFragment"
-        android:name="com.example.momentia.Camera.CameraFragment"
-        android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" />
 
     <fragment
         android:id="@+id/chatFragment"
@@ -169,4 +163,10 @@
     <action
         android:id="@+id/action_sendPhotoActivity_to_homeFragment"
         app:destination="@id/homeFragment" />
+
+    <fragment
+        android:id="@+id/memoriesFragment"
+        android:name="com.example.momentia.Memories.MemoriesFragment"
+        android:label="MemoriesFragment" />
+
 </navigation>

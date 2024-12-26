@@ -79,8 +79,7 @@ class CameraActivity : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
-            val intent = Intent(this, SendPhotoActivity::class.java)
-            startActivity(intent)
+            saveImageToGallery(capturedImage!!)
         }
 
         sendToFriendButton.setOnClickListener {
@@ -243,17 +242,15 @@ class CameraActivity : AppCompatActivity() {
     private fun sendImageToFriend(bitmap: Bitmap) {
         val intent = Intent(this, SendPhotoActivity::class.java)
 
-        // Konversi Bitmap menjadi ByteArray
         val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes)
         val byteArray = bytes.toByteArray()
 
-        // Tambahkan gambar sebagai extra
         intent.putExtra("capturedImage", byteArray)
 
-        // Mulai activity
         startActivity(intent)
     }
+
 
     private fun closeCapturedImage() {
         capturedImageView.setImageBitmap(null)

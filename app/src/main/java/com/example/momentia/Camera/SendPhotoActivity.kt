@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.FriendChat
+import com.example.momentia.DTO.Memory
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
 import com.google.firebase.Timestamp
@@ -104,8 +104,7 @@ class SendPhotoActivity : AppCompatActivity() {
                                         avatarUrl = friendDoc.getString("avatarUrl") ?: "",
                                         timestamp = null,
                                         lastMessage = null,
-                                        counter = null,
-                                        isRead = false
+                                        counter = null
                                     )
                                 }
 
@@ -129,22 +128,13 @@ class SendPhotoActivity : AppCompatActivity() {
 
     private fun sendPhotoToFriend(friend: FriendChat, image: Bitmap) {
         val chatId = "${currentUser!!.uid}_${friend.userId}"
-        val receiverChatId = "${friend.userId}_${currentUser.uid}"
-
         val messageId = db.collection("chats")
             .document(chatId)
             .collection("messages")
             .document()
             .id
 
-        val receiverMessageId = db.collection("chats")
-            .document(receiverChatId)
-            .collection("messages")
-            .document()
-            .id
-
         val imageRef = storage.reference.child("chat_images/$chatId/$messageId.jpg")
-
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageData = baos.toByteArray()
@@ -171,16 +161,22 @@ class SendPhotoActivity : AppCompatActivity() {
                         .document(messageId)
                         .set(message)
                         .addOnSuccessListener {
-                            db.collection("chats")
-                                .document(receiverChatId)
-                                .collection("messages")
-                                .document(receiverMessageId)
-                                .set(message)
+                            val memory = Memory(
+                                location = null,
+                                mediaUrl = downloadUrl,
+                                senderId = currentUser.uid,
+                                receiverId = friend.userId,
+                                sentAt = Timestamp.now(),
+                                viewed = false
+                            )
+
+                            db.collection("memories")
+                                .add(memory)
                                 .addOnSuccessListener {
-                                    Toast.makeText(this, "Photo sent to ${friend.firstName}", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
                                 }
                                 .addOnFailureListener {
-                                    Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
                                 }
                         }
                         .addOnFailureListener {
@@ -191,4 +187,5 @@ class SendPhotoActivity : AppCompatActivity() {
                 }
             }
     }
+
 }

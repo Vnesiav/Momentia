@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity() {
             R.id.editNameFragment,
             R.id.changeUsernameFragment,
             R.id.changePasswordFragment,
-            R.id.changeNumberFragment
+            R.id.changeNumberFragment,
+            R.id.memoriesFragment
         )
 
         navController.addOnDestinationChangedListener { _, destination, _ ->

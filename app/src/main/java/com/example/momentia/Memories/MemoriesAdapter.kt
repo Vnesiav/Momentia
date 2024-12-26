@@ -1,50 +1,55 @@
 package com.example.momentia.Memories
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.momentia.DTO.Memory
+import com.example.momentia.DTO.MemorySection
 import com.example.momentia.R
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
-class MemoriesAdapter(
-    private val memories: List<Memory>,
-    private val onSendToFriendClick: (Memory) -> Unit
-) : RecyclerView.Adapter<MemoriesAdapter.MemoryViewHolder>() {
+class MemoriesAdapter(private val sections: List<MemorySection>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class MemoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val imageView: ImageView = view.findViewById(R.id.memoryImageView)
-        private val dateTextView: TextView = view.findViewById(R.id.memoryDateTextView)
+    companion object {
+        const val VIEW_TYPE_HEADER = 0
+        const val VIEW_TYPE_ITEM = 1
+    }
 
-        fun bind(memory: Memory, onSendToFriendClick: (Memory) -> Unit) {
-            Glide.with(imageView.context)
-                .load(memory.mediaUrl)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .into(imageView)
-
-            val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-            dateTextView.text = dateFormat.toString()
-
-            itemView.setOnClickListener {
-                onSendToFriendClick(memory)
-            }
+    override fun getItemViewType(position: Int): Int {
+        return when (sections[position]) {
+            is MemorySection.Header -> VIEW_TYPE_HEADER
+            is MemorySection.Item -> VIEW_TYPE_ITEM
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_memory, parent, false)
-        return MemoryViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            VIEW_TYPE_HEADER -> {
+                val view = inflater.inflate(R.layout.item_header, parent, false)
+                HeaderViewHolder(view)
+            }
+            VIEW_TYPE_ITEM -> {
+                val view = inflater.inflate(R.layout.item_memory, parent, false)
+                MemoryViewHolder(view)
+            }
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
     }
 
-    override fun onBindViewHolder(holder: MemoryViewHolder, position: Int) {
-        val memory = memories[position]
-        holder.bind(memory, onSendToFriendClick)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val section = sections[position]) {
+            is MemorySection.Header -> {
+                val formattedDate = section.memory.sentAt?.let {
+                    val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+                    dateFormat.format(it.toDate())
+                } ?: "Unknown Date"
+                (holder as HeaderViewHolder).bind(formattedDate)
+            }
+            is MemorySection.Item -> (holder as MemoryViewHolder).bind(section.memory)
+        }
     }
 
-    override fun getItemCount(): Int = memories.size
+
+    override fun getItemCount(): Int = sections.size
 }
