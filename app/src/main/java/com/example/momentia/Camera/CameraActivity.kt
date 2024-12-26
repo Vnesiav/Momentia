@@ -243,15 +243,18 @@ class CameraActivity : AppCompatActivity() {
     private fun sendImageToFriend(bitmap: Bitmap) {
         val intent = Intent(this, SendPhotoActivity::class.java)
 
-        // Konversi Bitmap menjadi ByteArray
+        // Resize the bitmap to reduce its size
+        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 800, 800, true)
+
+        // Convert the resized Bitmap to ByteArray
         val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes)
         val byteArray = bytes.toByteArray()
 
-        // Tambahkan gambar sebagai extra
+        // Add the image as an extra
         intent.putExtra("capturedImage", byteArray)
 
-        // Mulai activity
+        // Start the activity
         startActivity(intent)
     }
 
