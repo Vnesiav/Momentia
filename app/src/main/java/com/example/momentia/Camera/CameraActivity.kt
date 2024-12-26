@@ -15,13 +15,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.example.momentia.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
-import androidx.exifinterface.media.ExifInterface
-import android.util.Log
+import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class CameraActivity : AppCompatActivity() {
 
@@ -39,6 +42,7 @@ class CameraActivity : AppCompatActivity() {
     private val CAMERA_PERMISSION_REQUEST_CODE = 101
     private val CAMERA_REQUEST_CODE = 100
     private val GALLERY_REQUEST_CODE = 102
+    private lateinit var currentPhotoPath: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +79,7 @@ class CameraActivity : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
-            val intent = Intent(this, SendPhotoActivity::class.java)
-            startActivity(intent)
+            saveImageToGallery(capturedImage!!)
         }
 
         sendToFriendButton.setOnClickListener {
@@ -98,65 +101,18 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun getLocationFromImage(imageUri: Uri): Pair<Double, Double>? {
-        try {
-            val exif = ExifInterface(contentResolver.openInputStream(imageUri)!!)
-            val latDegrees = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
-            val latRef = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF)
-            val lonDegrees = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
-            val lonRef = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF)
-
-            if (latDegrees != null && latRef != null && lonDegrees != null && lonRef != null) {
-                val latitude = convertToDegrees(latDegrees, latRef)
-                val longitude = convertToDegrees(lonDegrees, lonRef)
-                return Pair(latitude, longitude)
-            }
-        } catch (e: IOException) {
-            Log.e("CameraActivity", "Failed to read EXIF data", e)
-        }
-        return null
-    }
-
-    private fun convertToDegrees(coord: String, ref: String): Double {
-        val dms = coord.split(",")
-        val degrees = dms[0].toDouble()
-        val minutes = dms[1].toDouble() / 60
-        val seconds = dms[2].toDouble() / 3600
-        var result = degrees + minutes + seconds
-        if (ref == "S" || ref == "W") {
-            result = -result
-        }
-        return result
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 CAMERA_REQUEST_CODE -> {
-                    // Periksa apakah data berisi gambar yang diambil dengan kamera
-                    val imageBitmap = data?.extras?.get("data") as? Bitmap
-                    if (imageBitmap != null) {
-                        capturedImage = imageBitmap
-                        capturedImageView.setImageBitmap(capturedImage)
-
-                        // Ambil lokasi dari gambar
-                        val imageUri = data.data
-                        val location = getLocationFromImage(imageUri ?: Uri.EMPTY)
-                        if (location != null) {
-                            val (latitude, longitude) = location
-                            Toast.makeText(this, "Location: Lat = $latitude, Lon = $longitude", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(this, "No location data available", Toast.LENGTH_SHORT).show()
-                        }
-
-                        retakeButton.isEnabled = true
-                        toggleButtons(true)
-                    } else {
-                        Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT).show()
-                    }
+                    val file = File(currentPhotoPath)
+                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
+                    capturedImage = bitmap
+                    capturedImageView.setImageBitmap(bitmap)
+                    retakeButton.isEnabled = true
+                    toggleButtons(true)
                 }
-
                 GALLERY_REQUEST_CODE -> {
                     val imageUri: Uri? = data?.data
                     if (imageUri != null) {
@@ -171,7 +127,6 @@ class CameraActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun toggleButtons(isImageCaptured: Boolean) {
         if (isImageCaptured) {
@@ -236,9 +191,36 @@ class CameraActivity : AppCompatActivity() {
     private fun openCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (cameraIntent.resolveActivity(packageManager) != null) {
-            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+            val photoFile: File? = try {
+                createImageFile()
+            } catch (ex: IOException) {
+                Toast.makeText(this, "Error occurred while creating the file", Toast.LENGTH_SHORT).show()
+                null
+            }
+            photoFile?.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this,
+                    "com.example.momentia.fileprovider",
+                    it
+                )
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+            }
         } else {
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val storageDir: File = getExternalFilesDir(null)!!
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        ).apply {
+            currentPhotoPath = absolutePath
         }
     }
 
@@ -260,17 +242,15 @@ class CameraActivity : AppCompatActivity() {
     private fun sendImageToFriend(bitmap: Bitmap) {
         val intent = Intent(this, SendPhotoActivity::class.java)
 
-        // Konversi Bitmap menjadi ByteArray
         val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes)
         val byteArray = bytes.toByteArray()
 
-        // Tambahkan gambar sebagai extra
         intent.putExtra("capturedImage", byteArray)
 
-        // Mulai activity
         startActivity(intent)
     }
+
 
     private fun closeCapturedImage() {
         capturedImageView.setImageBitmap(null)

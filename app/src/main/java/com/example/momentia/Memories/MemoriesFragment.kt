@@ -77,11 +77,8 @@ class MemoriesFragment : Fragment() {
         val sections = mutableListOf<MemorySection>()
         var lastDate: String? = null
 
-        memories.sortedBy { memory ->
-            memory.sentAt?.let {
-                val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
-                dateFormat.format(it.toDate())
-            }
+        memories.sortedByDescending { memory ->
+            memory.sentAt?.toDate()
         }.forEach { memory ->
             val currentDate = memory.sentAt?.let {
                 val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
@@ -96,7 +93,6 @@ class MemoriesFragment : Fragment() {
         }
         return sections
     }
-
 
     private fun loadMemories() {
         val currentUser = auth.currentUser
