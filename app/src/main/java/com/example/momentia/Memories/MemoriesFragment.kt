@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.Memory
+import com.example.momentia.DTO.MemorySection
 import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,9 +32,21 @@ class MemoriesFragment : Fragment() {
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         memoriesRecyclerView = view.findViewById(R.id.memoriesRecyclerView)
-        memoriesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
 
-        memoriesAdapter = MemoriesAdapter(filteredMemoriesList)
+        val gridLayoutManager = GridLayoutManager(requireContext(), 3) // 3 kolom
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (memoriesAdapter.getItemViewType(position)) {
+                    MemoriesAdapter.VIEW_TYPE_HEADER -> gridLayoutManager.spanCount // Header mengisi seluruh baris
+                    MemoriesAdapter.VIEW_TYPE_ITEM -> 1 // Item mengisi 1 kolom
+                    else -> 1
+                }
+            }
+        }
+        memoriesRecyclerView.layoutManager = gridLayoutManager
+
+        val initialSections = organizeMemoriesByDate(filteredMemoriesList)
+        memoriesAdapter = MemoriesAdapter(initialSections)
         memoriesRecyclerView.adapter = memoriesAdapter
 
         val searchView: androidx.appcompat.widget.SearchView = view.findViewById(R.id.search_date)
@@ -59,6 +72,21 @@ class MemoriesFragment : Fragment() {
         return view
     }
 
+    private fun organizeMemoriesByDate(memories: List<Memory>): List<MemorySection> {
+        val sections = mutableListOf<MemorySection>()
+        var lastDate: String? = null
+
+        memories.sortedBy { it.formattedDate }.forEach { memory ->
+            val currentDate = memory.formattedDate?.take(7)
+            if (currentDate != lastDate) {
+                sections.add(MemorySection.Header(memory))
+                lastDate = currentDate
+            }
+            sections.add(MemorySection.Item(memory))
+        }
+        return sections
+    }
+
     private fun loadMemories() {
         val currentUser = auth.currentUser
         if (currentUser == null) {
@@ -72,7 +100,6 @@ class MemoriesFragment : Fragment() {
             .get()
             .addOnSuccessListener { result ->
                 memoriesList.clear()
-                filteredMemoriesList.clear()
                 for (document in result) {
                     try {
                         val memory = document.toObject(Memory::class.java)
@@ -81,12 +108,15 @@ class MemoriesFragment : Fragment() {
                         android.util.Log.e("Firestore Error", "Failed to parse memory", e)
                     }
                 }
-                filteredMemoriesList.addAll(memoriesList)
-                memoriesAdapter.notifyDataSetChanged()
+
+                val organizedSections = organizeMemoriesByDate(memoriesList)
+                memoriesAdapter = MemoriesAdapter(organizedSections)
+                memoriesRecyclerView.adapter = memoriesAdapter
             }
             .addOnFailureListener { e ->
                 android.util.Log.e("Firestore Error", "Failed to load memories", e)
             }
+
     }
 
     private fun filterMemories(query: String?) {
@@ -95,12 +125,17 @@ class MemoriesFragment : Fragment() {
             filteredMemoriesList.addAll(memoriesList)
         } else {
             val lowerCaseQuery = query.lowercase(Locale.getDefault())
+
             filteredMemoriesList.addAll(
                 memoriesList.filter {
                     it.formattedDate?.lowercase(Locale.getDefault())?.contains(lowerCaseQuery) == true
                 }
             )
         }
-        memoriesAdapter.notifyDataSetChanged()
+
+        val organizedSections = organizeMemoriesByDate(filteredMemoriesList)
+        memoriesAdapter = MemoriesAdapter(organizedSections)
+        memoriesRecyclerView.adapter = memoriesAdapter
     }
+
 }

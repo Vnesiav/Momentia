@@ -3,26 +3,46 @@ package com.example.momentia.Memories
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.momentia.DTO.Memory
+import com.example.momentia.DTO.MemorySection
 import com.example.momentia.R
 
-class MemoriesAdapter(
-    private val memoriesList: List<Memory>,
-//    private val onMemoryClick: (Memory) -> Unit
-) : RecyclerView.Adapter<MemoryViewHolder>() {
+class MemoriesAdapter(private val sections: List<MemorySection>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoryViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_memory, parent, false)
-        return MemoryViewHolder(itemView)
+    companion object {
+        const val VIEW_TYPE_HEADER = 0
+        const val VIEW_TYPE_ITEM = 1
     }
 
-    override fun onBindViewHolder(holder: MemoryViewHolder, position: Int) {
-        val memory = memoriesList[position]
-//        holder.bind(memory, onMemoryClick)
-        holder.bind(memory)
+    override fun getItemViewType(position: Int): Int {
+        return when (sections[position]) {
+            is MemorySection.Header -> VIEW_TYPE_HEADER
+            is MemorySection.Item -> VIEW_TYPE_ITEM
+        }
     }
-    override fun getItemCount(): Int {
-        return memoriesList.size
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            VIEW_TYPE_HEADER -> {
+                val view = inflater.inflate(R.layout.item_header, parent, false)
+                HeaderViewHolder(view)
+            }
+            VIEW_TYPE_ITEM -> {
+                val view = inflater.inflate(R.layout.item_memory, parent, false)
+                MemoryViewHolder(view)
+            }
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
     }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val section = sections[position]) {
+            is MemorySection.Header -> {
+                (holder as HeaderViewHolder).bind(section.memory.formattedDate ?: "Unknown Date")
+            }
+            is MemorySection.Item -> (holder as MemoryViewHolder).bind(section.memory)
+        }
+    }
+
+    override fun getItemCount(): Int = sections.size
 }
