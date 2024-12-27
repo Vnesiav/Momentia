@@ -170,6 +170,7 @@ class SendPhotoActivity : AppCompatActivity() {
                                 .add(memory)
                                 .addOnSuccessListener {
                                     Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
+                                    finish()
                                 }
                                 .addOnFailureListener {
                                     Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
