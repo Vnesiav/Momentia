@@ -196,6 +196,13 @@ class ChatFragment : BaseAuthFragment() {
                     counter = null,
                     isRead = false
                 )
+
+                val fullname = friendChat.firstName + " " + friendChat.lastName
+
+                if (fullname.length >= 15) {
+                    friendChat.lastName = "..."
+                }
+
                 callback(friendChat)
             }
             .addOnFailureListener { e ->

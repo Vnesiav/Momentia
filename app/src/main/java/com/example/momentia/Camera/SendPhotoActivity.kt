@@ -17,6 +17,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
@@ -151,33 +152,47 @@ class SendPhotoActivity : AppCompatActivity() {
                         "isRead" to false
                     )
 
+                    val chat = mapOf(
+                        "firstUserId" to currentUser.uid,
+                        "secondUserId" to friend.userId,
+                        "lastChatTime" to Timestamp.now()
+                    )
+
                     db.collection("chats")
                         .document(chatId)
-                        .collection("messages")
-                        .document(messageId)
-                        .set(message)
+                        .set(chat, SetOptions.merge())
                         .addOnSuccessListener {
-                            val memory = Memory(
-                                location = null,
-                                mediaUrl = downloadUrl,
-                                senderId = currentUser.uid,
-                                receiverId = friend.userId,
-                                sentAt = Timestamp.now(),
-                                viewed = false
-                            )
-
-                            db.collection("memories")
-                                .add(memory)
+                            db.collection("chats")
+                                .document(chatId)
+                                .collection("messages")
+                                .document(messageId)
+                                .set(message)
                                 .addOnSuccessListener {
-                                    Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
-                                    finish()
+                                    val memory = Memory(
+                                        location = null,
+                                        mediaUrl = downloadUrl,
+                                        senderId = currentUser.uid,
+                                        receiverId = friend.userId,
+                                        sentAt = Timestamp.now(),
+                                        viewed = false
+                                    )
+
+                                    db.collection("memories")
+                                        .add(memory)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
+                                            finish()
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
+                                        }
                                 }
                                 .addOnFailureListener {
-                                    Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
                                 }
                         }
                         .addOnFailureListener {
-                            Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Failed to update chat", Toast.LENGTH_SHORT).show()
                         }
                 } else {
                     Toast.makeText(this, "Failed to upload photo", Toast.LENGTH_SHORT).show()
