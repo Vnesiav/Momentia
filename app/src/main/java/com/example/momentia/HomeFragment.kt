@@ -37,14 +37,8 @@ class HomeFragment : BaseAuthFragment() {
             db.collection("users").document(it.uid).get()
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
-                        val firstName = document.getString("firstName") ?: ""
-                        val lastName = document.getString("lastName") ?: ""
-                        val fullName = if (firstName.isNotEmpty() || lastName.isNotEmpty()) {
-                            "$firstName $lastName".trim()
-                        } else {
-                            "User"
-                        }
-                        hello.text = Html.fromHtml("Hello, <b>$fullName!</b>", Html.FROM_HTML_MODE_LEGACY)
+                        val firstName = document.getString("firstName") ?: "User"
+                        hello.text = Html.fromHtml("Hello, <b>$firstName!</b>", Html.FROM_HTML_MODE_LEGACY)
                     } else {
                         hello.text = Html.fromHtml("Hello, <b>User!</b>", Html.FROM_HTML_MODE_LEGACY)
                     }
