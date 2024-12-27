@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -261,7 +262,9 @@ class ChatFragment : BaseAuthFragment() {
         val searchView = view.findViewById<SearchView>(R.id.search_friend)
         val searchText = searchView.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
         searchText.textSize = 14f
+        searchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
     }
+
 
     private fun navigateToChatMessage(friend: FriendChat) {
         val intent = Intent(requireContext(), ChatMessageActivity::class.java).apply {

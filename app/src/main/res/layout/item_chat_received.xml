@@ -40,13 +40,12 @@
             android:id="@+id/message_image"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:visibility="gone"
             android:layout_marginTop="8dp"
-            android:contentDescription="@string/image_message"
-            android:layout_gravity="center" />
+            android:visibility="gone"
+            android:contentDescription="@string/image_message" />
 
         <TextView
-            android:id="@+id/timestamp"
+            android:id="@+id/timestamp_receive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
