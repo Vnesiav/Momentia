@@ -193,6 +193,7 @@ class ChatFragment : BaseAuthFragment() {
                     avatarUrl = document.getString("avatarUrl") ?: "",
                     timestamp = document.getTimestamp("lastChatTime"), // Menambahkan lastChatTime
                     lastMessage = null, // Akan diisi setelah memanggil getLastMessage
+                    photoUrl = null,
                     counter = null,
                     isRead = false
                 )

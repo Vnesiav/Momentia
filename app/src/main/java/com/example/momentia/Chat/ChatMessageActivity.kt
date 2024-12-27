@@ -8,18 +8,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.Chat
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoaderCircle
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.QuerySnapshot
 
 class ChatMessageActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
@@ -49,14 +46,11 @@ class ChatMessageActivity : AppCompatActivity() {
         val intent = intent
         intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 
-        // Mendapatkan data dari Intent
+        // Get data from Intent
         userId = intent.getStringExtra("userId") ?: ""
         firstName = intent.getStringExtra("firstName") ?: ""
         lastName = intent.getStringExtra("lastName") ?: ""
         imageUrl = intent.getStringExtra("imageUrl") ?: "none"
-
-//        Log.d("ChatMessageActivity", "UserId: $userId")
-//        Log.d("ChatMessageActivity", "ImageUrl: $imageUrl")
 
         chatRecyclerView = findViewById(R.id.message_container)
         chatAdapter = ChatMessageAdapter(messages, imageUrl)
@@ -71,11 +65,11 @@ class ChatMessageActivity : AppCompatActivity() {
         // Update adapter
         chatAdapter.notifyDataSetChanged()
 
-        // Inisialisasi tampilan
+        // Initialize views
         friendPicture = findViewById(R.id.friend_profile_picture)
         friendName = findViewById(R.id.friend_name)
 
-        // Mengatur data pada tampilan
+        // Set data to views
         setIdentity(firstName, lastName, imageUrl)
 
         backButton = findViewById(R.id.back_button)
@@ -215,7 +209,7 @@ class ChatMessageActivity : AppCompatActivity() {
                     }
 
                     if (querySnapshot != null) {
-                        messages.clear() // Hapus pesan sebelumnya
+                        messages.clear() // Clear previous messages
                         for (document in querySnapshot) {
                             val messageText = document.getString("messageText") ?: ""
                             val senderId = document.getString("senderId") ?: ""
@@ -224,19 +218,16 @@ class ChatMessageActivity : AppCompatActivity() {
                             val isRead = document.getBoolean("isRead") ?: false
 
                             if (timestamp != null) {
-                                // Buat objek Chat berdasarkan data yang diambil
+                                // Create Chat object based on retrieved data
                                 val chatMessage = Chat(
                                     senderId = senderId,
                                     message = messageText,
                                     lastMessageTime = timestamp,
                                     isRead = isRead,
                                     isSentByCurrentUser = senderId == currentUser.uid,
-                                    photoUrl = photoUrl // Masukkan URL foto (null jika tidak ada)
+                                    photoUrl = photoUrl // Include photo URL (null if not available)
                                 )
 
-//                                if (chatMessage.photoUrl != null) {
-//                                    Log.d("ChatMessageActivity", "==============================Received message: $photoUrl by $senderId")
-//                                }
                                 messages.add(chatMessage)
                             }
                         }
@@ -287,6 +278,4 @@ class ChatMessageActivity : AppCompatActivity() {
                 Log.e("ChatMessageActivity", "Error fetching unread messages", e)
             }
     }
-
 }
-
