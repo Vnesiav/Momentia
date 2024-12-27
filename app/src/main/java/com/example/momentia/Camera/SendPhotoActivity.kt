@@ -1,8 +1,9 @@
 package com.example.momentia.Camera
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +36,6 @@ class SendPhotoActivity : AppCompatActivity() {
             GlideImageLoader(this),
             object : FriendListAdapter.OnClickListener {
                 override fun onItemClick(friend: FriendChat) {
-                    // Highlight selected friend
                     selectedFriend = friend
                     Toast.makeText(
                         this@SendPhotoActivity,
@@ -51,12 +51,16 @@ class SendPhotoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.send_to_friend)
 
-        // Initialize RecyclerView
+        val imageUriString = intent.getStringExtra("capturedImageUri")
+        if (imageUriString != null) {
+            val imageUri = Uri.parse(imageUriString)
+            capturedImage = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        }
+
         friendListRecyclerView = findViewById(R.id.friend_list_recycler)
         friendListRecyclerView.layoutManager = LinearLayoutManager(this)
         friendListRecyclerView.adapter = friendAdapter
 
-        // Initialize send button
         sendButton = findViewById(R.id.send_button)
         sendButton.setOnClickListener {
             if (selectedFriend == null) {
@@ -68,13 +72,6 @@ class SendPhotoActivity : AppCompatActivity() {
             }
         }
 
-        // Receive image from CameraActivity
-        val byteArray = intent.getByteArrayExtra("capturedImage")
-        if (byteArray != null) {
-            capturedImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-        }
-
-        // Load friends
         getFriendList()
     }
 
@@ -108,7 +105,6 @@ class SendPhotoActivity : AppCompatActivity() {
                                     )
                                 }
 
-                                // Update the friend list and adapter
                                 friendList.clear()
                                 friendList.addAll(friends)
                                 friendAdapter.setData(friends)
@@ -187,5 +183,4 @@ class SendPhotoActivity : AppCompatActivity() {
                 }
             }
     }
-
 }
