@@ -125,8 +125,16 @@ class SendPhotoActivity : AppCompatActivity() {
 
     private fun sendPhotoToFriend(friend: FriendChat, image: Bitmap) {
         val chatId = "${currentUser!!.uid}_${friend.userId}"
+        val receiverChatId = "${friend.userId}_${currentUser.uid}"
+
         val messageId = db.collection("chats")
             .document(chatId)
+            .collection("messages")
+            .document()
+            .id
+
+        val receiverMessageId = db.collection("chats")
+            .document(receiverChatId)
             .collection("messages")
             .document()
             .id
@@ -158,37 +166,65 @@ class SendPhotoActivity : AppCompatActivity() {
                         "lastChatTime" to Timestamp.now()
                     )
 
+                    val receiverChat = mapOf(
+                        "firstUserId" to friend.userId,
+                        "secondUserId" to currentUser.uid,
+                        "lastChatTime" to Timestamp.now()
+                    )
+
                     db.collection("chats")
                         .document(chatId)
                         .set(chat, SetOptions.merge())
                         .addOnSuccessListener {
                             db.collection("chats")
-                                .document(chatId)
-                                .collection("messages")
-                                .document(messageId)
-                                .set(message)
+                                .document(receiverChatId)
+                                .set(receiverChat, SetOptions.merge())
                                 .addOnSuccessListener {
-                                    val memory = Memory(
-                                        location = null,
-                                        mediaUrl = downloadUrl,
-                                        senderId = currentUser.uid,
-                                        receiverId = friend.userId,
-                                        sentAt = Timestamp.now(),
-                                        viewed = false
-                                    )
-
-                                    db.collection("memories")
-                                        .add(memory)
+                                    db.collection("chats")
+                                        .document(chatId)
+                                        .collection("messages")
+                                        .document(messageId)
+                                        .set(message)
                                         .addOnSuccessListener {
-                                            Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
-                                            finish()
+                                            db.collection("chats")
+                                                .document(receiverChatId)
+                                                .collection("messages")
+                                                .document(receiverMessageId)
+                                                .set(message)
+                                                .addOnSuccessListener {
+                                                    val memory = Memory(
+                                                        location = null,
+                                                        mediaUrl = downloadUrl,
+                                                        senderId = currentUser.uid,
+                                                        receiverId = friend.userId,
+                                                        sentAt = Timestamp.now(),
+                                                        viewed = false
+                                                    )
+
+                                                    db.collection("memories")
+                                                        .add(memory)
+                                                        .addOnSuccessListener {
+                                                            Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
+                                                            finish()
+                                                        }
+                                                        .addOnFailureListener {
+                                                            Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
+                                                        }
+                                                }
+                                                .addOnFailureListener {
+                                                    Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
+                                                }
                                         }
                                         .addOnFailureListener {
-                                            Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
                                         }
                                 }
                                 .addOnFailureListener {
-                                    Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this,
+                                        "Failed to update chat",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                         }
                         .addOnFailureListener {

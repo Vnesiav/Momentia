@@ -79,14 +79,14 @@ class ChatMessageAdapter(
         private val messageText: TextView = itemView.findViewById(R.id.message_text)
         private val messageImage: ImageView = itemView.findViewById(R.id.message_image)
         private val profileImage: ImageView = itemView.findViewById(R.id.profile_image)
-        private val timestamp: TextView = itemView.findViewById(R.id.timestamp)
+        private val timestamp: TextView = itemView.findViewById(R.id.timestamp_receive)
 
         fun bind(message: Chat, friendImageUrl: String) {
             if (!message.photoUrl.isNullOrEmpty()) {
                 messageImage.visibility = View.VISIBLE
                 messageText.visibility = View.GONE
                 // Load image for the message
-                GlideImageLoader(itemView.context).loadImage(message.photoUrl, messageImage)
+                GlideImageLoaderCircle(itemView.context).loadImage(message.photoUrl, messageImage)
             } else {
                 messageText.visibility = View.VISIBLE
                 messageImage.visibility = View.GONE
@@ -104,7 +104,7 @@ class ChatMessageAdapter(
             if (friendImageUrl == "none" || friendImageUrl == "") {
                 profileImage.setImageResource(R.drawable.account_circle)
             } else {
-                GlideImageLoader(itemView.context).loadImage(friendImageUrl, profileImage)
+                GlideImageLoaderCircle(itemView.context).loadImage(friendImageUrl, profileImage)
             }
         }
     }
