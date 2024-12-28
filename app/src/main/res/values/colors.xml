@@ -14,4 +14,5 @@
     <color name="primaryColor">#FF6200EE</color>
     <color name="dark_red">#8b0000</color>
     <color name="bot_nav">#7B7368</color>
+    <color name="gray_line">#B9B9B9</color>
 </resources>

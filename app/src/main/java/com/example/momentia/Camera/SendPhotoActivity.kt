@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.FriendChat
@@ -26,8 +27,10 @@ class SendPhotoActivity : AppCompatActivity() {
     private val currentUser = FirebaseAuth.getInstance().currentUser
     private val storage = FirebaseStorage.getInstance()
     private lateinit var friendListRecyclerView: RecyclerView
+    private lateinit var searchBar: SearchView
     private lateinit var sendButton: ImageButton
     private val friendList = mutableListOf<FriendChat>()
+    private var filteredFriendList = mutableListOf<FriendChat>()
     private var selectedFriend: FriendChat? = null
     private var capturedImage: Bitmap? = null
 
@@ -62,6 +65,11 @@ class SendPhotoActivity : AppCompatActivity() {
         friendListRecyclerView.layoutManager = LinearLayoutManager(this)
         friendListRecyclerView.adapter = friendAdapter
 
+        // Initialize SearchView
+        searchBar = findViewById(R.id.search_bar)
+        setupSearchBar()
+
+        // Initialize send button
         sendButton = findViewById(R.id.send_button)
         sendButton.setOnClickListener {
             if (selectedFriend == null) {
@@ -73,7 +81,47 @@ class SendPhotoActivity : AppCompatActivity() {
             }
         }
 
+        // Receive image from CameraActivity
+        val byteArray = intent.getByteArrayExtra("capturedImage")
+        if (byteArray != null) {
+            capturedImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        } else {
+            Toast.makeText(this, "Failed to receive image", Toast.LENGTH_SHORT).show()
+        }
+
+        // Load friends
         getFriendList()
+    }
+
+    private fun setupSearchBar() {
+        searchBar = findViewById(R.id.search_bar)
+        searchBar.queryHint = getString(R.string.search) // Set query hint programmatically
+        searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false // We handle updates dynamically, no need for submit action
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val query = newText?.trim() ?: ""
+                filterFriendList(query)
+                return true
+            }
+        })
+    }
+
+    private fun filterFriendList(query: String) {
+        filteredFriendList.clear()
+        if (query.isEmpty()) {
+            filteredFriendList.addAll(friendList)
+        } else {
+            filteredFriendList.addAll(
+                friendList.filter { friend ->
+                    friend.firstName.contains(query, ignoreCase = true) ||
+                            (friend.lastName?.contains(query, ignoreCase = true) ?: false)
+                }
+            )
+        }
+        friendAdapter.setData(filteredFriendList)
     }
 
     private fun getFriendList() {
@@ -102,13 +150,14 @@ class SendPhotoActivity : AppCompatActivity() {
                                         avatarUrl = friendDoc.getString("avatarUrl") ?: "",
                                         timestamp = null,
                                         lastMessage = null,
+                                        photoUrl = null,
                                         counter = null
                                     )
                                 }
 
                                 friendList.clear()
                                 friendList.addAll(friends)
-                                friendAdapter.setData(friends)
+                                filterFriendList("") // Show all friends initially
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(this, "Error loading friends", Toast.LENGTH_SHORT).show()
@@ -180,6 +229,8 @@ class SendPhotoActivity : AppCompatActivity() {
                                 .document(receiverChatId)
                                 .set(receiverChat, SetOptions.merge())
                                 .addOnSuccessListener {
+                                    Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
+                                    finish() // Finish the activity after sending the photo
                                     db.collection("chats")
                                         .document(chatId)
                                         .collection("messages")
@@ -235,4 +286,5 @@ class SendPhotoActivity : AppCompatActivity() {
                 }
             }
     }
+}
 }

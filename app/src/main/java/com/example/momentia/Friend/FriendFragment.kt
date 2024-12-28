@@ -137,6 +137,7 @@ class FriendFragment : BaseAuthFragment() {
                                         avatarUrl = friendDoc.getString("avatarUrl") ?: "",
                                         timestamp = null,
                                         lastMessage = null,
+                                        photoUrl = null,
                                         counter = null
                                     )
                                 }

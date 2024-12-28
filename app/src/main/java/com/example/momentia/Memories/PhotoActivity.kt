@@ -39,7 +39,7 @@ class PhotoActivity : AppCompatActivity() {
         }
 
         backButton.setOnClickListener {
-            finish()
+            onBackPressed()
         }
 
         saveButton.setOnClickListener {

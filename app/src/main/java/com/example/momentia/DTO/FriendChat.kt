@@ -10,5 +10,6 @@ data class FriendChat(
     var timestamp: Timestamp?,
     var lastMessage: String?,
     var counter: Int?,
+    val photoUrl: String?,
     var isRead: Boolean = false
 )
