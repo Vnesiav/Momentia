@@ -34,6 +34,7 @@ class SendPhotoActivity : AppCompatActivity() {
     private var filteredFriendList = mutableListOf<FriendChat>()
     private var selectedFriend: FriendChat? = null
     private var capturedImage: Bitmap? = null
+    private var isSending = false
 
     private val friendAdapter by lazy {
         FriendListAdapter(
@@ -66,40 +67,41 @@ class SendPhotoActivity : AppCompatActivity() {
         friendListRecyclerView.layoutManager = LinearLayoutManager(this)
         friendListRecyclerView.adapter = friendAdapter
 
-        // Initialize SearchView
         searchBar = findViewById(R.id.search_bar)
         setupSearchBar()
 
-        // Initialize send button
         sendButton = findViewById(R.id.send_button)
         sendButton.setOnClickListener {
+            if (isSending) {
+                Toast.makeText(this, "Sending in progress, please wait...", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             if (selectedFriend == null) {
                 Toast.makeText(this, "Please select a friend to send the photo", Toast.LENGTH_SHORT).show()
             } else if (capturedImage == null) {
                 Toast.makeText(this, "No image to send", Toast.LENGTH_SHORT).show()
             } else {
+                isSending = true
                 sendPhotoToFriend(selectedFriend!!, capturedImage!!)
             }
         }
 
-        // Receive image from CameraActivity
+
         val byteArray = intent.getByteArrayExtra("capturedImage")
-        if (byteArray != null) {
+        if (capturedImage == null && byteArray != null) {
             capturedImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-        } else {
-            Toast.makeText(this, "Failed to receive image", Toast.LENGTH_SHORT).show()
         }
 
-        // Load friends
         getFriendList()
     }
 
     private fun setupSearchBar() {
         searchBar = findViewById(R.id.search_bar)
-        searchBar.queryHint = getString(R.string.search) // Set query hint programmatically
+        searchBar.queryHint = getString(R.string.search)
         searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return false // We handle updates dynamically, no need for submit action
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -158,7 +160,7 @@ class SendPhotoActivity : AppCompatActivity() {
 
                                 friendList.clear()
                                 friendList.addAll(friends)
-                                filterFriendList("") // Show all friends initially
+                                filterFriendList("")
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(this, "Error loading friends", Toast.LENGTH_SHORT).show()
@@ -201,90 +203,79 @@ class SendPhotoActivity : AppCompatActivity() {
                 }
                 imageRef.downloadUrl
             }.addOnCompleteListener { task ->
+                isSending = false
+                sendButton.isEnabled = true
+
                 if (task.isSuccessful) {
                     val downloadUrl = task.result.toString()
-                    val message = mapOf(
-                        "senderId" to currentUser.uid,
-                        "photoUrl" to downloadUrl,
-                        "timestamp" to Timestamp.now(),
-                        "isRead" to false
-                    )
-
-                    val chat = mapOf(
-                        "firstUserId" to currentUser.uid,
-                        "secondUserId" to friend.userId,
-                        "lastChatTime" to Timestamp.now()
-                    )
-
-                    val receiverChat = mapOf(
-                        "firstUserId" to friend.userId,
-                        "secondUserId" to currentUser.uid,
-                        "lastChatTime" to Timestamp.now()
-                    )
-
-                    db.collection("chats")
-                        .document(chatId)
-                        .set(chat, SetOptions.merge())
-                        .addOnSuccessListener {
-                            db.collection("chats")
-                                .document(receiverChatId)
-                                .set(receiverChat, SetOptions.merge())
-                                .addOnSuccessListener {
-                                    Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
-                                    finish() // Finish the activity after sending the photo
-                                    db.collection("chats")
-                                        .document(chatId)
-                                        .collection("messages")
-                                        .document(messageId)
-                                        .set(message)
-                                        .addOnSuccessListener {
-                                            db.collection("chats")
-                                                .document(receiverChatId)
-                                                .collection("messages")
-                                                .document(receiverMessageId)
-                                                .set(message)
-                                                .addOnSuccessListener {
-                                                    val memory = Memory(
-                                                        location = null,
-                                                        mediaUrl = downloadUrl,
-                                                        senderId = currentUser.uid,
-                                                        receiverId = friend.userId,
-                                                        sentAt = Timestamp.now(),
-                                                        viewed = false
-                                                    )
-
-                                                    db.collection("memories")
-                                                        .add(memory)
-                                                        .addOnSuccessListener {
-                                                            Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
-                                                            finish()
-                                                        }
-                                                        .addOnFailureListener {
-                                                            Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
-                                                        }
-                                                }
-                                                .addOnFailureListener {
-                                                    Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
-                                                }
-                                        }
-                                        .addOnFailureListener {
-                                            Toast.makeText(this, "Failed to send photo", Toast.LENGTH_SHORT).show()
-                                        }
-                                }
-                                .addOnFailureListener {
-                                    Toast.makeText(
-                                        this,
-                                        "Failed to update chat",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, "Failed to update chat", Toast.LENGTH_SHORT).show()
-                        }
+                    saveMessageAndMemory(friend, chatId, receiverChatId, messageId, receiverMessageId, downloadUrl)
                 } else {
-                    Toast.makeText(this, "Failed to upload photo", Toast.LENGTH_SHORT).show()
+                    showToast("Failed to upload photo")
                 }
             }
+    }
+
+    private fun saveMessageAndMemory(
+        friend: FriendChat,
+        chatId: String,
+        receiverChatId: String,
+        messageId: String,
+        receiverMessageId: String,
+        downloadUrl: String
+    ) {
+        val message = mapOf(
+            "senderId" to currentUser!!.uid,
+            "photoUrl" to downloadUrl,
+            "timestamp" to Timestamp.now(),
+            "isRead" to false
+        )
+
+        val chat = mapOf(
+            "firstUserId" to currentUser!!.uid,
+            "secondUserId" to friend.userId,
+            "lastChatTime" to Timestamp.now()
+        )
+
+        val receiverChat = mapOf(
+            "firstUserId" to friend.userId,
+            "secondUserId" to currentUser.uid,
+            "lastChatTime" to Timestamp.now()
+        )
+
+        db.collection("chats").document(chatId).set(chat, SetOptions.merge())
+            .addOnSuccessListener {
+                db.collection("chats").document(receiverChatId).set(receiverChat, SetOptions.merge())
+                    .addOnSuccessListener {
+                        db.collection("chats").document(chatId).collection("messages").document(messageId).set(message)
+                            .addOnSuccessListener {
+                                db.collection("chats").document(receiverChatId).collection("messages").document(receiverMessageId).set(message)
+                                    .addOnSuccessListener {
+                                        val memory = Memory(
+                                            location = null,
+                                            mediaUrl = downloadUrl,
+                                            senderId = currentUser!!.uid,
+                                            receiverId = friend.userId,
+                                            sentAt = Timestamp.now(),
+                                            viewed = false
+                                        )
+
+                                        db.collection("memories").add(memory)
+                                            .addOnSuccessListener {
+                                                showToast("Photo sent and saved to memories")
+                                                finish()
+                                            }
+                                            .addOnFailureListener { showToast("Failed to save photo to memories") }
+                                    }
+                                    .addOnFailureListener { showToast("Failed to send photo") }
+                            }
+                            .addOnFailureListener { showToast("Failed to send photo") }
+                    }
+                    .addOnFailureListener { showToast("Failed to update chat") }
+            }
+            .addOnFailureListener { showToast("Failed to update chat") }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

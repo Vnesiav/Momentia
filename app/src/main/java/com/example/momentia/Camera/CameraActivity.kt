@@ -12,7 +12,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -28,7 +28,6 @@ import java.util.Date
 import java.util.Locale
 
 class CameraActivity : AppCompatActivity() {
-
     private lateinit var firestore: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
     private lateinit var capturedImageView: ImageView
@@ -37,8 +36,8 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var galleryButton: ImageButton
     private lateinit var closeButton: ImageButton
     private lateinit var backButton: ImageButton
-    private lateinit var saveButton: LinearLayout
-    private lateinit var sendToFriendButton: LinearLayout
+    private lateinit var saveButton: ImageButton
+    private lateinit var sendToFriendButton: TextView
     private var capturedImage: Bitmap? = null
     private val CAMERA_PERMISSION_REQUEST_CODE = 101
     private val CAMERA_REQUEST_CODE = 100
@@ -63,10 +62,8 @@ class CameraActivity : AppCompatActivity() {
 
         retakeButton.isEnabled = false
 
-        // Initialize buttons state
         toggleButtons(false)
 
-        // Set up button click listeners
         cameraButton.setOnClickListener {
             if (checkCameraPermission()) {
                 openCamera()
@@ -94,7 +91,7 @@ class CameraActivity : AppCompatActivity() {
         }
 
         backButton.setOnClickListener {
-            finish() // Navigate back to the home fragment
+            finish()
         }
 
         galleryButton.setOnClickListener {
