@@ -12,6 +12,8 @@ import com.example.momentia.Memories.PhotoActivity
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
 import com.example.momentia.glide.GlideImageLoaderCircle
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ChatMessageAdapter(
     private val messages: List<Chat>,
@@ -52,6 +54,7 @@ class ChatMessageAdapter(
     class SentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val messageText: TextView = itemView.findViewById(R.id.message_text)
         private val messageImage: ImageView = itemView.findViewById(R.id.message_image)
+        private val timestamp: TextView = itemView.findViewById(R.id.timestamp)
 
         fun bind(message: Chat) {
             if (!message.photoUrl.isNullOrEmpty()) {
@@ -69,6 +72,13 @@ class ChatMessageAdapter(
                 messageText.visibility = View.VISIBLE
                 messageImage.visibility = View.GONE
                 messageText.text = message.message
+
+                // Convert Firestore Timestamp to Date and format it
+                message.lastMessageTime.let { firestoreTimestamp ->
+                    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    val formattedTime = formatter.format(firestoreTimestamp.toDate())
+                    timestamp.text = formattedTime
+                }
             }
         }
     }
@@ -77,6 +87,7 @@ class ChatMessageAdapter(
         private val messageText: TextView = itemView.findViewById(R.id.message_text)
         private val messageImage: ImageView = itemView.findViewById(R.id.message_image)
         private val profileImage: ImageView = itemView.findViewById(R.id.profile_image)
+        private val timestamp: TextView = itemView.findViewById(R.id.timestamp_receive)
 
         fun bind(message: Chat, friendImageUrl: String) {
             if (!message.photoUrl.isNullOrEmpty()) {
@@ -90,15 +101,26 @@ class ChatMessageAdapter(
                     intent.putExtra("IMAGE_URL", message.photoUrl)
                     context.startActivity(intent)
                 }
+                GlideImageLoaderCircle(itemView.context).loadImage(message.photoUrl, messageImage)
             } else {
                 messageText.visibility = View.VISIBLE
                 messageImage.visibility = View.GONE
                 // Ensure that text is not empty
                 messageText.text = message.message ?: ""  // Ensure message is not null
+
+                // Convert Firestore Timestamp to Date and format it
+                message.lastMessageTime.let { firestoreTimestamp ->
+                    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    val formattedTime = formatter.format(firestoreTimestamp.toDate())
+                    timestamp.text = formattedTime
+                }
             }
 
-            // Load the friend's profile image
-            GlideImageLoaderCircle(itemView.context).loadImage(friendImageUrl, profileImage)
+            if (friendImageUrl == "none" || friendImageUrl == "") {
+                profileImage.setImageResource(R.drawable.account_circle)
+            } else {
+                GlideImageLoaderCircle(itemView.context).loadImage(friendImageUrl, profileImage)
+            }
         }
     }
 }

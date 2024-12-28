@@ -1,11 +1,13 @@
 package com.example.momentia.Camera
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageButton
@@ -19,7 +21,6 @@ import androidx.core.content.FileProvider
 import com.example.momentia.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -240,17 +241,38 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun sendImageToFriend(bitmap: Bitmap) {
-        val intent = Intent(this, SendPhotoActivity::class.java)
+        val imageUri = saveImageToExternalStorage(bitmap)
 
-        val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes)
-        val byteArray = bytes.toByteArray()
-
-        intent.putExtra("capturedImage", byteArray)
-
-        startActivity(intent)
+        if (imageUri != null) {
+            val intent = Intent(this, SendPhotoActivity::class.java)
+            intent.putExtra("capturedImageUri", imageUri.toString())
+            startActivity(intent)
+        }
     }
 
+    private fun saveImageToExternalStorage(bitmap: Bitmap): Uri? {
+        val imageCollection = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        } else {
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "Momentia_Image_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        }
+
+        val imageUri: Uri? = contentResolver.insert(imageCollection, contentValues)
+        imageUri?.let { uri ->
+            contentResolver.openOutputStream(uri).use { outputStream ->
+                if (outputStream != null) {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                }
+            }
+        }
+        return imageUri
+    }
 
     private fun closeCapturedImage() {
         capturedImageView.setImageBitmap(null)

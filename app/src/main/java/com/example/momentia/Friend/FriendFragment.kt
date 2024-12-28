@@ -142,9 +142,18 @@ class FriendFragment : BaseAuthFragment() {
                                     )
                                 }
 
+                                // Jika ingin memproses nama lengkap
+                                val processedFriends = friends.map { friend ->
+                                    val fullName = "${friend.firstName} ${friend.lastName.orEmpty()}"
+                                    if (fullName.length >= 15) {
+                                        friend.lastName = "..."
+                                    }
+                                    friend
+                                }
+
                                 friendList.clear()
-                                friendList.addAll(friends)
-                                friendChatAdapter.setData(friends)
+                                friendList.addAll(processedFriends)
+                                friendChatAdapter.setData(processedFriends)
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(requireContext(), "Error getting friend list", Toast.LENGTH_SHORT).show()
