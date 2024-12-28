@@ -1,7 +1,12 @@
 package com.example.momentia.Chat
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -17,10 +22,14 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
 class ChatMessageActivity : AppCompatActivity() {
-    val db = FirebaseFirestore.getInstance()
-    val currentUser = FirebaseAuth.getInstance().currentUser
+    private val db = FirebaseFirestore.getInstance()
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private val storage = FirebaseStorage.getInstance()
+    private val PICK_IMAGE_REQUEST = 1
 
     private lateinit var userId: String
     private lateinit var firstName: String
@@ -32,6 +41,7 @@ class ChatMessageActivity : AppCompatActivity() {
 
     private lateinit var backButton: ImageButton
     private lateinit var sendButton: ImageButton
+    private lateinit var galleryButton: ImageButton
 
     private lateinit var chatRecyclerView: RecyclerView
     private lateinit var chatAdapter: ChatMessageAdapter
@@ -80,6 +90,11 @@ class ChatMessageActivity : AppCompatActivity() {
         sendButton = findViewById(R.id.send_button)
         sendButton.setOnClickListener {
             sendMessage(userId)
+        }
+
+        galleryButton = findViewById(R.id.gallery_button)
+        galleryButton.setOnClickListener {
+            openGallery()
         }
     }
 
@@ -276,6 +291,90 @@ class ChatMessageActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 Log.e("ChatMessageActivity", "Error fetching unread messages", e)
+            }
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val imageUri: Uri? = data.data
+            if (imageUri != null) {
+                showConfirmationDialog(imageUri)
+            }
+        }
+    }
+
+    private fun showConfirmationDialog(imageUri: Uri) {
+        val dialogView = layoutInflater.inflate(R.layout.confirmation_dialog_send_photo, null)
+        val imageView = dialogView.findViewById<ImageView>(R.id.dialog_image)
+        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        imageView.setImageBitmap(bitmap)
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        dialogView.findViewById<ImageButton>(R.id.button_send).setOnClickListener {
+            uploadImageToFirebase(imageUri)
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<ImageButton>(R.id.button_cancel).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun uploadImageToFirebase(imageUri: Uri) {
+        val chatId = getChatId(currentUser!!.uid, userId)
+        val messageId = db.collection("chats")
+            .document(chatId)
+            .collection("messages")
+            .document()
+            .id
+
+        val imageRef = storage.reference.child("chat_images/$chatId/$messageId.jpg")
+        val baos = ByteArrayOutputStream()
+        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageData = baos.toByteArray()
+
+        imageRef.putBytes(imageData)
+            .continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    throw task.exception ?: Exception("Image upload failed")
+                }
+                imageRef.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUrl = task.result.toString()
+                    val message = mapOf(
+                        "senderId" to currentUser.uid,
+                        "photoUrl" to downloadUrl,
+                        "timestamp" to Timestamp.now(),
+                        "isRead" to false
+                    )
+
+                    db.collection("chats")
+                        .document(chatId)
+                        .collection("messages")
+                        .document(messageId)
+                        .set(message)
+                        .addOnSuccessListener {
+                            Log.d("ChatMessageActivity", "Photo sent successfully")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("ChatMessageActivity", "Failed to send photo: ${e.message}")
+                        }
+                } else {
+                    Log.e("ChatMessageActivity", "Failed to upload photo")
+                }
             }
     }
 }
