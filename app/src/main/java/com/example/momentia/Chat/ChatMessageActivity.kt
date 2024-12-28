@@ -1,8 +1,10 @@
 package com.example.momentia.Chat
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -11,8 +13,12 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.Chat
@@ -24,12 +30,21 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ChatMessageActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val currentUser = FirebaseAuth.getInstance().currentUser
     private val storage = FirebaseStorage.getInstance()
+
     private val PICK_IMAGE_REQUEST = 1
+    private val CAMERA_REQUEST_CODE = 100
+    private val CAMERA_PERMISSION_REQUEST_CODE = 101
+    private lateinit var currentPhotoPath: String
 
     private lateinit var userId: String
     private lateinit var firstName: String
@@ -41,6 +56,7 @@ class ChatMessageActivity : AppCompatActivity() {
 
     private lateinit var backButton: ImageButton
     private lateinit var sendButton: ImageButton
+    private lateinit var cameraButton: ImageButton
     private lateinit var galleryButton: ImageButton
 
     private lateinit var chatRecyclerView: RecyclerView
@@ -90,6 +106,15 @@ class ChatMessageActivity : AppCompatActivity() {
         sendButton = findViewById(R.id.send_button)
         sendButton.setOnClickListener {
             sendMessage(userId)
+        }
+
+        cameraButton = findViewById(R.id.button_camera)
+        cameraButton.setOnClickListener {
+            if (checkCameraPermission()) {
+                openCamera()
+            } else {
+                requestCameraPermission()
+            }
         }
 
         galleryButton = findViewById(R.id.gallery_button)
@@ -299,6 +324,72 @@ class ChatMessageActivity : AppCompatActivity() {
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
+    private fun openCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (cameraIntent.resolveActivity(packageManager) != null) {
+            val photoFile: File? = try {
+                createImageFile()
+            } catch (ex: IOException) {
+                Toast.makeText(this, "Error occurred while creating the file", Toast.LENGTH_SHORT).show()
+                null
+            }
+            photoFile?.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this,
+                    "com.example.momentia.fileprovider",
+                    it
+                )
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+            }
+        } else {
+            Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val storageDir: File = getExternalFilesDir(null)!!
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        ).apply {
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    private fun checkCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestCameraPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.CAMERA),
+            CAMERA_PERMISSION_REQUEST_CODE
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera()
+            } else {
+                Toast.makeText(this, "Camera permission is required to use the camera", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
@@ -306,6 +397,11 @@ class ChatMessageActivity : AppCompatActivity() {
             if (imageUri != null) {
                 showConfirmationDialog(imageUri)
             }
+        }
+
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val imageUri = Uri.fromFile(File(currentPhotoPath))
+            showConfirmationDialog(imageUri)
         }
     }
 
@@ -339,6 +435,13 @@ class ChatMessageActivity : AppCompatActivity() {
             .document()
             .id
 
+        val receiverChatId = getChatId(userId, currentUser.uid)
+        val receiverMessageId = db.collection("chats")
+            .document(chatId)
+            .collection("messages")
+            .document()
+            .id
+
         val imageRef = storage.reference.child("chat_images/$chatId/$messageId.jpg")
         val baos = ByteArrayOutputStream()
         val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
@@ -367,7 +470,17 @@ class ChatMessageActivity : AppCompatActivity() {
                         .document(messageId)
                         .set(message)
                         .addOnSuccessListener {
-                            Log.d("ChatMessageActivity", "Photo sent successfully")
+                            db.collection("chats")
+                                .document(receiverChatId)
+                                .collection("messages")
+                                .document(messageId)
+                                .set(message)
+                                .addOnSuccessListener {
+                                    Log.d("ChatMessageActivity", "Photo sent successfully")
+                                }
+                                .addOnFailureListener {
+                                    Log.e("ChatMessageActivity", "Failed to send photo: ${it.message}")
+                                }
                         }
                         .addOnFailureListener { e ->
                             Log.e("ChatMessageActivity", "Failed to send photo: ${e.message}")
