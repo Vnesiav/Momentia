@@ -104,6 +104,7 @@ class SendPhotoActivity : AppCompatActivity() {
                                         avatarUrl = friendDoc.getString("avatarUrl") ?: "",
                                         timestamp = null,
                                         lastMessage = null,
+                                        photoUrl = null,
                                         counter = null
                                     )
                                 }
@@ -174,6 +175,7 @@ class SendPhotoActivity : AppCompatActivity() {
                                 .add(memory)
                                 .addOnSuccessListener {
                                     Toast.makeText(this, "Photo sent and saved to memories", Toast.LENGTH_SHORT).show()
+                                    finish() // Finish the activity after sending the photo
                                 }
                                 .addOnFailureListener {
                                     Toast.makeText(this, "Failed to save photo to memories", Toast.LENGTH_SHORT).show()
@@ -187,5 +189,4 @@ class SendPhotoActivity : AppCompatActivity() {
                 }
             }
     }
-
 }
