@@ -1,5 +1,6 @@
 package com.example.momentia.Chat
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.Chat
+import com.example.momentia.Memories.PhotoActivity
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
 import com.example.momentia.glide.GlideImageLoaderCircle
@@ -57,6 +59,12 @@ class ChatMessageAdapter(
                 messageText.visibility = View.GONE
                 // Load image using Glide or another library
                 GlideImageLoaderCircle(itemView.context).loadImage(message.photoUrl, messageImage)
+                messageImage.setOnClickListener {
+                    val context = itemView.context
+                    val intent = Intent(context, PhotoActivity::class.java)
+                    intent.putExtra("IMAGE_URL", message.photoUrl)
+                    context.startActivity(intent)
+                }
             } else {
                 messageText.visibility = View.VISIBLE
                 messageImage.visibility = View.GONE
@@ -76,6 +84,12 @@ class ChatMessageAdapter(
                 messageText.visibility = View.GONE
                 // Load image for the message
                 GlideImageLoader(itemView.context).loadImage(message.photoUrl, messageImage)
+                messageImage.setOnClickListener {
+                    val context = itemView.context
+                    val intent = Intent(context, PhotoActivity::class.java)
+                    intent.putExtra("IMAGE_URL", message.photoUrl)
+                    context.startActivity(intent)
+                }
             } else {
                 messageText.visibility = View.VISIBLE
                 messageImage.visibility = View.GONE
