@@ -7,42 +7,72 @@
     android:layout_height="match_parent"
     tools:context=".Camera.CameraActivity">
 
-    <!-- Background ImageView to capture the image -->
     <ImageView
         android:id="@+id/capturedImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:contentDescription="Captured Image" />
+        android:contentDescription="@string/captured_image" />
 
-    <!-- Close Button -->
     <ImageButton
         android:id="@+id/closeButton"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_margin="16dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Close Photo"
+        android:contentDescription="@string/close"
         android:scaleType="centerInside"
         android:src="@drawable/close"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Back Button -->
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Back"
+        android:contentDescription="@string/back"
         android:scaleType="centerInside"
         android:src="@drawable/back"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Button Layout stacked on top of the captured image -->
+    <ImageButton
+        android:id="@+id/saveButton"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/circle_profile"
+        android:contentDescription="@string/save"
+        android:elevation="12dp"
+        android:src="@drawable/save_button"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sendToFriendButton"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:text="@string/send_to"
+        android:textColor="@color/dark_brown"
+        android:textSize="16sp"
+        android:paddingHorizontal="16dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_button"
+        android:contentDescription="@string/save"
+        android:elevation="12dp"
+        android:gravity="center"
+        android:visibility="gone"
+        app:drawableEndCompat="@drawable/sendto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="RtlSymmetry" />
+
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
@@ -60,7 +90,7 @@
             android:layout_height="64dp"
             android:layout_marginEnd="16dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Gallery"
+            android:contentDescription="@string/gallery"
             android:scaleType="centerInside"
             android:src="@drawable/gallery_photo" />
 
@@ -70,7 +100,7 @@
             android:layout_height="64dp"
             android:layout_marginEnd="16dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Take Photo"
+            android:contentDescription="@string/takeapic"
             android:scaleType="centerInside"
             android:src="@drawable/camera" />
 
@@ -79,65 +109,9 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Retake Photo"
+            android:contentDescription="@string/retake_photo"
             android:scaleType="centerInside"
             android:src="@drawable/retake" />
-
-        <LinearLayout
-            android:id="@+id/saveButton"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/rounded_button"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:contentDescription="Save Icon"
-                android:scaleType="centerInside"
-                android:src="@drawable/save" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="Save"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/sendToFriendButton"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/rounded_button"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="Send To"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:contentDescription="Send to Friend Icon"
-                android:scaleType="centerInside"
-                android:src="@drawable/sendto" />
-        </LinearLayout>
 
     </LinearLayout>
 
