@@ -62,7 +62,8 @@ class FriendListAdapter(
 
         // Bind the data to the view
         fun bindData(friend: FriendChat, position: Int) {
-            nameTextView.text = friend.firstName
+            val fullName = "${friend.firstName} ${friend.lastName ?: ""}".trim()
+            nameTextView.text = fullName
             friend.avatarUrl?.let { imageLoader.loadImage(it, profilePicture) }
 
             // Set the button tick icon based on the saved tick status
