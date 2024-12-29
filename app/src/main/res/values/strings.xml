@@ -99,17 +99,17 @@
     <!-- Camera -->
     <string name="button_tick">Button Tick</string>
     <string name="send_button">Send To Friend</string>
-
-    <!-- Memories-->
-    <string name="image_message">Image</string>
-    <string name="memories_image">memories-image</string>
-    <string name="search_hint">Search</string>
     <string name="takeapic">Capture your favorite moments today</string>
-
+    <string name="takeapic2">Smile and click the button, cheese!</string>
     <string name="close">close</string>
     <string name="captured_image">captured image</string>
     <string name="gallery">gallery</string>
     <string name="retake_photo">retake photo</string>
     <string name="send_to">Send to</string>
+
+    <!-- Memories-->
+    <string name="image_message">Image</string>
+    <string name="memories_image">memories-image</string>
+    <string name="search_hint">Search</string>
 
 </resources>
