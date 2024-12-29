@@ -31,9 +31,8 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
     private lateinit var capturedImageView: ImageView
+    private lateinit var cameraText: TextView
     private lateinit var cameraButton: ImageButton
-    private lateinit var retakeButton: ImageButton
-    private lateinit var galleryButton: ImageButton
     private lateinit var closeButton: ImageButton
     private lateinit var backButton: ImageButton
     private lateinit var saveButton: ImageButton
@@ -52,15 +51,12 @@ class CameraActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
 
         capturedImageView = findViewById(R.id.capturedImageView)
+        cameraText = findViewById(R.id.cameraText)
         cameraButton = findViewById(R.id.cameraButton)
-        retakeButton = findViewById(R.id.retakeButton)
-        galleryButton = findViewById(R.id.galleryButton)
         saveButton = findViewById(R.id.saveButton)
         sendToFriendButton = findViewById(R.id.sendToFriendButton)
         closeButton = findViewById(R.id.closeButton)
         backButton = findViewById(R.id.backButton)
-
-        retakeButton.isEnabled = false
 
         toggleButtons(false)
 
@@ -70,10 +66,6 @@ class CameraActivity : AppCompatActivity() {
             } else {
                 requestCameraPermission()
             }
-        }
-
-        retakeButton.setOnClickListener {
-            openCamera()
         }
 
         saveButton.setOnClickListener {
@@ -93,10 +85,6 @@ class CameraActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
-
-        galleryButton.setOnClickListener {
-            openGallery()
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -108,7 +96,6 @@ class CameraActivity : AppCompatActivity() {
                     val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
                     capturedImage = bitmap
                     capturedImageView.setImageBitmap(bitmap)
-                    retakeButton.isEnabled = true
                     toggleButtons(true)
                 }
                 GALLERY_REQUEST_CODE -> {
@@ -128,31 +115,23 @@ class CameraActivity : AppCompatActivity() {
 
     private fun toggleButtons(isImageCaptured: Boolean) {
         if (isImageCaptured) {
-            // Show close button, hide back button
             backButton.visibility = View.GONE
             closeButton.visibility = View.VISIBLE
 
-            // Show save and send buttons
             saveButton.visibility = View.VISIBLE
             sendToFriendButton.visibility = View.VISIBLE
 
-            // Hide camera and gallery buttons
+            cameraText.visibility = View.GONE
             cameraButton.visibility = View.GONE
-            galleryButton.visibility = View.GONE
-            retakeButton.visibility = View.GONE
         } else {
-            // Show back button, hide close button
             backButton.visibility = View.VISIBLE
             closeButton.visibility = View.GONE
 
-            // Hide save and send buttons
             saveButton.visibility = View.GONE
             sendToFriendButton.visibility = View.GONE
 
-            // Show camera and gallery buttons
+            cameraText.visibility = View.VISIBLE
             cameraButton.visibility = View.VISIBLE
-            galleryButton.visibility = View.VISIBLE
-            retakeButton.visibility = View.VISIBLE
         }
     }
 
@@ -275,10 +254,5 @@ class CameraActivity : AppCompatActivity() {
         capturedImageView.setImageBitmap(null)
         capturedImage = null
         toggleButtons(false)
-    }
-
-    private fun openGallery() {
-        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE)
     }
 }
