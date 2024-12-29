@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -141,7 +142,7 @@ class ChatMessageActivity : AppCompatActivity() {
 
     private fun sendMessage(userId: String) {
         val friendId = userId
-        val messageInput = findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.message_input)
+        val messageInput = findViewById<EditText>(R.id.message_input)
 
         if (currentUser != null && !messageInput.text.isNullOrEmpty()) {
             val chatId = getChatId(currentUser.uid, friendId)
