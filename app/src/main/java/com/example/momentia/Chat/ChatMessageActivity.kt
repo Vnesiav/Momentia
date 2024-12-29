@@ -254,7 +254,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             val messageText = document.getString("messageText") ?: ""
                             val senderId = document.getString("senderId") ?: ""
                             val photoUrl = document.getString("photoUrl")
-                            val timestamp = document.getTimestamp("timestamp")
+                            val timestamp = document.getTimestamp("timestamp") ?: Timestamp.now()
                             val isRead = document.getBoolean("isRead") ?: false
 
                             if (timestamp != null) {
@@ -473,7 +473,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             db.collection("chats")
                                 .document(receiverChatId)
                                 .collection("messages")
-                                .document(messageId)
+                                .document(receiverMessageId)
                                 .set(message)
                                 .addOnSuccessListener {
                                     Log.d("ChatMessageActivity", "Photo sent successfully")

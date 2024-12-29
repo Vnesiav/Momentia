@@ -1,6 +1,7 @@
 package com.example.momentia.Chat
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,6 +71,14 @@ class ChatMessageAdapter(
                     intent.putExtra("IMAGE_URL", message.photoUrl)
                     context.startActivity(intent)
                 }
+
+                // Convert Firestore Timestamp to Date and format it
+                message.lastMessageTime.let { firestoreTimestamp ->
+                    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    formatter.timeZone = TimeZone.getDefault()
+                    val formattedTime = formatter.format(firestoreTimestamp.toDate())
+                    timestamp.text = formattedTime
+                }
             } else {
                 messageText.visibility = View.VISIBLE
                 messageImage.visibility = View.GONE
@@ -102,8 +111,17 @@ class ChatMessageAdapter(
                     val intent = Intent(context, PhotoActivity::class.java)
                     intent.putExtra("IMAGE_URL", message.photoUrl)
                     context.startActivity(intent)
+                    Log.d("ChatMessageAdapter", "Image clicked: ${message.photoUrl} with timestamp: {${message.lastMessageTime.toDate()}")
                 }
                 GlideImageLoaderCircle(itemView.context).loadImage(message.photoUrl, messageImage)
+
+                // Convert Firestore Timestamp to Date and format it
+                message.lastMessageTime.let { firestoreTimestamp ->
+                    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    formatter.timeZone = TimeZone.getDefault()
+                    val formattedTime = formatter.format(firestoreTimestamp.toDate())
+                    timestamp.text = formattedTime
+                }
             } else {
                 messageText.visibility = View.VISIBLE
                 messageImage.visibility = View.GONE
@@ -111,7 +129,7 @@ class ChatMessageAdapter(
                 messageText.text = message.message ?: ""  // Ensure message is not null
 
                 // Convert Firestore Timestamp to Date and format it
-                message.lastMessageTime?.let { firestoreTimestamp ->
+                message.lastMessageTime.let { firestoreTimestamp ->
                     val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
                     formatter.timeZone = TimeZone.getDefault()
                     val formattedTime = formatter.format(firestoreTimestamp.toDate())
