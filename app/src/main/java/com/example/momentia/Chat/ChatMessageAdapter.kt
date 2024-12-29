@@ -14,6 +14,7 @@ import com.example.momentia.glide.GlideImageLoader
 import com.example.momentia.glide.GlideImageLoaderCircle
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
 
 class ChatMessageAdapter(
     private val messages: List<Chat>,
@@ -60,6 +61,7 @@ class ChatMessageAdapter(
             if (!message.photoUrl.isNullOrEmpty()) {
                 messageImage.visibility = View.VISIBLE
                 messageText.visibility = View.GONE
+                timestamp.visibility = View.VISIBLE
                 // Load image using Glide or another library
                 GlideImageLoaderCircle(itemView.context).loadImage(message.photoUrl, messageImage)
                 messageImage.setOnClickListener {
@@ -109,8 +111,9 @@ class ChatMessageAdapter(
                 messageText.text = message.message ?: ""  // Ensure message is not null
 
                 // Convert Firestore Timestamp to Date and format it
-                message.lastMessageTime.let { firestoreTimestamp ->
+                message.lastMessageTime?.let { firestoreTimestamp ->
                     val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    formatter.timeZone = TimeZone.getDefault()
                     val formattedTime = formatter.format(firestoreTimestamp.toDate())
                     timestamp.text = formattedTime
                 }
