@@ -10,6 +10,7 @@ import com.example.momentia.glide.ImageLoader
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
 
 class ChatViewHolder(
     private val containerView: View,
@@ -71,7 +72,8 @@ class ChatViewHolder(
 
         // Convert Firestore Timestamp to Date and format it
         chat.timestamp?.let { firestoreTimestamp ->
-            val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val formatter = SimpleDateFormat("HH:mm", Locale("id", "ID"))
+            formatter.timeZone = TimeZone.getDefault()
             val formattedTime = formatter.format(firestoreTimestamp.toDate())
             timestamp.text = formattedTime
         }
