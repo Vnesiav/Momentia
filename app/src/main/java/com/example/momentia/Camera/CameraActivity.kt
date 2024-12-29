@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 import com.example.momentia.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -31,7 +32,7 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
     private lateinit var capturedImageView: ImageView
-    private lateinit var cameraText: TextView
+    private lateinit var gifImage: ImageView
     private lateinit var cameraButton: ImageButton
     private lateinit var closeButton: ImageButton
     private lateinit var backButton: ImageButton
@@ -51,12 +52,12 @@ class CameraActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
 
         capturedImageView = findViewById(R.id.capturedImageView)
-        cameraText = findViewById(R.id.cameraText)
         cameraButton = findViewById(R.id.cameraButton)
         saveButton = findViewById(R.id.saveButton)
         sendToFriendButton = findViewById(R.id.sendToFriendButton)
         closeButton = findViewById(R.id.closeButton)
         backButton = findViewById(R.id.backButton)
+        gifImage = findViewById(R.id.gifImage)
 
         toggleButtons(false)
 
@@ -85,6 +86,12 @@ class CameraActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             finish()
         }
+
+        // Load GIF using Glide
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.giphy) // Replace with your GIF file name
+            .into(findViewById<ImageView>(R.id.gifImage))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -121,8 +128,8 @@ class CameraActivity : AppCompatActivity() {
             saveButton.visibility = View.VISIBLE
             sendToFriendButton.visibility = View.VISIBLE
 
-            cameraText.visibility = View.GONE
             cameraButton.visibility = View.GONE
+            gifImage.visibility = View.GONE
         } else {
             backButton.visibility = View.VISIBLE
             closeButton.visibility = View.GONE
@@ -130,8 +137,8 @@ class CameraActivity : AppCompatActivity() {
             saveButton.visibility = View.GONE
             sendToFriendButton.visibility = View.GONE
 
-            cameraText.visibility = View.VISIBLE
             cameraButton.visibility = View.VISIBLE
+            gifImage.visibility = View.VISIBLE
         }
     }
 

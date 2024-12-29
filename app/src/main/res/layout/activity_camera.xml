@@ -25,31 +25,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/cameraText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="68dp"
-        android:text="@string/takeapic2"
-        android:textColor="@color/dark_brown"
-        android:textSize="20sp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/cameraButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageButton
-        android:id="@+id/cameraButton"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/takeapic"
-        android:scaleType="centerInside"
-        android:src="@drawable/momentia_logo"
+    <FrameLayout
+        android:id="@+id/cameraFrame"
+        android:layout_width="380dp"
+        android:layout_height="700dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/capturedImageView" />
+        app:layout_constraintTop_toTopOf="@+id/capturedImageView">
+
+        <ImageButton
+            android:id="@+id/cameraButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/takeapic"
+            android:scaleType="fitCenter"
+            android:src="@drawable/halo_svg" />
+
+        <ImageView
+            android:id="@+id/gifImage"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="60dp"
+            android:contentDescription="@string/takeapic"
+            android:scaleType="fitCenter" />
+
+    </FrameLayout>
 
     <ImageButton
         android:id="@+id/closeButton"
