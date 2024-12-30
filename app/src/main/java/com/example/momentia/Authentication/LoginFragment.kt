@@ -211,9 +211,6 @@ class LoginFragment : Fragment() {
                         phoneNumber = user.phoneNumber ?: "",
                         avatarUrl = user.photoUrl?.toString() ?: "",
                         friends = emptyList(),
-                        snapsReceived = emptyList(),
-                        snapsSent = emptyList(),
-                        stories = emptyList(),
                         createdAt = com.google.firebase.Timestamp.now()
                     )
                 }
