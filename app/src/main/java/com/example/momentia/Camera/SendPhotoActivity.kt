@@ -87,7 +87,6 @@ class SendPhotoActivity : AppCompatActivity() {
             }
         }
 
-
         val byteArray = intent.getByteArrayExtra("capturedImage")
         if (capturedImage == null && byteArray != null) {
             capturedImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
