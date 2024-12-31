@@ -31,6 +31,7 @@ class FriendFragment : BaseAuthFragment() {
     private lateinit var profileButton: ImageButton
     private lateinit var searchView: SearchView
     private lateinit var warningText: TextView
+    private lateinit var asterisk: TextView
 
     private lateinit var friendChatRecyclerView: RecyclerView
     private val friendList = mutableListOf<FriendChat>()
@@ -53,6 +54,7 @@ class FriendFragment : BaseAuthFragment() {
         friendChatRecyclerView = view.findViewById(R.id.friend_chat_recycler)
         warningText = view.findViewById(R.id.warning_text)
         warningText.text = "Loading..."
+        asterisk = view.findViewById(R.id.asterisk)
 
         addFriendButton.setOnClickListener {
             navigateToAddFriend()
@@ -68,10 +70,35 @@ class FriendFragment : BaseAuthFragment() {
 
         setFontSize(view)
 
-        getFriendList(view)
+        getFriendList()
+        addFriendCounter()
         setupSearch()
 
         return view
+    }
+
+    private fun addFriendCounter() {
+        if (currentUser == null) {
+            findNavController().navigate(R.id.loginFragment)
+            return
+        }
+
+        db.collection("users")
+            .document(currentUser.uid)
+            .collection("friendRequests")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Toast.makeText(requireContext(), "Error listening to friend requests", Toast.LENGTH_SHORT).show()
+                    Log.e("FriendFragment", "Error listening to friend requests: ", error)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null && !snapshot.isEmpty) {
+                    asterisk.visibility = View.VISIBLE
+                } else {
+                    asterisk.visibility = View.INVISIBLE
+                }
+            }
     }
 
     private fun setupSearch() {
@@ -107,7 +134,7 @@ class FriendFragment : BaseAuthFragment() {
         friendChatAdapter.setData(filteredList)
     }
 
-    private fun getFriendList(view: View) {
+    private fun getFriendList() {
         if (currentUser == null) {
             findNavController().navigate(R.id.loginFragment)
             return
@@ -120,7 +147,7 @@ class FriendFragment : BaseAuthFragment() {
                 if (documentSnapshot.exists()) {
                     val friendIds = documentSnapshot.get("friends") as? List<String> ?: emptyList()
 
-                    val warningText = view.findViewById<TextView>(R.id.warning_text) // Pass view here
+                    Log.d("FriendFragment", "Friend length: ${friendIds.size}, Friend is empty? ${friendIds.isNotEmpty()}")
                     if (friendIds.isNotEmpty()) {
                         warningText.visibility = View.GONE
                         friendChatRecyclerView.visibility = View.VISIBLE
@@ -161,7 +188,7 @@ class FriendFragment : BaseAuthFragment() {
                             }
                     } else {
                         warningText.visibility = View.VISIBLE
-                        warningText.text = "No friends found"
+                        warningText.text = getText(R.string.no_friends_found)
                         friendChatRecyclerView.visibility = View.GONE
                         Log.d("FriendFragment", "No friends found.")
                     }

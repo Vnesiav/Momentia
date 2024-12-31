@@ -24,14 +24,23 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import org.w3c.dom.Text
 
 class AddFriendFragment : BaseAuthFragment() {
     private lateinit var backButton: ImageButton
     private lateinit var searchView: SearchView
+    private lateinit var searchText: TextView
+
     private lateinit var addFriendRecyclerView: RecyclerView
     private lateinit var friendRequestRecyclerView: RecyclerView
     private var currentUserFriends = mutableListOf<String>()
+
+    private lateinit var addedTitle: TextView
+    private lateinit var addedUnderline: View
+
+    private lateinit var quickAddTitle: TextView
+    private lateinit var quickAddUnderline: View
+
+    private lateinit var warningText: TextView
 
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var updateTimeRunnable: Runnable
@@ -39,8 +48,9 @@ class AddFriendFragment : BaseAuthFragment() {
     private var friendList = mutableListOf<Friend>()
     private var filteredList = mutableListOf<Friend>()
 
-    private lateinit var db: FirebaseFirestore
-    private lateinit var auth: FirebaseAuth
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val currentUser = auth.currentUser
 
     private val requestAdapter by lazy {
         FriendRequestAdapter(
@@ -129,15 +139,19 @@ class AddFriendFragment : BaseAuthFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add_friend, container, false)
-        setFontSize(view)
 
         backButton = view.findViewById(R.id.back_button)
         searchView = view.findViewById(R.id.search_friend)
+
         addFriendRecyclerView = view.findViewById(R.id.add_friend_recycler)
         friendRequestRecyclerView = view.findViewById(R.id.friend_request_recycler)
 
-        db = FirebaseFirestore.getInstance()
-        auth = FirebaseAuth.getInstance()
+        addedTitle = view.findViewById(R.id.added_me)
+        addedUnderline = view.findViewById(R.id.added_me_underline)
+        quickAddTitle = view.findViewById(R.id.quick_add)
+        quickAddUnderline = view.findViewById(R.id.quick_add_underline)
+
+        warningText = view.findViewById(R.id.warning_text)
 
         // Initialize RecyclerView and Adapter
         addFriendRecyclerView.adapter = friendAdapter
@@ -149,6 +163,8 @@ class AddFriendFragment : BaseAuthFragment() {
         backButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+
+        setFontSize()
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -211,10 +227,6 @@ class AddFriendFragment : BaseAuthFragment() {
     }
 
     private fun showFriendRequests() {
-        val currentUser = auth.currentUser
-        val addedTitle = view?.findViewById<TextView>(R.id.added_me)
-        val underline1 = view?.findViewById<View>(R.id.view1)
-
         if (currentUser != null) {
             db.collection("users")
                 .document(currentUser.uid)
@@ -224,8 +236,8 @@ class AddFriendFragment : BaseAuthFragment() {
                     val friendRequests = mutableListOf<FriendRequest>()
 
                     if (!querySnapshot.isEmpty) {
-                        addedTitle?.visibility = View.VISIBLE
-                        underline1?.visibility = View.VISIBLE
+                        addedTitle.visibility = View.VISIBLE
+                        addedUnderline.visibility = View.VISIBLE
                         friendRequestRecyclerView.visibility = View.VISIBLE
 
                         for (request in querySnapshot.documents) {
@@ -250,8 +262,8 @@ class AddFriendFragment : BaseAuthFragment() {
                             }
                         }
                     } else {
-                        addedTitle?.visibility = View.GONE
-                        underline1?.visibility = View.GONE
+                        addedTitle.visibility = View.GONE
+                        addedUnderline.visibility = View.GONE
                         friendRequestRecyclerView.visibility = View.GONE
                     }
                 }
@@ -316,23 +328,14 @@ class AddFriendFragment : BaseAuthFragment() {
     }
 
     private fun searchFriends(query: String?) {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val addedMe: TextView = view?.findViewById(R.id.added_me) ?: return
-        val underline1: View = view?.findViewById(R.id.view1) ?: return
-        val friendRequestRecyclerView: RecyclerView = view?.findViewById(R.id.friend_request_recycler) ?: return
-        val quickAdd: TextView = view?.findViewById(R.id.quick_add) ?: return
-        val underline2: View = view?.findViewById(R.id.view2) ?: return
-        val warningText: TextView = view?.findViewById(R.id.warning_text) ?: return
-        val addFriendRecyclerView: RecyclerView = view?.findViewById(R.id.add_friend_recycler) ?: return
-
         if (!TextUtils.isEmpty(query)) {
             val searchText = query!!.lowercase()
 
             friendRequestRecyclerView.visibility = View.GONE
-            quickAdd.visibility = View.GONE
-            underline2.visibility = View.GONE
-            addedMe.visibility = View.GONE
-            underline1.visibility = View.GONE
+            quickAddTitle.visibility = View.GONE
+            quickAddUnderline.visibility = View.GONE
+            addedTitle.visibility = View.GONE
+            addedUnderline.visibility = View.GONE
 
             db.collection("users")
                 .orderBy("username")
@@ -378,12 +381,6 @@ class AddFriendFragment : BaseAuthFragment() {
     }
 
     private fun showRandomUsers() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val warningText: TextView = view?.findViewById(R.id.warning_text) ?: return
-        val quickAdd: TextView = view?.findViewById(R.id.quick_add) ?: return
-        val underline2: View = view?.findViewById(R.id.view2) ?: return
-        val addFriendRecyclerView: RecyclerView = view?.findViewById(R.id.add_friend_recycler) ?: return
-
         if (currentUser != null) {
             db.collection("users")
                 .document(currentUser.uid)
@@ -415,11 +412,12 @@ class AddFriendFragment : BaseAuthFragment() {
                                 addFriendRecyclerView.visibility = View.GONE
                             } else {
                                 warningText.visibility = View.GONE
-                                quickAdd.visibility = View.VISIBLE
-                                underline2.visibility = View.VISIBLE
+                                quickAddTitle.visibility = View.VISIBLE
+                                quickAddUnderline.visibility = View.VISIBLE
                                 addFriendRecyclerView.visibility = View.VISIBLE
 
                                 filteredList.shuffle()
+                                Log.d("RandomUsers", "Filtered list size: ${filteredList.size}")
 
                                 friendAdapter.setData(filteredList, friends)
                             }
@@ -435,9 +433,9 @@ class AddFriendFragment : BaseAuthFragment() {
         }
     }
 
-    private fun setFontSize(view: View) {
-        val searchView = view.findViewById<SearchView>(R.id.search_friend)
-        val searchText = searchView.findViewById<TextView>(androidx.appcompat.R.id.search_src_text)
+    private fun setFontSize() {
+        searchText = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+
         searchText.textSize = 14f
     }
 }

@@ -85,6 +85,8 @@ class ChatFragment : BaseAuthFragment() {
             return
         }
 
+        loadingText.text = getText(R.string.loading)
+
 //        Log.d("ChatFragment", "Current user UID: ${currentUser.uid}")
         db.collection("chats")
             .orderBy("lastChatTime", Query.Direction.DESCENDING)
@@ -103,14 +105,19 @@ class ChatFragment : BaseAuthFragment() {
                         val lastChatTime = document.getTimestamp("lastChatTime")
                         val ids = docId.split("_")
 
+                        Log.d("ChatFragment", "ids: $ids")
+
                         if (ids.size == 2) {
                             val userId = ids[0]
                             val friendId = ids[1]
 
                             if (currentUser.uid == userId) {
                                 getFriendId(friendId) { friendChat ->
+                                    Log.d("ChatFragment", "getFriendId lewat")
                                     if (friendChat != null) {
+                                        Log.d("ChatFragment", "friendChat != null lewat")
                                         getLastMessage(friendId) { lastMessage, isReadStatus ->
+                                            Log.d("ChatFragment", "getLastMessage lewat")
                                             getLastMessageCount(friendId) { unreadCount ->
                                                 friendChat.counter = unreadCount
 
@@ -122,7 +129,10 @@ class ChatFragment : BaseAuthFragment() {
                                                 }
 
                                                 if (friendChat.firstName != "Unknown") {
-                                                    Log.d("ChatFragment", "Last message: $lastMessage")
+                                                    Log.d(
+                                                        "ChatFragment",
+                                                        "Last message: $lastMessage"
+                                                    )
                                                     friendList.add(friendChat)
                                                 }
 
@@ -130,18 +140,28 @@ class ChatFragment : BaseAuthFragment() {
 
                                                 // Pastikan pembaruan UI terjadi pada main thread
                                                 activity?.runOnUiThread {
+                                                    loadingText.visibility = View.GONE
                                                     friendList.sortByDescending { it.timestamp }
                                                     friendChatAdapter.setData(friendList)
                                                     friendChatAdapter.notifyDataSetChanged()
                                                 }
+
+                                                if (friendList.isEmpty()) {
+                                                    loadingText.text = "No recent chat"
+                                                    loadingText.visibility = View.VISIBLE
+                                                }
                                             }
                                         }
+                                    } else {
+                                        loadingText.visibility = View.VISIBLE
+                                        loadingText.text = "No recent chat"
                                     }
                                 }
+                            } else {
+                                loadingText.text = "No recent chat"
                             }
                         }
                     }
-                    loadingText.visibility = View.GONE
                 }
             }
             .addOnFailureListener { e ->
