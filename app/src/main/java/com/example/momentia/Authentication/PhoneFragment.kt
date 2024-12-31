@@ -110,9 +110,6 @@ class PhoneFragment : Fragment() {
             phoneNumber = phoneNumber,
             avatarUrl = null,
             friends = emptyList(),
-            snapsReceived = emptyList(),
-            snapsSent = emptyList(),
-            stories = emptyList(),
             createdAt = Timestamp.now()
         )
 
