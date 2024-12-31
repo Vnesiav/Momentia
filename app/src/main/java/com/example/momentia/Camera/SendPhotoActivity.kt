@@ -1,5 +1,6 @@
 package com.example.momentia.Camera
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -9,10 +10,12 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.DTO.FriendChat
 import com.example.momentia.DTO.Memory
+import com.example.momentia.MainActivity
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
 import com.google.firebase.Timestamp
@@ -84,6 +87,8 @@ class SendPhotoActivity : AppCompatActivity() {
             } else {
                 isSending = true
                 sendPhotoToFriend(selectedFriend!!, capturedImage!!)
+
+                finish()
             }
         }
 
