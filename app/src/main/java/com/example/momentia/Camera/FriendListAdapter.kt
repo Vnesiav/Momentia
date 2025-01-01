@@ -64,7 +64,12 @@ class FriendListAdapter(
         fun bindData(friend: FriendChat, position: Int) {
             val fullName = "${friend.firstName} ${friend.lastName ?: ""}".trim()
             nameTextView.text = fullName
-            friend.avatarUrl?.let { imageLoader.loadImage(it, profilePicture) }
+
+            if (!friend.avatarUrl.isNullOrEmpty()) {
+                imageLoader.loadImage(friend.avatarUrl, profilePicture)
+            } else {
+                profilePicture.setImageResource(R.drawable.account_circle)
+            }
 
             // Set the button tick icon based on the saved tick status
             val isTicked = tickStatus[position] ?: false
