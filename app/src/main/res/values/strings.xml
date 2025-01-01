@@ -114,5 +114,6 @@
     <string name="asterisk">*</string>
     <string name="loading">Loading...</string>
     <string name="no_friends_found">No friend found</string>
+    <string name="delete_friend">Delete friend</string>
 
 </resources>
