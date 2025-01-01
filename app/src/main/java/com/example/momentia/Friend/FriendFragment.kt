@@ -23,10 +23,13 @@ import com.example.momentia.glide.GlideImageLoader
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 class FriendFragment : BaseAuthFragment() {
     private val db = FirebaseFirestore.getInstance()
     private val currentUser = FirebaseAuth.getInstance().currentUser
+    private var friendListener: ListenerRegistration? = null
+
     private lateinit var addFriendButton: ImageButton
     private lateinit var profileButton: ImageButton
     private lateinit var searchView: SearchView
@@ -70,7 +73,7 @@ class FriendFragment : BaseAuthFragment() {
 
         setFontSize(view)
 
-        getFriendList()
+        setupFriendListListener()
         addFriendCounter()
         setupSearch()
 
@@ -134,17 +137,22 @@ class FriendFragment : BaseAuthFragment() {
         friendChatAdapter.setData(filteredList)
     }
 
-    private fun getFriendList() {
+    private fun setupFriendListListener() {
         if (currentUser == null) {
             findNavController().navigate(R.id.loginFragment)
             return
         }
 
-        db.collection("users")
+        friendListener = db.collection("users")
             .document(currentUser.uid)
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
+            .addSnapshotListener { documentSnapshot, error ->
+                if (error != null) {
+                    Toast.makeText(requireContext(), "Error listening for changes", Toast.LENGTH_SHORT).show()
+                    Log.e("FriendFragment", "Error listening for changes: ", error)
+                    return@addSnapshotListener
+                }
+
+                if (documentSnapshot != null && documentSnapshot.exists()) {
                     val friendIds = documentSnapshot.get("friends") as? List<String> ?: emptyList()
 
                     Log.d("FriendFragment", "Friend length: ${friendIds.size}, Friend is empty? ${friendIds.isNotEmpty()}")
@@ -194,10 +202,16 @@ class FriendFragment : BaseAuthFragment() {
                     }
                 }
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Error getting current user document", Toast.LENGTH_SHORT).show()
-                Log.e("FriendFragment", "Error getting current user document: ", e)
-            }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setupFriendListListener()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        friendListener?.remove() // Hentikan listener saat fragment dihentikan
     }
 
     private fun navigateToProfile() {
