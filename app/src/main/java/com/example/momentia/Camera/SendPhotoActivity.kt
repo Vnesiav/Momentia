@@ -256,7 +256,6 @@ class SendPhotoActivity : AppCompatActivity() {
                                             senderId = currentUser!!.uid,
                                             receiverId = friend.userId,
                                             sentAt = Timestamp.now(),
-                                            viewed = false
                                         )
 
                                         db.collection("memories").add(memory)
