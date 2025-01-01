@@ -255,7 +255,6 @@ class SendPhotoActivity : AppCompatActivity() {
                                 db.collection("chats").document(receiverChatId).collection("messages").document(receiverMessageId).set(message)
                                     .addOnSuccessListener {
                                         val memory = Memory(
-                                            location = null,
                                             mediaUrl = downloadUrl,
                                             senderId = currentUser!!.uid,
                                             receiverId = friend.userId,
