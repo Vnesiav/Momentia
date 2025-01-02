@@ -39,6 +39,7 @@ Fitur-fitur yang sudah diaplikasikan:
    - Menyimpan foto ke galeri pengguna untuk koleksi pribadi.
 
 Struktur tabel:
+
 users  
   └── {userId}  
       ├── avatarUrl: String (nullable)  
