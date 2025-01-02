@@ -40,4 +40,4 @@ Fitur-fitur yang sudah diaplikasikan:
 
 Struktur tabel:
 
-![image](https://github.com/user-attachments/assets/fe05832e-1776-4515-b9a9-b526ea359d35)
+![image](https://github.com/user-attachments/assets/fb4e915c-0c86-4f35-ba85-811a4f78e0cf)
