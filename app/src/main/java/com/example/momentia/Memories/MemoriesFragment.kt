@@ -123,7 +123,6 @@ class MemoriesFragment : Fragment() {
             .addOnFailureListener { e ->
                 android.util.Log.e("Firestore Error", "Failed to load memories", e)
             }
-
     }
 
     private fun filterMemories(query: String?) {
@@ -149,6 +148,4 @@ class MemoriesFragment : Fragment() {
         memoriesAdapter = MemoriesAdapter(organizedSections)
         memoriesRecyclerView.adapter = memoriesAdapter
     }
-
-
 }

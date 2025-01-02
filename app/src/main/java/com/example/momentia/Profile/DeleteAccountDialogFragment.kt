@@ -32,7 +32,6 @@ class DeleteAccountDialogFragment : DialogFragment() {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
-
         dialog?.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
 
         val confirmDeleteButton: Button = view.findViewById(R.id.confirm_delete_button)
@@ -46,7 +45,6 @@ class DeleteAccountDialogFragment : DialogFragment() {
             dismiss()
         }
     }
-
 
     private fun deleteAccount() {
         val user = FirebaseAuth.getInstance().currentUser
@@ -71,7 +69,6 @@ class DeleteAccountDialogFragment : DialogFragment() {
             }
         }
     }
-
 
     private fun showToast(message: String) {
         activity?.runOnUiThread {
