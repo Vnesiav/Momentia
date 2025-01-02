@@ -39,4 +39,5 @@ Fitur-fitur yang sudah diaplikasikan:
    - Menyimpan foto ke galeri pengguna untuk koleksi pribadi.
 
 Struktur tabel:
+
 ![image](https://github.com/user-attachments/assets/fe05832e-1776-4515-b9a9-b526ea359d35)
