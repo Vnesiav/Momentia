@@ -10,11 +10,8 @@ data class User(
     val phoneNumber: String = "",
     val avatarUrl: String? = null,
     val friends: List<String> = emptyList(),
-    val snapsReceived: List<String> = emptyList(),
-    val snapsSent: List<String> = emptyList(),
-    val stories: List<String> = emptyList(),
     val createdAt: Timestamp = Timestamp.now()
 ) {
     // No-argument constructor required for Firestore deserialization
-    constructor() : this("", "", "", "", "", null, emptyList(), emptyList(), emptyList(), emptyList(), Timestamp.now())
+    constructor() : this("", "", "", "", "", null, emptyList(), Timestamp.now())
 }

@@ -1,6 +1,7 @@
 package com.example.momentia.Friend
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,25 +16,31 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.momentia.Authentication.BaseAuthFragment
+import com.example.momentia.Chat.ChatMessageActivity
 import com.example.momentia.DTO.FriendChat
 import com.example.momentia.R
 import com.example.momentia.glide.GlideImageLoader
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 class FriendFragment : BaseAuthFragment() {
     private val db = FirebaseFirestore.getInstance()
     private val currentUser = FirebaseAuth.getInstance().currentUser
+    private var friendListener: ListenerRegistration? = null
+
     private lateinit var addFriendButton: ImageButton
     private lateinit var profileButton: ImageButton
     private lateinit var searchView: SearchView
+    private lateinit var warningText: TextView
+    private lateinit var asterisk: TextView
 
     private lateinit var friendChatRecyclerView: RecyclerView
     private val friendList = mutableListOf<FriendChat>()
     private val friendChatAdapter by lazy {
         FriendAdapter(layoutInflater, GlideImageLoader(requireContext()), object: FriendAdapter.OnClickListener {
-            override fun onItemClick(friend: FriendChat) = showSelectionDialog(friend)
+            override fun onItemClick(friend: FriendChat) = navigateToChatMessage(friend)
         })
     }
 
@@ -48,6 +55,9 @@ class FriendFragment : BaseAuthFragment() {
         addFriendButton = view.findViewById(R.id.add_friend_button)
         profileButton = view.findViewById(R.id.profile_button)
         friendChatRecyclerView = view.findViewById(R.id.friend_chat_recycler)
+        warningText = view.findViewById(R.id.warning_text)
+        warningText.text = "Loading..."
+        asterisk = view.findViewById(R.id.asterisk)
 
         addFriendButton.setOnClickListener {
             navigateToAddFriend()
@@ -62,10 +72,36 @@ class FriendFragment : BaseAuthFragment() {
         friendChatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         setFontSize(view)
-        getFriendList(view)
+
+        setupFriendListListener()
+        addFriendCounter()
         setupSearch()
 
         return view
+    }
+
+    private fun addFriendCounter() {
+        if (currentUser == null) {
+            findNavController().navigate(R.id.loginFragment)
+            return
+        }
+
+        db.collection("users")
+            .document(currentUser.uid)
+            .collection("friendRequests")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Toast.makeText(requireContext(), "Error listening to friend requests", Toast.LENGTH_SHORT).show()
+                    Log.e("FriendFragment", "Error listening to friend requests: ", error)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null && !snapshot.isEmpty) {
+                    asterisk.visibility = View.VISIBLE
+                } else {
+                    asterisk.visibility = View.INVISIBLE
+                }
+            }
     }
 
     private fun setupSearch() {
@@ -101,20 +137,25 @@ class FriendFragment : BaseAuthFragment() {
         friendChatAdapter.setData(filteredList)
     }
 
-    private fun getFriendList(view: View) {
+    private fun setupFriendListListener() {
         if (currentUser == null) {
             findNavController().navigate(R.id.loginFragment)
             return
         }
 
-        db.collection("users")
+        friendListener = db.collection("users")
             .document(currentUser.uid)
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
+            .addSnapshotListener { documentSnapshot, error ->
+                if (error != null) {
+                    Toast.makeText(requireContext(), "Error listening for changes", Toast.LENGTH_SHORT).show()
+                    Log.e("FriendFragment", "Error listening for changes: ", error)
+                    return@addSnapshotListener
+                }
+
+                if (documentSnapshot != null && documentSnapshot.exists()) {
                     val friendIds = documentSnapshot.get("friends") as? List<String> ?: emptyList()
 
-                    val warningText = view.findViewById<TextView>(R.id.warning_text) // Pass view here
+                    Log.d("FriendFragment", "Friend length: ${friendIds.size}, Friend is empty? ${friendIds.isNotEmpty()}")
                     if (friendIds.isNotEmpty()) {
                         warningText.visibility = View.GONE
                         friendChatRecyclerView.visibility = View.VISIBLE
@@ -128,13 +169,26 @@ class FriendFragment : BaseAuthFragment() {
                                         userId = friendDoc.id,
                                         firstName = friendDoc.getString("firstName") ?: "Unknown",
                                         lastName = friendDoc.getString("lastName"),
-                                        avatarUrl = friendDoc.getString("avatarUrl") ?: ""
+                                        avatarUrl = friendDoc.getString("avatarUrl") ?: "",
+                                        timestamp = null,
+                                        lastMessage = null,
+                                        photoUrl = null,
+                                        counter = null
                                     )
                                 }
 
+                                // Jika ingin memproses nama lengkap
+                                val processedFriends = friends.map { friend ->
+                                    val fullName = "${friend.firstName} ${friend.lastName.orEmpty()}"
+                                    if (fullName.length >= 15) {
+                                        friend.lastName = "..."
+                                    }
+                                    friend
+                                }
+
                                 friendList.clear()
-                                friendList.addAll(friends)
-                                friendChatAdapter.setData(friends)
+                                friendList.addAll(processedFriends)
+                                friendChatAdapter.setData(processedFriends)
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(requireContext(), "Error getting friend list", Toast.LENGTH_SHORT).show()
@@ -142,18 +196,23 @@ class FriendFragment : BaseAuthFragment() {
                             }
                     } else {
                         warningText.visibility = View.VISIBLE
-                        warningText.text = "No friends found"
+                        warningText.text = getText(R.string.no_friends_found)
                         friendChatRecyclerView.visibility = View.GONE
                         Log.d("FriendFragment", "No friends found.")
                     }
                 }
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Error getting current user document", Toast.LENGTH_SHORT).show()
-                Log.e("FriendFragment", "Error getting current user document: ", e)
-            }
     }
 
+    override fun onStart() {
+        super.onStart()
+        setupFriendListListener()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        friendListener?.remove() // Hentikan listener saat fragment dihentikan
+    }
 
     private fun navigateToProfile() {
         val navController = findNavController()
@@ -181,11 +240,15 @@ class FriendFragment : BaseAuthFragment() {
         navController.navigate(R.id.addFriendFragment, null, navOptions)
     }
 
-    private fun showSelectionDialog(friend: FriendChat) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Friend selected")
-            .setMessage("Work is on progress")
-            .setPositiveButton("OK") { _, _ -> }.show()
+    private fun navigateToChatMessage(friend: FriendChat) {
+        val intent = Intent(requireContext(), ChatMessageActivity::class.java).apply {
+            putExtra("userId", friend.userId) // Konsisten dengan "userId"
+            putExtra("firstName", friend.firstName) // Konsisten dengan "firstName"
+            putExtra("lastName", friend.lastName ?: "") // Konsisten dengan "lastName"
+            putExtra("imageUrl", friend.avatarUrl) // Konsisten dengan "imageUrl"
+            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+        }
+        startActivity(intent)
     }
 
     private fun setFontSize(view: View) {

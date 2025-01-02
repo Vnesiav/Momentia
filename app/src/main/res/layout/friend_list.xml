@@ -59,11 +59,14 @@
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:contentDescription="@string/bottom_menu_camera"
-        android:src="@drawable/camera_outlined"
+    <ImageButton
+        android:id="@+id/delete_friend_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:backgroundTint="@android:color/transparent"
+        android:contentDescription="@string/delete_friend"
+        android:src="@drawable/delete_friend"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -71,7 +74,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/dividerVertical"
+        android:layout_marginTop="8dp"
+        android:background="@color/app_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

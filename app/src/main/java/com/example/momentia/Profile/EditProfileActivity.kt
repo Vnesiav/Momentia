@@ -9,29 +9,23 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.momentia.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.example.momentia.R
 import java.io.ByteArrayOutputStream
 import java.util.*
 
-class EditProfileFragment : Fragment() {
+class EditProfileActivity : AppCompatActivity() {
 
-    private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var profileImageView: ImageView
     private val PICK_IMAGE_REQUEST = 1
     private val CAMERA_REQUEST_CODE = 100
@@ -42,49 +36,39 @@ class EditProfileFragment : Fragment() {
     private var userId: String? = null
     private var capturedImage: Bitmap? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false)
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_edit_profile)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        bottomNavigation = requireActivity().findViewById(R.id.bottom_nav)
-        hideBottomNavigation()
-
-        profileImageView = view.findViewById(R.id.profile_image)
+        profileImageView = findViewById(R.id.profile_image)
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
 
         userId = auth.currentUser?.uid
 
-        // Load current profile data using fetchUserData()
         fetchUserData()
 
-        val takePhotoButton: ImageButton = view.findViewById(R.id.take_photo_button)
+        val takePhotoButton: ImageButton = findViewById(R.id.take_photo_button)
         takePhotoButton.setOnClickListener {
-            Log.d("EditProfileFragment", "Take photo button clicked. User ID: $userId")
-            openCamera() // Directly open the camera
+            Log.d("EditProfileActivity", "Take photo button clicked. User ID: $userId")
+            openCamera()
         }
 
-        val changePhotoButton: ImageButton = view.findViewById(R.id.change_photo_button)
+        val changePhotoButton: ImageButton = findViewById(R.id.change_photo_button)
         changePhotoButton.setOnClickListener {
-            Log.d("EditProfileFragment", "Change photo button clicked. User ID: $userId")
-            openGallery() // Directly open the gallery
+            Log.d("EditProfileActivity", "Change photo button clicked. User ID: $userId")
+            openGallery()
         }
 
-        val deletePhotoButton: ImageButton = view.findViewById(R.id.delete_photo_button)
+        val deletePhotoButton: ImageButton = findViewById(R.id.delete_photo_button)
         deletePhotoButton.setOnClickListener {
             confirmDeletePhoto()
         }
 
-        val backButton: ImageButton = view.findViewById(R.id.back_button)
+        val backButton: ImageButton = findViewById(R.id.back_button)
         backButton.setOnClickListener {
-            findNavController().popBackStack()
+            finish()
         }
     }
 
@@ -103,11 +87,11 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun checkCameraPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestCameraPermission() {
-        ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -116,7 +100,7 @@ class EditProfileFragment : Fragment() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openCamera()
             } else {
-                Toast.makeText(requireContext(), "Camera permission is required to use the camera", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Camera permission is required to use the camera", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -140,7 +124,7 @@ class EditProfileFragment : Fragment() {
                 }
             }
         } else {
-            Toast.makeText(context, "Image selection cancelled", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Image selection cancelled", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -157,7 +141,7 @@ class EditProfileFragment : Fragment() {
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(context, "Failed to upload photo: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to upload photo: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -170,7 +154,7 @@ class EditProfileFragment : Fragment() {
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(context, "Failed to upload photo: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to upload photo: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -178,18 +162,17 @@ class EditProfileFragment : Fragment() {
         val user = auth.currentUser
 
         if (user == null) {
-            Log.w("EditProfileFragment", "User not logged in")
-            Toast.makeText(requireContext(), "Please log in", Toast.LENGTH_SHORT).show()
+            Log.w("EditProfileActivity", "User not logged in")
+            Toast.makeText(this, "Please log in", Toast.LENGTH_SHORT).show()
             return
         }
 
         val userId = user.uid
-        Log.d("EditProfileFragment", "User ID: $userId")
+        Log.d("EditProfileActivity", "User ID: $userId")
 
         firestore.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    Log.d("EditProfileFragment", "Document data: ${document.data}")
                     val avatarUrl = document.getString("avatarUrl") ?: ""
 
                     if (avatarUrl.isNotEmpty()) {
@@ -199,20 +182,17 @@ class EditProfileFragment : Fragment() {
                             .placeholder(R.drawable.person)
                             .into(profileImageView)
                     }
-                    Log.d("EditProfileFragment", "User data loaded successfully")
                 } else {
-                    Log.d("EditProfileFragment", "No user profile found for user ID: $userId")
-                    Toast.makeText(requireContext(), "Profile not found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Profile not found", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("EditProfileFragment", "Error loading user data", e)
-                Toast.makeText(requireContext(), "Failed to load profile", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to load profile", Toast.LENGTH_SHORT).show()
             }
     }
 
     private fun confirmDeletePhoto() {
-        AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(this)
             .setTitle("Delete Profile Photo")
             .setMessage("Are you sure you want to delete your profile photo?")
             .setPositiveButton("Yes") { _, _ -> deleteProfilePhoto() }
@@ -221,15 +201,15 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun deleteProfilePhoto() {
-        profileImageView.setImageResource(R.drawable.person) // Replace with default image
+        profileImageView.setImageResource(R.drawable.person)
         userId?.let { uid ->
             firestore.collection("users").document(uid)
                 .update("avatarUrl", null)
                 .addOnSuccessListener {
-                    Toast.makeText(context, "Profile photo deleted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Profile photo deleted", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(context, "Failed to delete profile photo: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Failed to delete profile photo: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
     }
@@ -239,15 +219,11 @@ class EditProfileFragment : Fragment() {
             firestore.collection("users").document(uid)
                 .update("avatarUrl", avatarUrl)
                 .addOnSuccessListener {
-                    Toast.makeText(context, "Profile photo updated successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Profile photo updated successfully", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(context, "Failed to update profile photo: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Failed to update profile photo: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
-    }
-
-    private fun hideBottomNavigation() {
-        bottomNavigation.visibility = View.GONE
     }
 }

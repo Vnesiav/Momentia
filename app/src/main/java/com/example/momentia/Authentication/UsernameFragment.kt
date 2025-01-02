@@ -17,6 +17,7 @@ class UsernameFragment : Fragment() {
     private lateinit var email: String
     private lateinit var password: String
     private lateinit var firestore: FirebaseFirestore
+    private var lastClickTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,12 @@ class UsernameFragment : Fragment() {
         }
 
         continueButton.setOnClickListener {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime < 3000) {
+                return@setOnClickListener
+            }
+            lastClickTime = currentTime
+
             handleContinueButtonClick()
         }
 

@@ -63,6 +63,7 @@
         android:layout_marginTop="70dp"
         android:gravity="center"
         android:text="@string/change_your_number"
+        android:textColor="@color/dark_brown"
         android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,8 +77,9 @@
         android:layout_marginTop="28dp"
         android:layout_marginHorizontal="16dp"
         android:hint="@string/current_number"
-        app:boxStrokeColor="@color/light_gray"
+        android:textColorHint="@color/dark_brown"
         app:hintTextColor="@color/dark_brown"
+        app:boxStrokeColor="@color/light_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/change_number_text">
@@ -87,7 +89,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
-            android:enabled="false" />
+            android:enabled="false"
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -98,8 +101,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginHorizontal="16dp"
-        app:boxStrokeColor="@color/light_gray"
+        android:textColorHint="@color/dark_brown"
         app:hintTextColor="@color/dark_brown"
+        app:boxStrokeColor="@color/light_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/currentNumberLayout">
@@ -109,7 +113,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/new_number"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:maxLength="13"
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

@@ -4,7 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/cameraFragment">
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.momentia.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_memoriesFragment"
+            app:destination="@id/memoriesFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
@@ -12,8 +22,8 @@
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 
     <fragment
@@ -49,6 +59,9 @@
         <action
             android:id="@+id/action_usernameFragment_to_nameFragment"
             app:destination="@id/nameFragment" />
+        <action
+            android:id="@+id/action_usernameFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 
     <fragment
@@ -72,14 +85,8 @@
     </fragment>
 
     <fragment
-        android:id="@+id/cameraFragment"
-        android:name="com.example.momentia.CameraFragment"
-        android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" />
-
-    <fragment
         android:id="@+id/chatFragment"
-        android:name="com.example.momentia.ChatFragment"
+        android:name="com.example.momentia.Chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
 
@@ -87,11 +94,14 @@
         android:id="@+id/profileFragment"
         android:name="com.example.momentia.Profile.ProfileFragment">
         <action
-            android:id="@+id/action_profileFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
+            android:id="@+id/action_profileFragment_to_accountDetailsFragment"
+            app:destination="@id/accountDetailsFragment" />
         <action
             android:id="@+id/action_profileFragment_to_editNameFragment"
             app:destination="@id/editNameFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_changeUsernameFragment"
+            app:destination="@id/changeUsernameFragment" />
         <action
             android:id="@+id/action_profileFragment_to_changeProfileFragment"
             app:destination="@id/changePasswordFragment" />
@@ -110,9 +120,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/editProfileFragment"
-        android:name="com.example.momentia.Profile.EditProfileFragment"
-        tools:layout="@layout/fragment_edit_profile">
+        android:id="@+id/accountDetailsFragment"
+        android:name="com.example.momentia.Profile.AccountDetailsFragment"
+        tools:layout="@layout/fragment_account_details">
     </fragment>
 
     <fragment
@@ -121,19 +131,23 @@
         tools:layout="@layout/fragment_edit_name" />
 
     <fragment
+        android:id="@+id/changeNumberFragment"
+        android:name="com.example.momentia.Profile.ChangeNumberFragment"
+        tools:layout="@layout/fragment_change_number" />
+
+    <fragment
+        android:id="@+id/changeUsernameFragment"
+        android:name="com.example.momentia.Profile.ChangeUsernameFragment"
+        tools:layout="@layout/fragment_change_username" />
+
+    <fragment
         android:id="@+id/changePasswordFragment"
         android:name="com.example.momentia.Profile.ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password">
-      
         <action
             android:id="@+id/actionPasswordUpdated"
             app:destination="@id/profileFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/changeNumberFragment"
-        android:name="com.example.momentia.Profile.ChangeNumberFragment"
-        tools:layout="@layout/fragment_change_number" />
 
     <dialog
         android:id="@+id/deleteAccountDialogFragment"
@@ -145,4 +159,14 @@
         android:id="@+id/friendFragment"
         android:name="com.example.momentia.Friend.FriendFragment"
         android:label="FriendFragment" />
+
+    <action
+        android:id="@+id/action_sendPhotoActivity_to_homeFragment"
+        app:destination="@id/homeFragment" />
+
+    <fragment
+        android:id="@+id/memoriesFragment"
+        android:name="com.example.momentia.Memories.MemoriesFragment"
+        android:label="MemoriesFragment" />
+
 </navigation>

@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-10-24T21:43:25.358063600Z">
+        <DropdownSelection timestamp="2025-01-01T14:34:40.506008600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=6XS4N7TGPZLNNRU4" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Ryu\.android\avd\Galaxy_S23_API_33.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -15,12 +15,12 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Raysen Harison B\.android\avd\Pixel_6_API_33.avd" />
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=6XS4N7TGPZLNNRU4" />
               </handle>
             </Target>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="PhysicalDevice" identifier="serial=6XS4N7TGPZLNNRU4" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Raysen Harison B\.android\avd\Pixel_6_API_33.avd" />
               </handle>
             </Target>
           </targets>

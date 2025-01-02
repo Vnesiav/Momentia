@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="16dp"
-    android:layout_marginHorizontal="16dp"
+    android:layout_margin="16dp"
     tools:context=".Authentication.LoginFragment">
 
     <ImageButton
@@ -62,6 +61,7 @@
         android:layout_marginTop="70dp"
         android:gravity="center"
         android:text="@string/whats_your_name"
+        android:textColor="@color/dark_brown"
         android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,8 +75,9 @@
         android:layout_marginTop="28dp"
         android:layout_marginHorizontal="16dp"
         android:hint="@string/first_name"
-        app:boxStrokeColor="@color/light_gray"
+        android:textColorHint="@color/dark_brown"
         app:hintTextColor="@color/dark_brown"
+        app:boxStrokeColor="@color/light_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/whats_your_name">
@@ -87,7 +88,8 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:autofillHints="name"
-            android:maxLength="50" />
+            android:maxLength="50"
+            android:textColor="@color/dark_brown" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -97,8 +99,9 @@
         android:layout_marginTop="12dp"
         android:layout_marginHorizontal="16dp"
         android:autofillHints="name"
-        app:boxStrokeColor="@color/light_gray"
+        android:textColorHint="@color/dark_brown"
         app:hintTextColor="@color/dark_brown"
+        app:boxStrokeColor="@color/light_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/firstNameLayout">
@@ -109,7 +112,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/last_name"
             android:inputType="text"
-            android:maxLength="50" />
+            android:maxLength="50"
+            android:textColor="@color/dark_brown"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

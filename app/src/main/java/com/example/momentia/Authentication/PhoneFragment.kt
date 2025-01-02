@@ -25,6 +25,7 @@ class PhoneFragment : Fragment() {
     private lateinit var firstName: String
     private lateinit var lastName: String
     private lateinit var phoneNumberEditText: EditText
+    private var lastClickTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,12 @@ class PhoneFragment : Fragment() {
         }
 
         continueButton.setOnClickListener {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime < 3000) {
+                return@setOnClickListener
+            }
+            lastClickTime = currentTime
+
             handleContinueButtonClick()
         }
 
@@ -103,9 +110,6 @@ class PhoneFragment : Fragment() {
             phoneNumber = phoneNumber,
             avatarUrl = null,
             friends = emptyList(),
-            snapsReceived = emptyList(),
-            snapsSent = emptyList(),
-            stories = emptyList(),
             createdAt = Timestamp.now()
         )
 

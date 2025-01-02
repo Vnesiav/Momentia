@@ -23,4 +23,9 @@
         <item name="android:layout_height">40dp</item>
     </style>
 
+    <style name="CustomSearchView" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@android:color/transparent</item>
+        <item name="searchViewStyle">@style/Widget.AppCompat.SearchView</item>
+    </style>
+
 </resources>
