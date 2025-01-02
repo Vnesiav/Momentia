@@ -39,33 +39,4 @@ Fitur-fitur yang sudah diaplikasikan:
    - Menyimpan foto ke galeri pengguna untuk koleksi pribadi.
 
 Struktur tabel:
-
-users  
-  └── {userId}  
-      ├── avatarUrl: String (nullable)  
-      ├── createdAt: Timestamp  
-      ├── email: String  
-      ├── firstName: String  
-      ├── friends: Array[String]  
-      ├── lastName: String  
-      ├── phoneNumber: String  
-      └── username: String  
-
-memories  
-  └── {memoryId}  
-      ├── mediaUrl: String  
-      ├── receiverId: String  
-      ├── senderId: String  
-      └── sentAt: Timestamp  
-
-chats  
-  └── {chatId}  
-      ├── firstUserId: String  
-      ├── lastChatTime: Timestamp  
-      ├── secondUserId: String  
-      └── messages  
-          └── {messageId}  
-              ├── isRead: Boolean  
-              ├── messageText: String  
-              ├── senderId: String  
-              └── timestamp: Timestamp  
+![image](https://github.com/user-attachments/assets/fe05832e-1776-4515-b9a9-b526ea359d35)
