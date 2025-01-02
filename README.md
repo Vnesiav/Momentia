@@ -18,6 +18,10 @@ Kelompok 2:
 3. Vianca Vanesia Barhan - 00000065031
 4. Walter Adrian Samuel - 00000067030
 
+Akun untuk demo:
+- email: dumpvinn@gmail.com
+- pass: akundemo1
+
 Fitur-fitur yang sudah diaplikasikan:
 1. Implementasi proses CRUD (tabel users)
    - Create (create account, create friend request, create friend, create storage for image)
@@ -35,5 +39,32 @@ Fitur-fitur yang sudah diaplikasikan:
    - Menyimpan foto ke galeri pengguna untuk koleksi pribadi.
 
 Struktur tabel:
+users  
+  └── {userId}  
+      ├── avatarUrl: String (nullable)  
+      ├── createdAt: Timestamp  
+      ├── email: String  
+      ├── firstName: String  
+      ├── friends: Array[String]  
+      ├── lastName: String  
+      ├── phoneNumber: String  
+      └── username: String  
 
-![image](https://github.com/user-attachments/assets/9e2c9b0f-6eea-4678-9a4c-6b38ca951eab)
+memories  
+  └── {memoryId}  
+      ├── mediaUrl: String  
+      ├── receiverId: String  
+      ├── senderId: String  
+      └── sentAt: Timestamp  
+
+chats  
+  └── {chatId}  
+      ├── firstUserId: String  
+      ├── lastChatTime: Timestamp  
+      ├── secondUserId: String  
+      └── messages  
+          └── {messageId}  
+              ├── isRead: Boolean  
+              ├── messageText: String  
+              ├── senderId: String  
+              └── timestamp: Timestamp  
